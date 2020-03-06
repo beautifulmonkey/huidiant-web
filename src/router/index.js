@@ -19,9 +19,9 @@ const router = new Router({
       name: '首页',
       component: Home,
       children: [
-        { 
-          path: '', 
-          name: '系统介绍', 
+        {
+          path: '',
+          name: '系统介绍',
           component: Intro,
           meta: {
             icon: 'fa fa-home fa-lg',

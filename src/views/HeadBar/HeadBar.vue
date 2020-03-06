@@ -1,5 +1,5 @@
-<template> 
-  <div class="headbar" :style="{'background':themeColor}" 
+<template>
+  <div class="headbar" :style="{'background':themeColor}"
     :class="$store.state.app.collapse?'position-collapse-left':'position-left'">
     <!-- 导航收缩 -->
     <span class="hamburg">
@@ -9,12 +9,17 @@
     </span>
     <!-- 导航菜单 -->
     <span class="navbar">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" 
+      <el-menu :default-active="activeIndex" class="el-menu-demo"
           :background-color="themeColor" text-color="#fff" active-text-color="#ffd04b" mode="horizontal" @select="selectNavBar()">
+<!--        <el-menu-item index="1" @click="$router.push('/')"><i class="fa fa-home fa-lg"></i>  </el-menu-item>-->
+<!--        <el-menu-item index="2" @click="openWindow('https://gitee.com/liuge1988/kitty')">{{$t("common.projectRepo")}}</el-menu-item>-->
+<!--        <el-menu-item index="3" @click="openWindow('https://gitee.com/liuge1988/kitty/wikis/Home')">{{$t("common.doc")}}</el-menu-item>-->
+<!--        <el-menu-item index="4" @click="openWindow('https://www.cnblogs.com/xifengxiaoma/')">{{$t("common.blog")}}</el-menu-item>-->
+
         <el-menu-item index="1" @click="$router.push('/')"><i class="fa fa-home fa-lg"></i>  </el-menu-item>
-        <el-menu-item index="2" @click="openWindow('https://gitee.com/liuge1988/kitty')">{{$t("common.projectRepo")}}</el-menu-item>
-        <el-menu-item index="3" @click="openWindow('https://gitee.com/liuge1988/kitty/wikis/Home')">{{$t("common.doc")}}</el-menu-item>
-        <el-menu-item index="4" @click="openWindow('https://www.cnblogs.com/xifengxiaoma/')">{{$t("common.blog")}}</el-menu-item>
+        <el-menu-item index="2">{{$t("common.projectRepo")}}</el-menu-item>
+        <el-menu-item index="3">{{$t("common.doc")}}</el-menu-item>
+        <el-menu-item index="4">{{$t("common.blog")}}</el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
@@ -24,14 +29,14 @@
           <!-- 主题切换 -->
           <theme-picker class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
         </el-menu-item>
-        <el-menu-item index="2" v-popover:popover-lang>
-          <!-- 语言切换 -->
-          <li style="color:#fff;" class="fa fa-language fa-lg"></li>
-          <el-popover ref="popover-lang" placement="bottom-start" trigger="click" v-model="langVisible">
-            <div class="lang-item" @click="changeLanguage('zh_cn')">简体中文</div>
-            <div class="lang-item" @click="changeLanguage('en_us')">English</div>
-          </el-popover>
-        </el-menu-item>
+<!--        <el-menu-item index="2" v-popover:popover-lang>-->
+<!--          &lt;!&ndash; 语言切换 &ndash;&gt;-->
+<!--          <li style="color:#fff;" class="fa fa-language fa-lg"></li>-->
+<!--          <el-popover ref="popover-lang" placement="bottom-start" trigger="click" v-model="langVisible">-->
+<!--            <div class="lang-item" @click="changeLanguage('zh_cn')">简体中文</div>-->
+<!--            <div class="lang-item" @click="changeLanguage('en_us')">English</div>-->
+<!--          </el-popover>-->
+<!--        </el-menu-item>-->
         <el-menu-item index="3" v-popover:popover-message>
           <!-- 我的私信 -->
           <el-badge :value="5" :max="99" class="badge" type="success">
