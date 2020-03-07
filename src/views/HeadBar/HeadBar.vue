@@ -16,10 +16,10 @@
 <!--        <el-menu-item index="3" @click="openWindow('https://gitee.com/liuge1988/kitty/wikis/Home')">{{$t("common.doc")}}</el-menu-item>-->
 <!--        <el-menu-item index="4" @click="openWindow('https://www.cnblogs.com/xifengxiaoma/')">{{$t("common.blog")}}</el-menu-item>-->
 
-        <el-menu-item index="1" @click="$router.push('/')"><i class="fa fa-home fa-lg"></i>  </el-menu-item>
-        <el-menu-item index="2">{{$t("common.projectRepo")}}</el-menu-item>
-        <el-menu-item index="3">{{$t("common.doc")}}</el-menu-item>
-        <el-menu-item index="4">{{$t("common.blog")}}</el-menu-item>
+        <el-menu-item index="1" @click="$router.push('/')">首页啊</el-menu-item>
+        <el-menu-item index="2" @click="$router.push('/project')">项目啊</el-menu-item>
+        <el-menu-item index="3" @click="$router.push('/doc')">文档啊</el-menu-item>
+        <el-menu-item index="4" @click="$router.push('/blog')">博客啊</el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
