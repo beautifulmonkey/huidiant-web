@@ -16,10 +16,11 @@
 <!--        <el-menu-item index="3" @click="openWindow('https://gitee.com/liuge1988/kitty/wikis/Home')">{{$t("common.doc")}}</el-menu-item>-->
 <!--        <el-menu-item index="4" @click="openWindow('https://www.cnblogs.com/xifengxiaoma/')">{{$t("common.blog")}}</el-menu-item>-->
 
-        <el-menu-item index="1" @click="$router.push('/')">首页啊</el-menu-item>
-        <el-menu-item index="2" @click="$router.push('/project')">项目啊</el-menu-item>
-        <el-menu-item index="3" @click="$router.push('/doc')">文档啊</el-menu-item>
-        <el-menu-item index="4" @click="$router.push('/blog')">博客啊</el-menu-item>
+        <el-menu-item index="cashier" @click="$router.push('/cashier/sys/user')">收银</el-menu-item>
+        <el-menu-item index="members" @click="$router.push('/members/project/manage')">会员</el-menu-item>
+        <el-menu-item index="3" @click="$router.push('/')">产品项目</el-menu-item>
+        <el-menu-item index="4" @click="$router.push('/')">报表</el-menu-item>
+        <el-menu-item index="5" @click="openWindow('/')">系统</el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
@@ -77,6 +78,8 @@ import Action from "@/components/Toolbar/Action"
 import NoticePanel from "@/views/Core/NoticePanel"
 import MessagePanel from "@/views/Core/MessagePanel"
 import PersonalPanel from "@/views/Core/PersonalPanel"
+import store from '@/store/modules/menu'
+
 export default {
   components:{
         Hamburger,
@@ -95,13 +98,13 @@ export default {
         role: "超级管理员",
         registeInfo: "注册时间：2018-12-20 "
       },
-      activeIndex: '1',
+      activeIndex: store.state.menuIndex,
       langVisible: false
     }
   },
   methods: {
     openWindow(url) {
-      window.open(url)
+      console.log(store.state.menuIndex)
     },
     selectNavBar(key, keyPath) {
       console.log(key, keyPath)

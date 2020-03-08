@@ -5,7 +5,7 @@ import Login from '@/views/Login'
 import NotFound from '@/views/Error/404'
 import Home from '@/views/Home'
 import Intro from '@/views/Intro/Intro'
-import Generator from '@/views/Generator/Generator'
+// import Generator from '@/views/Generator/Generator'
 import api from '@/http/api'
 import store from '@/store'
 import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
@@ -71,23 +71,27 @@ router.beforeEach((to, from, next) => {
 * 加载动态菜单和路由
 */
 function addDynamicMenuAndRoutes(userName, to, from) {
+  const menuIndex = to.path.split("/")[1];
+
   // 处理IFrame嵌套页面
   handleIFrameUrl(to.path)
   if(store.state.app.menuRouteLoaded) {
-    console.log('动态菜单和路由已经存在.')
+    console.log('动态菜单和路由已经存在.');
+    store.commit('switchNavTree', menuIndex);
     return
   }
   api.menu.findNavTree({'userName':userName})
   .then(res => {
     // 添加动态路由
-    let dynamicRoutes = addDynamicRoutes(res.data)
+    let dynamicRoutes = addDynamicRoutes(res.data);
     // 处理静态组件绑定路由
-    handleStaticComponent(router, dynamicRoutes)
-    router.addRoutes(router.options.routes)
+    handleStaticComponent(router, dynamicRoutes);
+    router.addRoutes(router.options.routes);
     // 保存加载状态
-    store.commit('menuRouteLoaded', true)
+    store.commit('menuRouteLoaded', true);
     // 保存菜单树
-    store.commit('setNavTree', res.data)
+    store.commit('setBaseNavTree', res.data);
+    store.commit('switchNavTree', menuIndex);
   }).then(res => {
     api.user.findPermissions({'name':userName}).then(res => {
       // 保存用户权限标识集合
@@ -103,12 +107,12 @@ function addDynamicMenuAndRoutes(userName, to, from) {
  * 比如'代码生成'是要求直接绑定到'Generator'页面组件
  */
 function handleStaticComponent(router, dynamicRoutes) {
-  for(let j=0;j<dynamicRoutes.length; j++) {
-    if(dynamicRoutes[j].name == '代码生成') {
-      dynamicRoutes[j].component = Generator
-      break
-    }
-  }
+  // for(let j=0;j<dynamicRoutes.length; j++) {
+  //   if(dynamicRoutes[j].name == '代码生成') {
+  //     dynamicRoutes[j].component = Generator
+  //     break
+  //   }
+  // }
   router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
 }
 
