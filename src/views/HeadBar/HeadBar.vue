@@ -20,7 +20,7 @@
         <el-menu-item index="members" @click="$router.push('/members/project/manage')">会员</el-menu-item>
         <el-menu-item index="3" @click="$router.push('/')">产品项目</el-menu-item>
         <el-menu-item index="4" @click="$router.push('/')">报表</el-menu-item>
-        <el-menu-item index="5" @click="openWindow('/')">系统</el-menu-item>
+        <el-menu-item index="5" @click="$router.push('/')">系统</el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
@@ -78,7 +78,6 @@ import Action from "@/components/Toolbar/Action"
 import NoticePanel from "@/views/Core/NoticePanel"
 import MessagePanel from "@/views/Core/MessagePanel"
 import PersonalPanel from "@/views/Core/PersonalPanel"
-import store from '@/store/modules/menu'
 
 export default {
   components:{
@@ -98,7 +97,6 @@ export default {
         role: "超级管理员",
         registeInfo: "注册时间：2018-12-20 "
       },
-      activeIndex: store.state.menuIndex,
       langVisible: false
     }
   },
@@ -135,7 +133,8 @@ export default {
   computed:{
     ...mapState({
       themeColor: state=>state.app.themeColor,
-      collapse: state=>state.app.collapse
+      collapse: state=>state.app.collapse,
+      activeIndex: state=>state.menu.menuIndex
     })
   }
 }

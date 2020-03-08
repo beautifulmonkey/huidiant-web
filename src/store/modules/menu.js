@@ -18,7 +18,11 @@ export default {
                 console.log("menuIndex没变,所以不用从新加载menu");
                 return
             }
-            state.menuIndex = menuIndex
+            if (menuIndex === ""){
+                console.log("访问首页");
+                menuIndex = "cashier"
+            }
+            state.menuIndex = menuIndex;
             state.baseNavTree.forEach((item,index,array)=>{
                 if (item.menuIndex === menuIndex){
                     state.navTree = item.children
