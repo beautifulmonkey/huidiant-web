@@ -30,14 +30,15 @@
           <!-- 主题切换 -->
           <theme-picker class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
         </el-menu-item>
-<!--        <el-menu-item index="2" v-popover:popover-lang>-->
+        <el-menu-item index="2">
 <!--          &lt;!&ndash; 语言切换 &ndash;&gt;-->
 <!--          <li style="color:#fff;" class="fa fa-language fa-lg"></li>-->
 <!--          <el-popover ref="popover-lang" placement="bottom-start" trigger="click" v-model="langVisible">-->
 <!--            <div class="lang-item" @click="changeLanguage('zh_cn')">简体中文</div>-->
 <!--            <div class="lang-item" @click="changeLanguage('en_us')">English</div>-->
 <!--          </el-popover>-->
-<!--        </el-menu-item>-->
+            <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        </el-menu-item>
         <el-menu-item index="3" v-popover:popover-message>
           <!-- 我的私信 -->
           <el-badge :value="5" :max="99" class="badge" type="success">
@@ -78,6 +79,7 @@ import Action from "@/components/Toolbar/Action"
 import NoticePanel from "@/views/Core/NoticePanel"
 import MessagePanel from "@/views/Core/MessagePanel"
 import PersonalPanel from "@/views/Core/PersonalPanel"
+import Screenfull from './Screenfull'
 
 export default {
   components:{
@@ -87,7 +89,8 @@ export default {
         Action,
         NoticePanel,
         MessagePanel,
-        PersonalPanel
+        PersonalPanel,
+        Screenfull
   },
   data() {
     return {
