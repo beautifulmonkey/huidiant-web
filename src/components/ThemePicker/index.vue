@@ -2,7 +2,8 @@
   <el-color-picker
     class="theme-picker"
     popper-class="theme-picker-dropdown"
-    v-model="theme" 
+    :predefine="predefineColors"
+    v-model="theme"
     :size="size">
   </el-color-picker>
 </template>
@@ -28,7 +29,19 @@ export default {
     return {
       chalk: '', // content of theme-chalk css
       theme: ORIGINAL_THEME,
-      showSuccess: true // 是否弹出换肤成功消息
+      showSuccess: true, // 是否弹出换肤成功消息,
+      predefineColors: [
+        '#2C869A',
+        '#d97600',
+        '#e597b9',
+        '#409EFF',
+        '#a278dc',
+        '#90ee90',
+        '#00ced1',
+        '#1e90ff',
+        '#699ce6',
+        '#334154'
+      ]
     }
   },
   mounted() {
@@ -78,7 +91,7 @@ export default {
         if (typeof innerText !== 'string') return
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })
-      
+
       // 响应外部操作
       this.$emit('onThemeChange', val)
       if(this.showSuccess) {

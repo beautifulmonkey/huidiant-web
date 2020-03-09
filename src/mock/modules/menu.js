@@ -9,7 +9,7 @@ export function findNavTree() {
     "msg": null,
     "data": [
       {
-        "name": "收银",
+        "name": "首页",
         "menuIndex": "cashier",
         "children": [
           {
