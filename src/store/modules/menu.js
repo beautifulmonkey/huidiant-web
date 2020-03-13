@@ -2,12 +2,14 @@ import de from "element-ui/src/locale/lang/de";
 
 export default {
     state: {
-        // 树相关
+        // 左侧树相关
         navTree: [],  // 当前树
         baseNavTree: [],  // 总树
         menuIndex: null,  // 总树
-        // 选中相关
-        selectActive: null  // 当前选中的select, 通常为url
+        selectActive: null,  // 当前选中的select, 通常为url
+
+        // 上侧head相关
+        headMenu: []  // 最上方的head菜单,结构数据的第一级
     },
     getters: {
 
@@ -15,6 +17,15 @@ export default {
     mutations: {
         setBaseNavTree(state, navTree){  // 设置导航总树
             state.baseNavTree = navTree;
+
+            if (!state.headMenu.length){ // 在遍历总树的时候可以加载出menu的数据
+                navTree.forEach((item,index,array)=>{
+                    state.headMenu.push({
+                        "menuIndex": item.menuIndex,
+                        "name": item.name
+                    })
+                });
+            }
         },
         switchNavTree(state, menuIndex){  // 设置导航当前树
             if (menuIndex === state.menuIndex) {

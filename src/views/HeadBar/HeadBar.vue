@@ -12,18 +12,13 @@
       <el-menu :default-active="activeIndex" class="el-menu-demo"
           :background-color="themeColor" text-color="#fff" active-text-color="#ffd04b" mode="horizontal" @select="selectNavBar()">
 <!--        <el-menu-item index="1" @click="$router.push('/')"><i class="fa fa-home fa-lg"></i>  </el-menu-item>-->
-<!--        <el-menu-item index="2" @click="openWindow('https://gitee.com/liuge1988/kitty')">{{$t("common.projectRepo")}}</el-menu-item>-->
-<!--        <el-menu-item index="3" @click="openWindow('https://gitee.com/liuge1988/kitty/wikis/Home')">{{$t("common.doc")}}</el-menu-item>-->
-<!--        <el-menu-item index="4" @click="openWindow('https://www.cnblogs.com/xifengxiaoma/')">{{$t("common.blog")}}</el-menu-item>-->
+<!--        <el-menu-item index="cashier" @click="$router.push('/cashier')">首页</el-menu-item>-->
+<!--        <el-menu-item index="members" @click="$router.push('/members')">会员</el-menu-item>-->
+<!--        <el-menu-item index="3" @click="$router.push('/')">产品项目</el-menu-item>-->
+<!--        <el-menu-item index="4" @click="$router.push('/')">报表</el-menu-item>-->
+<!--        <el-menu-item index="5" @click="$router.push('/')">系统</el-menu-item>-->
 
-        <el-menu-item index="cashier" @click="$router.push('/cashier')">首页</el-menu-item>
-        <el-menu-item index="members" @click="$router.push('/members')">会员</el-menu-item>
-<!--          <el-menu-item index="cashier" @click="$router.push('/cashier/sys/user')">首页</el-menu-item>-->
-<!--        <el-menu-item index="members" @click="$router.push('/members/project/manage')">会员</el-menu-item>-->
-
-        <el-menu-item index="3" @click="$router.push('/')">产品项目</el-menu-item>
-        <el-menu-item index="4" @click="$router.push('/')">报表</el-menu-item>
-        <el-menu-item index="5" @click="$router.push('/')">系统</el-menu-item>
+        <el-menu-item v-for="item in headMenu" :index="item.menuIndex" @click="$router.push('/' + item.menuIndex)">{{item.name}}</el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
@@ -140,7 +135,8 @@ export default {
     ...mapState({
       themeColor: state=>state.app.themeColor,
       collapse: state=>state.app.collapse,
-      activeIndex: state=>state.menu.menuIndex
+      activeIndex: state=>state.menu.menuIndex,
+      headMenu:state=>state.menu.headMenu
     })
   }
 }
