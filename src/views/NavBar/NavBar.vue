@@ -6,7 +6,7 @@
         <img v-if="collapse" src="@/assets/logo.png"/> <div>{{collapse?'':appName}}</div>
     </div>
     <!-- 导航菜单 -->
-    <el-menu ref="navmenu" default-active="1" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
+    <el-menu ref="navmenu" :default-active="selectActive" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
       :collapse="collapse" :collapse-transition="false" :unique-opened="true  "
       @open="handleopen" @close="handleclose" @select="handleselect">
       <!-- 导航菜单树组件，动态加载菜单 -->
@@ -27,7 +27,8 @@ export default {
       appName: state=>state.app.appName,
       themeColor: state=>state.app.themeColor,
       collapse: state=>state.app.collapse,
-      navTree: state=>state.menu.navTree
+      navTree: state=>state.menu.navTree,
+      selectActive: state=>state.menu.selectActive
     }),
     mainTabs: {
       get () { return this.$store.state.tab.mainTabs },

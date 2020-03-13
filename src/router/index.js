@@ -61,8 +61,11 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login' })
     } else {
       // 加载动态菜单和路由
-      addDynamicMenuAndRoutes(userName, to, from)
-      next()
+      addDynamicMenuAndRoutes(userName, to, from);
+      if (to.path !== "/cashier" && to.path !== "/members"){
+        store.commit('setSelectActive', to.path);
+        next()
+      }
     }
   }
 })

@@ -13,7 +13,7 @@ export function findNavTree() {
         "menuIndex": "cashier",
         "children": [
           {
-        "id": 1,
+        "id": "/cashier/sys",
         "createBy": null,
         "createTime": null,
         "lastUpdateBy": null,
@@ -29,7 +29,7 @@ export function findNavTree() {
         "parentName": null,
         "level": 0,
         "children": [{
-          "id": 2,
+          "id": "/cashier/sys/user",
           "createBy": null,
           "createTime": null,
           "lastUpdateBy": null,
@@ -46,7 +46,7 @@ export function findNavTree() {
           "level": 1,
           "children": []
         }, {
-          "id": 3,
+          "id": "/cashier/sys/dept",
           "createBy": null,
           "createTime": null,
           "lastUpdateBy": null,
@@ -63,7 +63,7 @@ export function findNavTree() {
           "level": 1,
           "children": []
         }, {
-          "id": 4,
+          "id": "/cashier/sys/role",
           "createBy": null,
           "createTime": null,
           "lastUpdateBy": null,
@@ -80,7 +80,7 @@ export function findNavTree() {
           "level": 1,
           "children": []
         }, {
-          "id": 5,
+          "id": "/cashier/sys/menu",
           "createBy": null,
           "createTime": null,
           "lastUpdateBy": null,
@@ -97,7 +97,7 @@ export function findNavTree() {
           "level": 1,
           "children": []
         }, {
-          "id": 7,
+          "id": "/cashier/sys/dict",
           "createBy": null,
           "createTime": null,
           "lastUpdateBy": null,
@@ -114,7 +114,7 @@ export function findNavTree() {
           "level": 1,
           "children": []
         }, {
-          "id": 8,
+          "id": "/cashier/sys/log",
           "createBy": null,
           "createTime": null,
           "lastUpdateBy": "admin",
@@ -133,59 +133,7 @@ export function findNavTree() {
         }]
       },
           {
-          "id": 43,
-          "createBy": "admin",
-          "createTime": "2018-12-27T02:57:29.000+0000",
-          "lastUpdateBy": "admin",
-          "lastUpdateTime": "2018-12-27T03:02:26.000+0000",
-          "parentId": 0,
-          "name": "系统监控",
-          "url": "",
-          "perms": "",
-          "type": 0,
-          "icon": "el-icon-info",
-          "orderNum": 1,
-          "delFlag": 0,
-          "parentName": null,
-          "level": 0,
-          "children": [{
-            "id": 6,
-            "createBy": null,
-            "createTime": null,
-            "lastUpdateBy": "admin",
-            "lastUpdateTime": "2018-12-27T03:03:45.000+0000",
-            "parentId": 43,
-            "name": "数据监控",
-            "url": null,
-            "perms": null,
-            "type": 1,
-            "icon": "el-icon-warning",
-            "orderNum": 0,
-            "delFlag": 0,
-            "parentName": "系统监控",
-            "level": 1,
-            "children": []
-          }, {
-            "id": 38,
-            "createBy": "admin",
-            "createTime": "2018-11-02T12:02:15.000+0000",
-            "lastUpdateBy": "admin",
-            "lastUpdateTime": "2018-12-27T03:03:53.000+0000",
-            "parentId": 43,
-            "name": "服务监控",
-            "url": null,
-            "perms": "",
-            "type": 1,
-            "icon": "el-icon-view",
-            "orderNum": 1,
-            "delFlag": 0,
-            "parentName": "系统监控",
-            "level": 1,
-            "children": []
-          }]
-        },
-          {
-          "id": 44,
+          "id": "/cashier/service",
           "createBy": "admin",
           "createTime": "2018-12-27T03:05:48.000+0000",
           "lastUpdateBy": "admin",
@@ -201,17 +149,17 @@ export function findNavTree() {
           "parentName": null,
           "level": 0,
           "children": [{
-            "id": 41,
+            "id": "/cashier/service/deal",
             "createBy": "admin",
             "createTime": "2018-11-03T03:06:48.000+0000",
             "lastUpdateBy": "admin",
             "lastUpdateTime": "2018-12-27T03:08:11.000+0000",
             "parentId": 44,
             "name": "注册中心",
-            "url": "http://139.196.87.48:8500",
+            "url": "/cashier/service/deal",
             "perms": "",
             "type": 1,
-            "icon": " el-icon-view",
+            "icon": " el-icon-user",
             "orderNum": 0,
             "delFlag": 0,
             "parentName": "服务治理",
@@ -313,7 +261,7 @@ export function findNavTree() {
         "menuIndex": "members",
         "children": [
           {
-            "id": 350,
+            "id": "/members/project",
             "createBy": null,
             "createTime": null,
             "lastUpdateBy": "admin",
@@ -330,7 +278,7 @@ export function findNavTree() {
             "level": 0,
             "children": [
               {
-                "id": 351,
+                "id": "/members/project/manage",
                 "createBy": null,
                 "createTime": null,
                 "lastUpdateBy": "admin",
@@ -349,7 +297,7 @@ export function findNavTree() {
                 ]
               },
               {
-                "id": 352,
+                "id": "/members/project/sensor",
                 "createBy": null,
                 "createTime": null,
                 "lastUpdateBy": "admin",
@@ -370,7 +318,7 @@ export function findNavTree() {
             ]
           },
           {
-            "id": 360,
+            "id": "/members/project/money",
             "createBy": null,
             "createTime": null,
             "lastUpdateBy": "admin",

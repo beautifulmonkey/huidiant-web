@@ -2,9 +2,12 @@ import de from "element-ui/src/locale/lang/de";
 
 export default {
     state: {
+        // 树相关
         navTree: [],  // 当前树
         baseNavTree: [],  // 总树
         menuIndex: null,  // 总树
+        // 选中相关
+        selectActive: null  // 当前选中的select, 通常为url
     },
     getters: {
 
@@ -28,6 +31,9 @@ export default {
                     state.navTree = item.children
                 }
             })
+        },
+        setSelectActive(state, Active){  // 设置导航总树
+            state.selectActive = Active;
         },
     },
     actions: {
