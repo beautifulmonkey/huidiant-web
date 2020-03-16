@@ -337,6 +337,26 @@ export function findNavTree() {
             ]
           }
           ]
+      },
+      {
+        "name": "商品",
+        "menuIndex": "goods"
+      },
+      {
+        "name": "客户",
+        "menuIndex": "customer"
+      },
+      {
+        "name": "订单",
+        "menuIndex": "orders"
+      },
+      {
+        "name": "数据",
+        "menuIndex": "summary"
+      },
+      {
+        "name": "设置",
+        "menuIndex": "settings"
       }
     ]
   }

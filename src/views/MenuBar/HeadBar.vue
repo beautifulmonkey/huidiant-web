@@ -77,7 +77,8 @@ import Action from "@/components/Toolbar/Action"
 import NoticePanel from "@/views/Core/NoticePanel"
 import MessagePanel from "@/views/Core/MessagePanel"
 import PersonalPanel from "@/views/Core/PersonalPanel"
-import Screenfull from './Screenfull'
+// import Screenfull from '@/views/HeadBar/Screenfull'
+import Screenfull from '@/components/ScreenFull/Screenfull'
 
 export default {
   components:{
