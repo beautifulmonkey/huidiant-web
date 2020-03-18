@@ -9,6 +9,7 @@ import Intro from '@/views/Intro/Intro'
 import api from '@/http/api'
 import store from '@/store'
 import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
+import de from "element-ui/src/locale/lang/de";
 
 Vue.use(Router)
 const Bar = { template: '<h1>bar</h1>' }
@@ -68,7 +69,9 @@ router.beforeEach((to, from, next) => {
     } else {
       // 加载动态菜单和路由
       addDynamicMenuAndRoutes(userName, to, from);
-      if (to.path !== "/cashier" && to.path !== "/members"){
+      // todo: 动态获取
+      const menuindex = ["/cashier", "/goods", "/customer", "/orders", "/summary", "/settings"];
+      if (menuindex.indexOf(to.path) === -1 ){
         store.commit('setSelectActive', to.path);
         next()
       }
@@ -80,7 +83,7 @@ router.beforeEach((to, from, next) => {
 * 加载动态菜单和路由
 */
 function addDynamicMenuAndRoutes(userName, to, from) {
-  const menuIndex = to.path.split("/")[1];
+  const menuIndex = "/" + to.path.split("/")[1];
 
   // 处理IFrame嵌套页面
   handleIFrameUrl(to.path)

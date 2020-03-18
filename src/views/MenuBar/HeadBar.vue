@@ -17,7 +17,7 @@
 <!--        <el-menu-item index="3" @click="$router.push('/')">产品项目</el-menu-item>-->
 <!--        <el-menu-item index="4" @click="$router.push('/')">报表</el-menu-item>-->
         <el-menu-item index="5" @click="openWindow('#/sy')"><strong>收银</strong></el-menu-item>
-        <el-menu-item v-for="item in headMenu" :index="item.menuIndex" @click="$router.push('/' + item.menuIndex)">{{item.name}}</el-menu-item>
+        <el-menu-item v-for="item in headMenu" :index="item.menuIndex" @click="$router.push(item.menuIndex)">{{item.name}}</el-menu-item>
       </el-menu>
     </span>
     <!-- 工具栏 -->
