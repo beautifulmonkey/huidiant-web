@@ -11,6 +11,7 @@ import store from '@/store'
 import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
 
 Vue.use(Router)
+const Bar = { template: '<h1>bar</h1>' }
 
 const router = new Router({
   routes: [
@@ -34,6 +35,11 @@ const router = new Router({
       path: '/login',
       name: '登录',
       component: Login
+    },
+    {
+      path: '/sy',
+      name: '收银',
+      component: Bar
     },
     {
       path: '/404',
