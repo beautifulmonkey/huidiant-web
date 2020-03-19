@@ -4,6 +4,7 @@ import Cookies from "js-cookie"
 import Login from '@/views/Login'
 import NotFound from '@/views/Error/404'
 import Home from '@/views/Home'
+import Cashier from '@/views/Cashier'
 import Intro from '@/views/Intro/Intro'
 // import Generator from '@/views/Generator/Generator'
 import api from '@/http/api'
@@ -12,7 +13,6 @@ import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
 import de from "element-ui/src/locale/lang/de";
 
 Vue.use(Router)
-const Bar = { template: '<h1>bar</h1>' }
 
 const router = new Router({
   routes: [
@@ -38,9 +38,9 @@ const router = new Router({
       component: Login
     },
     {
-      path: '/sy',
+      path: '/cashier',
       name: '收银',
-      component: Bar
+      component: Cashier
     },
     {
       path: '/404',
@@ -70,7 +70,7 @@ router.beforeEach((to, from, next) => {
       // 加载动态菜单和路由
       addDynamicMenuAndRoutes(userName, to, from);
       // todo: 动态获取
-      const menuindex = ["/cashier", "/goods", "/customer", "/orders", "/summary", "/settings"];
+      const menuindex = ["/goods", "/customer", "/orders", "/analysis", "/settings"];
       if (menuindex.indexOf(to.path) === -1 ){
         store.commit('setSelectActive', to.path);
         next()
