@@ -69,10 +69,15 @@ router.beforeEach((to, from, next) => {
     } else {
       // 加载动态菜单和路由
       addDynamicMenuAndRoutes(userName, to, from);
-      // todo: 动态获取
+      // todo: 艹 OBServer如何获取数据????????
       const menuindex = ["/goods", "/customer", "/orders", "/analysis", "/settings"];
+      const hidden_map = {"/goods/service/add": "/goods/service"};
       if (menuindex.indexOf(to.path) === -1 ){
-        store.commit('setSelectActive', to.path);
+        if (hidden_map[to.path]){
+          store.commit('setSelectActive', hidden_map[to.path]);  // todo: 不管用
+        }else {
+          store.commit('setSelectActive', to.path);
+        }
         next()
       }
     }
@@ -102,7 +107,7 @@ function addDynamicMenuAndRoutes(userName, to, from) {
     // 保存加载状态
     store.commit('menuRouteLoaded', true);
     // 保存菜单树
-    store.commit('setBaseNavTree', res.data);
+    store.commit('setBaseNavTree', baseNavTree(res.data));
     store.commit('switchNavTree', menuIndex);
   }).then(res => {
     api.user.findPermissions({'name':userName}).then(res => {
@@ -143,6 +148,25 @@ function handleIFrameUrl(path) {
       break
     }
   }
+}
+
+
+/**
+ * 递归把hidden数据剔除
+ */
+
+function baseNavTree(btree) {
+  var children_list = [];
+  btree.forEach((item,index,array)=>{
+    if(!item.hidden) {
+      if(item.children && item.children.length >= 1){
+        item.children = baseNavTree(item.children)
+      }
+      children_list.push(item)
+    }
+  });
+
+  return children_list
 }
 
 /**

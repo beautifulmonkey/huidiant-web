@@ -27,7 +27,8 @@
           <!-- 主题切换 -->
           <theme-picker class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
         </el-menu-item>
-        <el-menu-item index="2">
+
+        <el-menu-item index="2" v-if="!isMobile()">
 <!--          &lt;!&ndash; 语言切换 &ndash;&gt;-->
 <!--          <li style="color:#fff;" class="fa fa-language fa-lg"></li>-->
 <!--          <el-popover ref="popover-lang" placement="bottom-start" trigger="click" v-model="langVisible">-->
@@ -102,6 +103,10 @@ export default {
     }
   },
   methods: {
+      isMobile(){
+          let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+          return flag;
+      },
     openWindow(url) {
       window.open(url)
     },

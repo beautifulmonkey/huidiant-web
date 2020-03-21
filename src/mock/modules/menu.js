@@ -89,6 +89,8 @@ export function findNavTree() {
         "name": "商品",
         "menuIndex": "/goods",
         "children": [
+
+            // 服务
           {
             "id": "/goods/service",
             "name": "服务管理",
@@ -96,6 +98,18 @@ export function findNavTree() {
             "icon": "el-icon-bell",
             "children": []
           },
+          {
+            "id": "/goods/service/add",
+            "name": "新增服务",
+            "url": "/goods/service/add",
+            "icon": "el-icon-plus",
+            "hidden": true,
+            "activeMenu": "/goods/service",  // todo activeMenu
+            "children": [
+            ]
+          },
+
+            // 产品
           {
             "id": "/goods/product",
             "name": "产品管理",

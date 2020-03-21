@@ -43,7 +43,7 @@ export default {
                 }
             })
         },
-        setSelectActive(state, Active){  // 设置导航总树
+        setSelectActive(state, Active){  // 设置当前选中节点
             state.selectActive = Active;
         },
     },
