@@ -99,12 +99,11 @@ export function findNavTree() {
             "children": []
           },
           {
-            "id": "/goods/service/add",
-            "name": "新增服务",
+            "id": "/goods/service",
+            "name": "添加服务",
             "url": "/goods/service/add",
             "icon": "el-icon-plus",
             "hidden": true,
-            "activeMenu": "/goods/service",  // todo activeMenu
             "children": [
             ]
           },
@@ -117,6 +116,9 @@ export function findNavTree() {
             "icon": "el-icon-shopping-bag-2",
             "children": []
           },
+
+
+            // 卡项
           {
             "id": "/goods/card",
             "name": "卡项管理",
@@ -124,6 +126,23 @@ export function findNavTree() {
             "icon": "el-icon-bank-card",
             "children": []
           },
+          {
+            "id": "/goods/card",
+            "name": "添加次卡",
+            "url": "/goods/card/add/numbers",
+            "icon": "el-icon-plus",
+            "hidden": true,
+            "children": []
+          },
+          {
+            "id": "/goods/card",
+            "name": "添加充值卡",
+            "url": "/goods/card/add/prepaid",
+            "icon": "el-icon-plus",
+            "hidden": true,
+            "children": []
+          }
+
         ]
       },
       {

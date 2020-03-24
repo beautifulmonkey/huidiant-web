@@ -71,7 +71,11 @@ router.beforeEach((to, from, next) => {
       addDynamicMenuAndRoutes(userName, to, from);
       // todo: 艹 OBServer如何获取数据????????
       const menuindex = ["/goods", "/customer", "/orders", "/analysis", "/settings"];
-      const hidden_map = {"/goods/service/add": "/goods/service"};
+      const hidden_map = {
+        "/goods/service/add": "/goods/service",
+        "/goods/card/add/numbers": "/goods/card",
+        "/goods/card/add/prepaid": "/goods/card",
+      };
       if (menuindex.indexOf(to.path) === -1 ){
         if (hidden_map[to.path]){
           store.commit('setSelectActive', hidden_map[to.path]);  // todo: 不管用
