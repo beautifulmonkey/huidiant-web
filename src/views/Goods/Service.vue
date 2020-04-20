@@ -33,6 +33,7 @@
                     <el-input
                             v-model="filter.query"
                             size="mini"
+                            clearable
                             placeholder="请输入内容"
                             prefix-icon="el-icon-search"
                             >
@@ -134,7 +135,7 @@
                     page_index: 1,
                     page_size: 10
                 },
-                pageSizes: [10, 30, 50],
+                pageSizes: [5, 10, 30, 50],
                 category: [
                     {
                         "id": 4,
@@ -163,65 +164,31 @@
                         "name": "染发"
                     }
                 ],
-                tableData: [
-                    {
-                    name: 'PPT精油',
-                    price: 158,
-                    disable: 1,
-
-                }, {
-                    name: '沐蔻丹发质还原',
-                    price: 880,
-                    disable: 0
-                }, {
-                    name: '极度受损发染膏',
-                    price: 1280,
-                        disable: 1
-                }, {
-                    name: '设计师剪发',
-                    price: 38,
-                        disable: 1
-                }, {
-                    name: '欧莱雅烫发',
-                    price: 580,
-                        disable: 1
-                }, {
-                    name: '首席剪发',
-                    price: 58,
-                        disable: 0
-                }, {
-                    name: '总监剪发',
-                    price: 98,
-                        disable: 1
-                }, {
-                    name: '设计师剪发',
-                    price: 38,
-                        disable: 1
-                }]
+                tableData: []
             }
         },
         methods: {
-            // async getServiceList(){
-            //     this.listLoading = true;
-            //     try {
-            //         const res = await serviceApi.getServiceList(this.filter)
-            //         if (res.status >= 200 && res.status < 300) {
-            //             this.tableData = res.data.data
-            //             this.filter.pageTotal = res.data.page.total
-            //         } else {
-            //             this.$message({
-            //                 type: 'error',
-            //                 message: '获取维护方式列表失败!'
-            //             })
-            //         }
-            //     } catch (error) {
-            //         console.log(error)
-            //     }
-            //     setTimeout(() => {
-            //         // scrollTo(0, 800)
-            //         this.listLoading = false
-            //     }, 500)
-            // }
+            async getServiceList(){
+                this.listLoading = true;
+                try {
+                    const res = await serviceApi.getServiceList(this.filter)
+                    if (res.status >= 200 && res.status < 300) {
+                        this.tableData = res.data.data
+                        this.filter.pageTotal = res.data.page.total
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取维护方式列表失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+                setTimeout(() => {
+                    // scrollTo(0, 800)
+                    this.listLoading = false
+                }, 500)
+            },
 
             // 搜索
             onSearchClick() {
@@ -287,17 +254,12 @@
             onPageIndexChange(val) {
                 this.filter.page_index = val;
                 this.getServiceList()
-            },
-
-            async getServiceList() {
-                console.log("发送请求!")
-                console.log(this.filter)
             }
 
         },
 
         mounted() {
-            // this.getServiceList()
+            this.getServiceList()
         }
     }
 </script>
