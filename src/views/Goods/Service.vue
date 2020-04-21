@@ -97,7 +97,7 @@
                         label="操作"
                         show-overflow-tooltip>
                     <template slot-scope="scope">
-                        <el-button size="mini" type="text" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" type="text" @click="$router.push('/goods/service/edit/' + scope.row.id)">编辑</el-button>
                         <el-button
                                 v-if="!scope.row.disable"
                                 size="mini"

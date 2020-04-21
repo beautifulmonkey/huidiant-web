@@ -107,6 +107,16 @@ export function findNavTree() {
             "children": [
             ]
           },
+          {
+            "id": "/goods/service",
+            "name": "编辑服务",
+            "url": "/goods/service/edit/:id",
+            "component": "/goods/service/edit",
+            "icon": "el-icon-edit",
+            "hidden": true,
+            "children": [
+            ]
+          },
 
             // 产品
           {

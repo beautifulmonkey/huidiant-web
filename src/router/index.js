@@ -208,7 +208,11 @@ function addDynamicRoutes (menuList = [], routes = []) {
        try {
          // 根据菜单URL动态加载vue组件，这里要求vue组件须按照url路径存储
          // 如url="sys/user"，则组件路径应是"@/views/sys/user.vue",否则组件加载不到
-         let array = menuList[i].url.split('/')
+         if (menuList[i].component){
+           var array = menuList[i].component.split('/').slice(1)
+         }else {
+           var array = menuList[i].url.split('/')
+         }
          let url = ''
          for(let i=0; i<array.length; i++) {
             url += array[i].substring(0,1).toUpperCase() + array[i].substring(1) + '/'
