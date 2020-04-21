@@ -13,4 +13,28 @@ export default {
         const url = `${config.server.url}/goods/tag`;
         return await request('get', url, {"type": type})
     },
+
+    // 添加标签
+    async addTag(form) {
+        const url = `${config.server.url}/goods/tag`;
+        return await request('post', url, form)
+    },
+
+    // 添加分类
+    async addCategory(form) {
+        const url = `${config.server.url}/goods/category`;
+        return await request('post', url, form)
+    },
+
+    // 删除标签
+    async delTag(id) {
+        const url = `${config.server.url}/goods/tag/${id}`;
+        return await request('delete', url)
+    },
+
+    // 删除分类
+    async delCategory(id) {
+        const url = `${config.server.url}/goods/category/${id}`;
+        return await request('delete', url)
+    },
 }

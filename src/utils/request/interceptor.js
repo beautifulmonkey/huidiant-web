@@ -89,10 +89,10 @@ const reponseInterceptorError = function(error) {
 }
 
 // request拦截器
-// axios.interceptors.request.use(requestInterceptorFunc, requestInterceptorError)
+axios.interceptors.request.use(requestInterceptorFunc, requestInterceptorError)
 
 // respone拦截器
-// axios.interceptors.response.use(reponseInterceptorFunc, reponseInterceptorError)
+axios.interceptors.response.use(reponseInterceptorFunc, reponseInterceptorError)
 
 // 之前的通用组件的请求是自己封装的，为了兼容通用组件的请求的使用，需要导出去一个方法体让其他引用这个拦截器，历史遗留问题产生的方案
 export default {
