@@ -63,9 +63,13 @@ export default {
         tab = {
           name: route.name,
           title: route.name,
-          icon: route.meta.icon
-        }
+          icon: route.meta.icon,
+          path: route.path
+        };
         this.mainTabs = this.mainTabs.concat(tab)
+      }else {
+          // 动态参数需要更换
+          tab.path = route.path;
       }
       this.mainTabsActiveName = tab.name
       // 切换标签页时同步更新高亮菜单

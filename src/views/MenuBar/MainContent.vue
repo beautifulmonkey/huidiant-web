@@ -52,7 +52,8 @@ export default {
     selectedTabHandle (tab) {
       tab = this.mainTabs.filter(item => item.name === tab.name)
       if (tab.length >= 1) {
-        this.$router.push({ name: tab[0].name })
+        // this.$router.push({ name: tab[0].name })
+        this.$router.push(tab[0].path)
       }
     },
     // tabs, 删除tab
@@ -61,7 +62,7 @@ export default {
       if (this.mainTabs.length >= 1) {
         // 当前选中tab被删除
         if (tabName === this.mainTabsActiveName) {
-          this.$router.push({ name: this.mainTabs[this.mainTabs.length - 1].name }, () => {
+          this.$router.push(this.mainTabs[this.mainTabs.length - 1].path, () => {
             this.mainTabsActiveName = this.$route.name
           })
         }
@@ -84,10 +85,11 @@ export default {
     },
     // tabs, 刷新当前
     tabsRefreshCurrentHandle () {
-      var tempTabName = this.mainTabsActiveName
-      this.removeTabHandle(tempTabName)
+      var tempTabName = this.mainTabsActiveName;
+      let tab = this.mainTabs.filter(item => item.name === tempTabName);
+      this.removeTabHandle(tempTabName);
       this.$nextTick(() => {
-        this.$router.push({ name: tempTabName })
+        this.$router.push(tab[0].path)
       })
     }
   }

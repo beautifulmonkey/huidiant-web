@@ -29,7 +29,7 @@ export default {
         },
         switchNavTree(state, menuIndex){  // 设置导航当前树
             if (menuIndex === state.menuIndex) {
-                console.log("menuIndex没变,所以不用从新加载menu");
+                // console.log("menuIndex没变,所以不用从新加载menu");
                 return
             }
             if (menuIndex === "/"){
