@@ -5,7 +5,7 @@
         <el-button size="small" @click="btnClick('tag')" plain>管理标签</el-button>
 
         <el-dialog
-                :title="dialogTitle + '管理'"
+                :title="goods_mode_info + dialogTitle + '管理'"
                 :visible.sync="dialogVisible"
                 >
 
@@ -56,6 +56,14 @@
 
     export default {
         name: "categoryTagComponent",
+        props: {
+            goods_mode: {
+                type: Number
+            },
+            goods_mode_info: {
+                type: String
+            }
+        },
         data() {
             return {
                 goods_type: '',
@@ -86,7 +94,7 @@
             // 获取分类
             async getCategoryList(){
                 try {
-                    const res = await categoryTagApi.getCategoryList(1);
+                    const res = await categoryTagApi.getCategoryList(this.goods_mode);
                     if (res.status >= 200 && res.status < 300) {
                         this.tableData = res.data
                     } else {
@@ -103,7 +111,7 @@
             // 获取标签
             async getTagList(){
                 try {
-                    const res = await categoryTagApi.getTagList(1);
+                    const res = await categoryTagApi.getTagList(this.goods_mode);
                     if (res.status >= 200 && res.status < 300) {
                         this.tableData = res.data
                     } else {
@@ -210,6 +218,9 @@
                 this.Form.name = ''
             },
 
+        },
+        mounted() {
+            this.Form.type = this.goods_mode
         }
     };
 </script>

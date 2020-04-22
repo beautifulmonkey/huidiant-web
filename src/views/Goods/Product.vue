@@ -5,7 +5,7 @@
             <el-row>
                 <el-col :span="24"><div style="float: left">
                     <el-button size="small" icon="el-icon-plus" type="primary" @click="$router.push('/goods/product/add')">添加产品</el-button>
-                    <category-tag-component></category-tag-component>
+                    <category-tag-component :goods_mode=2 goods_mode_info="产品"></category-tag-component>
                 </div></el-col>
             </el-row>
 
