@@ -8,7 +8,7 @@ export default {
         const url = `${config.server.url}/goods/service`
         return await request('get', url, filter)
     },
-    // 获取服务列表
+    // 获取单个服务
     async getServiceOne(id) {
         const url = `${config.server.url}/goods/service/${id}`;
         return await request('get', url)

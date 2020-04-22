@@ -73,6 +73,7 @@ router.beforeEach((to, from, next) => {
       const menuindex = ["/goods", "/customer", "/orders", "/analysis", "/settings"];
       const hidden_map = {
         "/goods/service/add": "/goods/service",
+        "/goods/product/add": "/goods/product",
         "/goods/card/add/numbers": "/goods/card",
         "/goods/card/add/prepaid": "/goods/card",
       };

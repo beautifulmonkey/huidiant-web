@@ -185,7 +185,7 @@
                     } else {
                         this.$message({
                             type: 'error',
-                            message: '获取维护方式列表失败!'
+                            message: '获取服务列表失败!'
                         })
                     }
                 } catch (error) {

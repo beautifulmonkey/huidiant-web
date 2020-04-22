@@ -126,7 +126,23 @@ export function findNavTree() {
             "icon": "el-icon-shopping-bag-2",
             "children": []
           },
-
+          {
+            "id": "/goods/product",
+            "name": "添加产品",
+            "url": "/goods/product/add",
+            "icon": "el-icon-plus",
+            "hidden": true,
+            "children": []
+          },
+          {
+            "id": "/goods/product",
+            "name": "编辑产品",
+            "url": "/goods/product/edit/:id",
+            "component": "/goods/product/edit",
+            "icon": "el-icon-edit",
+            "hidden": true,
+            "children": []
+          },
 
             // 卡项
           {
