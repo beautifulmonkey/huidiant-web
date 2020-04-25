@@ -1,155 +1,213 @@
 <template>
     <div class="Card">
         <div class="m-wrap-16 table-head">
-            <div style="display: flex" class="">
 
-                <el-popover
-                        placement="bottom"
-                        title="选择卡项"
-                        trigger="click"
-                        content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+            <el-row>
+                <el-col :span="24"><div style="float: left">
+                    <el-popover
+                            placement="bottom"
+                            title="选择卡项类型"
+                            trigger="click">
 
-                    <div>
-                        <el-radio-group v-model="radio1" @change="radioChange">
-                            <el-radio-button label="/goods/card/add/numbers">次卡</el-radio-button>
-                            <el-radio-button label="/goods/card/add/prepaid">充值卡</el-radio-button>
-                        </el-radio-group>
-                    </div>
+                        <div>
+                            <el-radio-group v-model="cardType" @change="radioChange">
+                                <el-radio-button label="/goods/card/add/numbers">次卡</el-radio-button>
+                                <el-radio-button label="/goods/card/add/prepaid">充值卡</el-radio-button>
+                            </el-radio-group>
+                        </div>
 
-                    <el-button slot="reference" size="medium" icon="fa fa-plus" type="primary">添加卡项</el-button>
-                </el-popover>
+                        <el-button size="small" icon="el-icon-plus" slot="reference" type="primary">添加卡项</el-button>
 
-            </div>
+                    </el-popover>
+                </div></el-col>
+            </el-row>
+
         </div>
 
         <div class="m-wrap-16 table-body" >
-            <el-tabs type="card" @tab-click="handleClick">
-                <el-tab-pane label="全部卡类"></el-tab-pane>
-                <el-tab-pane label="充值卡"></el-tab-pane>
-                <el-tab-pane label="次卡"></el-tab-pane>
+            <el-tabs type="card" @tab-click="tabsClick" v-model="activeName" >
+                <el-tab-pane label="全部卡类" :name=-1></el-tab-pane>
+                <el-tab-pane label="充值卡" :name=1></el-tab-pane>
+                <el-tab-pane label="次卡" :name=2></el-tab-pane>
             </el-tabs>
             <el-table
                     size="medium"
-                    ref="multipleTable"
-                    :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-                    tooltip-effect="dark"
-                    style="width: 100%"
+                    :data="tableData"
                     >
                 <el-table-column
-                        type="selection"
-                        width="55">
-                </el-table-column>
-                <el-table-column
-                        sortable
-                        sort-by="price"
                         prop="name"
                         label="卡项">
                     <template slot-scope="scope">
                         <div class="card-img" style="width: 70px; height: 50px; float: left">
-                            <img v-if="!scope.row.type" class="" style="width: 50px;height: 50px; border-radius: 5px" :src="require('@/assets/img/ck.png')" />
-                            <img v-if="scope.row.type" class="" style="width: 50px;height: 50px; border-radius: 5px" :src="require('@/assets/img/czk.png')" />
+                            <img v-if="scope.row.type===2" class="" style="width: 50px;height: 50px; border-radius: 5px" :src="require('@/assets/img/ck.png')" />
+                            <img v-if="scope.row.type===1" class="" style="width: 50px;height: 50px; border-radius: 5px" :src="require('@/assets/img/czk.png')" />
                         </div>
-                        <div style="float: left; height: 50px; text-align: center">
-                            <div style="padding: 10px">
-                                {{scope.row.name}}
-                            </div>
-                        </div>
-                    </template>
-                </el-table-column>
-                <!--                <el-table-column-->
-                <!--                        sortable-->
-                <!--                        prop="price"-->
-                <!--                        label="价格">-->
-                <!--                </el-table-column>-->
+                            <div>{{scope.row.name}}
+                                <el-tag type="success" size="mini" v-if="!scope.row.disable">
+                                    在售
+                                </el-tag>
 
-                <el-table-column
-                        prop="name"
-                        label="分类"
-                        show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column
-                        prop="name"
-                        label="标签"
-                        show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column
-                        align="right">
-                    <template slot="header" slot-scope="scope">
-                        <el-input
-                                clearable
-                                v-model="search"
-                                size="mini"
-                                placeholder="输入关键字搜索"/>
+                                <el-tag type="danger" size="mini" v-if="scope.row.disable">
+                                    下架中
+                                </el-tag>
+                                <br>
+                                <el-tag type="warning" size="small">
+                                    ￥ {{scope.row.price}}
+                                </el-tag>
+                            </div>
                     </template>
+                </el-table-column>
+                <el-table-column
+                        prop="validity"
+                        label="有效期">
+                </el-table-column>
+                <el-table-column
+                        prop="type_details"
+                        label="套餐类型">
+                </el-table-column>
+                <el-table-column
+                        label="操作">
                     <template slot-scope="scope">
                         <el-button
+                                type="text"
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                        <el-button
-                                v-if="scope.row.type"
-                                size="mini"
-                                type="danger"
-                                @click="handleDelete(scope.$index, scope.row)">下架</el-button>
+                                >编辑</el-button>
+
+                        <el-button size="mini" type="text">详情</el-button>
 
                         <el-button
-                                v-if="!scope.row.type"
+                                v-if="!scope.row.disable"
                                 size="mini"
-                                type="success"
-                                @click="handleDelete(scope.$index, scope.row)">上架</el-button>
+                                type="text"
+                                @click="cardStatusChange(scope.row.id, 1)">下架</el-button>
+
+                        <el-button
+                                v-if="scope.row.disable"
+                                size="mini"
+                                type="text"
+                                @click="cardStatusChange(scope.row.id, 0)">上架</el-button>
+                        <el-button size="mini" type="text">删除</el-button>
+
 
                     </template>
                 </el-table-column>
 
             </el-table>
-
+            <div class="pagination-container">
+                <el-pagination background @size-change="onPageSizeChange" @current-change="onPageIndexChange" :current-page="filter.page_index" :page-sizes="pageSizes" :page-size="filter.page_size" layout="total, sizes, prev, pager, next, jumper"
+                               :total="filter.pageTotal">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+    import cardApi from '@/service/card.js'
+
     export default {
         name: "Card",
         data() {
             return {
-                radio1: '',
+                cardType: '',
+                activeName: -1,
+                filter: {
+                    type: -1,
+                    pageTotal: null,
+                    page_index: 1,
+                    page_size: 10
+                },
                 search: '',
-                tableData: [
-                    {
-                        name: '才子金卡',
-                        price: 158,
-                        type: 1,
-
-                    }, {
-                        name: '沐蔻丹发质还原',
-                        price: 880,
-                        type: 0
-                    }, {
-                        name: '才子银卡',
-                        price: 1280,
-                        type: 1
-                    }, {
-                        name: '发货HEN头皮周期',
-                        price: 38,
-                        type: 0
-                    }, {
-                        name: '才子钻石卡',
-                        price: 580,
-                        type: 1
-                    }, {
-                        name: '剪发卡',
-                        price: 58,
-                        type: 0
-                    }
-                ]
+                tableData: [],
+                pageSizes: [10, 30, 50],
             }
         },
         methods: {
-            handleClick(tab, event) {
-                console.log(tab, event);
+            tabsClick(tab, event) {
+                this.filter.page_index = 1
+                this.filter.type = tab.name;
+                this.getCardList()
             },
             radioChange(url) {
                 this.$router.push(url)
+            },
+
+            // 卡项上下架
+            cardStatusChange(card_id, disable) {
+                if (disable === 0){
+                    this.updateCardStatus(card_id, disable)
+                } else {
+
+                    this.$confirm('下架后无法在收银界面看到该卡项, 可通过上架还原。是否继续?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    })
+                        .then(() => {
+                            this.updateCardStatus(card_id, disable)
+                        })
+                        .catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消操作'
+                            })
+                        })
+
+                }
+            },
+
+            // 上下架卡项
+            async updateCardStatus(card_id, disable){
+                const disable_map = {1: "下架", 0: "上架"};
+                try {
+                    const res = await cardApi.updateCardStatus(card_id, disable);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '卡项' + disable_map[disable] + '成功!'
+                        });
+                        this.getCardList()
+                    } else {
+                        console.error('error', res.status)
+                    }
+                } catch (error) {
+                    console.error('error', error)
+                }
+            },
+
+            // 获取卡项列表
+            async getCardList(){
+                try {
+                    const res = await cardApi.getCardList(this.filter);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.tableData = res.data.data;
+                        this.filter.pageTotal = res.data.page.total
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取卡项列表失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 页数量变化
+            onPageSizeChange(val) {
+                this.filter.page_size = val;
+                this.getCardList()
+            },
+
+            // 页码变化
+            onPageIndexChange(val) {
+                this.filter.page_index = val;
+                this.getCardList()
             }
+
+        },
+        mounted(){
+            this.getCardList()
         }
     }
 </script>
@@ -158,15 +216,5 @@
     .m-wrap-16 {
         margin: 16px;
     }
-    .p-wrap-16-top {
-        padding-top: 16px;
-    }
-    .el-divider--horizontal {
-        margin: 5px;
-    }
-    .card-img {
-        /*background-image: url("@/assets/user.png");*/
-    }
-
 
 </style>

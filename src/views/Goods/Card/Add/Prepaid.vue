@@ -8,91 +8,105 @@
 
             <div class="m-wrap-from" style="width: 40%">
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-
                     <el-form-item label="名称" prop="name">
-                        <el-input v-model="ruleForm.name" class="from-item-input"></el-input>
+                        <el-input v-model="ruleForm.name" class="from-item-input" size="mini"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="充值金额" prop="name">
-                        <el-input v-model="ruleForm.name" class="from-item-input">
-                            <template slot="append">元</template>
+                    <el-form-item label="充值金额" prop="price">
+                        <el-input v-model="ruleForm.price" class="from-item-input" size="mini">
+                            <template slot="prepend">￥</template>
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item label="赠送金额" prop="name">
-                        <el-input v-model="ruleForm.name" class="from-item-input">
-                            <template slot="append">元</template>
-                        </el-input>
-                    </el-form-item>
-
-                    <el-form-item label="权益" prop="name">
-                        <el-button type="text" @click="dialogVisible = true">添加权益</el-button>
-                    </el-form-item>
-
-
-                    <el-form-item label="有效时间" prop="region">
-                        <el-radio v-model="radio" label="1">备选项</el-radio>
-                        <el-radio v-model="radio" label="2">
-                            <el-input v-model="ruleForm.name" style="width: 200px">
-                                <template slot="append">天</template>
-                            </el-input>
-                        </el-radio>
-                    </el-form-item>
-
-                    <el-form-item label="标签" prop="region">
-                        <el-select v-model="ruleForm.region" placeholder="请选择活动区域" class="from-item-input">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
-                    </el-form-item>
-
-                    <el-form-item label="服务时长" prop="time">
-                        <el-select v-model="ruleForm.time" placeholder="请选择活动区域" class="from-item-input">
-                            <el-option label="区域一" value="shanghai"></el-option>
-                            <el-option label="区域二" value="beijing"></el-option>
-                        </el-select>
+                    <el-form-item label="权益" prop="rule" style="width: 100vh;">
+                        <el-button type="text" @click="rightsAdd" style="float: left" v-if="!rightsRealData.length">添加权益</el-button>
+                        <el-button type="text" @click="rightsAdd" style="float: left" v-if="rightsRealData.length">编辑权益</el-button>
+                        <el-table
+                                v-if="rightsRealData.length"
+                                size="mini"
+                                :data="rightsRealData">
+                            <el-table-column
+                                    prop="label"
+                                    label="已选"
+                                    width="180">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="price"
+                                    label="优惠规则">
+                                <template slot-scope="scope">
+                                    <span v-if="!scope.row.isgoods_item">{{scope.row.value}} 折</span>
+                                    <span v-if="scope.row.isgoods_item&&scope.row.mode==='discount'">{{scope.row.value}} 折</span>
+                                    <span v-if="scope.row.isgoods_item&&scope.row.mode==='price'">{{scope.row.value}} 元</span>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-form-item>
 
 
-                    <!--                todo: 保存时关闭当前标签页-->
+<!--                    todo: 购卡赠送-->
+<!--                    <el-form-item label="购卡赠送" prop="gift">-->
+<!--                        <el-button type="text" @click="dialogVisible = true">添加赠送</el-button>-->
+<!--                    </el-form-item>-->
+
+                    <el-form-item label="有效时间" prop="valid_days">
+                        <el-radio-group v-model="valid_days_type">
+                            <el-radio label="-1" >永久有效</el-radio>
+                            <el-radio label="1">
+                                <el-input v-model="ruleForm.valid_days" size="mini" :disabled="valid_days_type==='-1'">
+                                    <template slot="append">天</template>
+                                </el-input>
+                            </el-radio>
+                        </el-radio-group>
+
+                    </el-form-item>
+
+                    <el-form-item label="描述" prop="description">
+                        <el-input type="textarea" v-model="ruleForm.description"></el-input>
+                    </el-form-item>
+
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                        <el-button @click="resetForm('ruleForm')">重置</el-button>
+                        <div style="float: left">
+                            <el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="mini">立即创建</el-button>
+                            <el-button @click="resetForm('ruleForm')" size="mini">重置</el-button>
+                        </div>
                     </el-form-item>
-                </el-form>        </div>
+                </el-form>
+            </div>
+
 
 <!--            todo: 高度50%如何定义-->
             <el-dialog
                     title="添加权益"
-                    width="70%"
+                    width="90%"
                     :visible.sync="dialogVisible"
                     >
-                <el-row
-                        style="height: 500px;">
+                <el-row>
                     <el-col :span="8">
                         <el-input
                                 clearable
                                 placeholder="输入关键字进行过滤"
                                 v-model="filterText">
                         </el-input>
+
+<!--                        todo: 元素如溢出何滚动条显示?-->
                         <el-tree
-                                style="font-size: 100px;"
-                                :data="data"
-                                node-key="id"
+                                node-key="code"
                                 ref="tree"
                                 show-checkbox
                                 @check-change="handleCheckChange"
+                                :data="goodsTreeData"
                                 :filter-node-method="filterNode"
                                 :check-strictly	="true"
                                 :props="defaultProps">
                         </el-tree>
                     </el-col>
                     <el-col :span="16">
+<!--                        todo: 表单未验证-->
                         <el-table
                                 empty-text="未定义任何权益"
-                                :data="tableData">
+                                :data="rightsTableData">
                             <el-table-column
-                                    prop="name"
+                                    prop="label"
                                     label="已选">
                             </el-table-column>
                             <el-table-column
@@ -101,10 +115,16 @@
                             </el-table-column>
                             <el-table-column
                                     prop="rule"
+                                    width="200px;"
                                     label="优惠设置">
                                 <template slot-scope="scope">
-                                    <el-input size="small">
-                                        <template slot="append">折</template>
+                                    <el-input size="mini" placeholder="请输入内容" v-model="scope.row.value">
+                                        <template slot="append">
+                                            <el-select v-model="scope.row.mode" size="mini" style="width: 100px">
+                                                <el-option label="折" value="discount"></el-option>
+                                                <el-option :disabled="!scope.row.isgoods_item" label="元" value="price"></el-option>
+                                            </el-select>
+                                        </template>
                                     </el-input>
                                 </template>
                             </el-table-column>
@@ -113,7 +133,7 @@
                                     label="操作">
                                 <template slot-scope="scope">
                                     <el-button
-                                            @click.native.prevent="deleteRow(scope.$index, tableData)"
+                                            @click.native.prevent="deleteRow(scope.$index, scope.row.code)"
                                             type="text"
                                             size="small">
                                         移除
@@ -122,8 +142,8 @@
                             </el-table-column>
                         </el-table>
                         <div style="margin-top: 20px">
-                            <el-button @click="dialogVisible = false"添加权益>取 消</el-button>
-                            <el-button type="primary" @click="dialogVisible = false">保 存</el-button>
+                            <el-button @click="dialogVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="rightsSubmit">保 存</el-button>
                         </div>
                     </el-col>
                 </el-row>
@@ -134,6 +154,7 @@
 </template>
 
 <script>
+    import cardApi from '@/service/card.js'
     export default {
         name: "Prepaid",
         watch: {
@@ -141,133 +162,222 @@
                 this.$refs.tree.filter(val);
             }
         },
-        methods: {
-            filterNode(value, data) {
-                if (!value) return true;
-                return data.label.indexOf(value) !== -1;
-            },
-            handleCheckChange(data, checked, indeterminate) {
-                // debugger
-                this.tableData.push({
-                    "name": data.label,
-                    "price": "-",
-                    "rule": 33,
-                    "handle":33
-                })
-            },
-            deleteRow(index, rows) {
-                rows.splice(index, 1);
-            }
-        },
         data() {
             return {
-                radio: '',
+                valid_days_type: "-1",
                 ruleForm: {
+                    type: 1,
                     name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: '',
-                    time: ''
+                    price: null,
+                    valid_days: null,
+                    description: '',
+                    rule: {'rights_list': []}
                 },
+
                 rules: {
                     name: [
                         { required: true, message: '请输入活动名称', trigger: 'blur' },
-                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                        { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
                     ],
-                    region: [
-                        { required: true, message: '请选择活动区域', trigger: 'change' }
+                    price: [
+                        { required: true, message: '请输入充值金额', trigger: 'blur' },
+                        {
+                            validator:(rule,value,callback)=>{
+                                if(value != ""){
+                                    if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
+                                        callback(new Error("充值金额为数字且不能小于0"));
+                                    }else{
+                                        callback();
+                                    }
+                                }else{
+                                    callback();
+                                }
+
+                            },
+                            trigger: 'blur'
+                        }
                     ],
-                    date1: [
-                        { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+                    rule: [
+                        {
+                            validator:(rule,value,callback)=>{
+                                if(!this.rightsRealData.length){
+                                    callback(new Error("至少添加一项卡权益"));
+                                }else{
+                                    callback();
+                                }
+
+                            },
+                            trigger: 'blur',
+                            required: true
+                        }
                     ],
-                    date2: [
-                        { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-                    ],
-                    type: [
-                        { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
-                    ],
-                    resource: [
-                        { required: true, message: '请选择活动资源', trigger: 'change' }
-                    ],
-                    desc: [
-                        { required: true, message: '请填写活动形式', trigger: 'blur' }
+                    valid_days: [
+                        {
+                            validator:(rule,value,callback)=>{
+                                if(this.valid_days_type !== '-1'){
+                                    if((/^(([1-9]{1}\d*)|(0{1}))?$/).test(value) == false || value>3650){
+                                        callback(new Error("有效时间需为大于0，小于3650的整数"));
+                                    }else{
+                                        callback();
+                                    }
+                                }else{
+                                    callback();
+                                }
+
+                            },
+                            trigger: 'blur',
+                            required: true
+                        }
                     ]
                 },
-                input1: '10',
                 dialogVisible: false,
                 filterText: '',
-                data: [
-                    {
-                    id: 1,
-                    label: '所有服务',
-                    children: [{
-                        id: 4,
-                        label: '烫发',
-                        children: [{
-                            id: 9,
-                            label: '欧莱配方烫发'
-                        }, {
-                            id: 10,
-                            label: '健康配方烫发'
-                        }]
-                    },
-                    {
-                        id: 11,
-                        label: '剪发',
-                        children: [{
-                            id: 12,
-                            label: '总监剪发'
-                        }, {
-                            id: 13,
-                            label: '首席剪发'
-                        }]
-                    }
-                    ]
-                }, {
-                    id: 2,
-                    label: '所有产品',
-                    children: [{
-                        id: 5,
-                        label: '洗发水',
-                        children: [{
-                            id: 14,
-                            label: '施华蔻洗发水'
-                        }, {
-                            id: 15,
-                            label: '阿立德洗发水'
-                        }]
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                }, {
-                    id: 3,
-                    label: '所有次卡',
-                    children: [{
-                        id: 7,
-                        label: '二级 3-1'
-                    }, {
-                        id: 8,
-                        label: '二级 3-2'
-                    }]
-                }],
-                tableData: [
-                    {
-                        "name": "烫发",
-                        "price": "-",
-                        "rule": 33,
-                        "handle":33
-                    }
-                ],
+
+                goodsTreeData: [],
+                rightsTableData: [],
+                rightsRealData: [],
+
                 defaultProps: {
                     children: 'children',
                     label: 'label'
                 }
             };
+        },
+        methods: {
+
+            resetForm(formName) {
+                this.rightsTableData = [];
+                this.rightsRealData = [];
+                this.$refs[formName].resetFields();
+            },
+
+            filterNode(value, data) {
+                if (!value) return true;
+                return data.label.indexOf(value) !== -1;
+            },
+
+            // 保存当前编辑权益
+            rightsSubmit(){
+                this.rightsRealData = this.rightsTableData;
+                this.dialogVisible = false
+            },
+
+            // 添加权益
+            rightsAdd(){
+                this.rightsTableData = this.rightsRealData;
+                this.dialogVisible = true;
+                this.$nextTick(() => {
+                    let check_node = [];
+                    for (let ite of this.rightsTableData) {
+                        check_node.push(ite.code)
+                    }
+                    this.$refs.tree.setCheckedKeys(check_node);
+                });
+            },
+
+            // 树状结构勾选
+            handleCheckChange(data, checked, indeterminate) {
+                if (checked) {
+                    // 添加权益
+                    let price = "-";
+                    let isgoods_item = false;
+                    if (data.price){
+                        price = "￥"+ data.price;
+                        isgoods_item = true
+                    }
+                    this.rightsTableData = this.rightsTableData.filter(item => item.code !== data.code);
+                    this.rightsTableData.push({
+                        id: data.id,
+                        code: data.code,
+                        price: price,
+                        label: data.label,
+                        type: data.type,
+                        value: 10,
+                        mode: "discount",
+                        isgoods_item: isgoods_item
+                    })
+                }else {
+                    // 删除权益
+                    this.rightsTableData = this.rightsTableData.filter(item => item.code !== data.code)
+                }
+            },
+
+            // 移除单条权益
+            deleteRow(index, code) {
+                this.rightsTableData.splice(index, 1);
+                this.$refs.tree.setChecked(code, false);
+
+            },
+
+            // 充值卡表单提交
+            prepaidSubmitForm(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        for(var i=0;i<this.rightsRealData.length;i++){
+                            let right_item = this.rightsRealData[i]
+                            const result = {
+                                "type": right_item.type,
+                                "id": right_item.id,
+                            };
+                            if (right_item.mode === "discount") {
+                                result.discount = parseFloat(right_item.value)
+                            }else if (right_item.mode === "price") {
+                                result.price = parseFloat(right_item.value)
+                            }
+                            console.log(result);
+                            this.ruleForm.rule.rights_list.push(result)
+                        }
+                        if (this.valid_days_type === '-1'){
+                            this.ruleForm.valid_days = -1
+                        }
+                        this.addPrepaidCard()
+                    } else {
+                        return false;
+                    }
+                });
+            },
+
+            // 添加充值卡
+            async addPrepaidCard() {
+                try {
+                    const res = await cardApi.addPrepaidCard(this.ruleForm);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '添加充值卡成功!',
+                            offset: 60
+                        });
+                        this.$router.push("/goods/card")
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '添加充值卡失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 获取商品树结构
+            async getGoodsTree(){
+                try {
+                    const res = await cardApi.getGoodsTree();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.goodsTreeData = res.data
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取商品树失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        },
+        mounted() {
+            this.getGoodsTree();
         }
     }
 </script>
@@ -275,6 +385,16 @@
 <style scoped>
     .m-wrap-8 {
         margin: 8px;
+    }
+    .m-wrap-from {
+        margin: 40px;
+    }
+    .el-form-item {
+        font-weight: 700
+    }
+    .from-item-input {
+        /*width: 400px;*/
+        width: 100%;
     }
 
 </style>

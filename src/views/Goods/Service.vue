@@ -146,7 +146,7 @@
                     query: '',
                     category_id: null,
                     tag_id: null,
-                    pageTotal: 30,
+                    pageTotal: null,
                     page_index: 1,
                     page_size: 10
                 },

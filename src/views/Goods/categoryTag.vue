@@ -25,7 +25,7 @@
 
             <el-table
                     :data="tableData"
-                    height="400"
+                    height="40vh"
             >
                 <el-table-column
                         prop="name"
