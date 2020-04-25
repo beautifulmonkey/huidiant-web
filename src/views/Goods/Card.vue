@@ -11,8 +11,8 @@
 
                         <div>
                             <el-radio-group v-model="cardType" @change="radioChange">
-                                <el-radio-button label="/goods/card/add/numbers">次卡</el-radio-button>
-                                <el-radio-button label="/goods/card/add/prepaid">充值卡</el-radio-button>
+                                <el-radio-button label="/goods/card/counting/add">次卡</el-radio-button>
+                                <el-radio-button label="/goods/card/prepaid/add">充值卡</el-radio-button>
                             </el-radio-group>
                         </div>
 
@@ -71,6 +71,7 @@
                         <el-button
                                 type="text"
                                 size="mini"
+                                @click="$router.push('/goods/card/prepaid/edit/' + scope.row.id)"
                                 >编辑</el-button>
 
                         <el-button size="mini" type="text">详情</el-button>
@@ -86,7 +87,8 @@
                                 size="mini"
                                 type="text"
                                 @click="cardStatusChange(scope.row.id, 0)">上架</el-button>
-                        <el-button size="mini" type="text">删除</el-button>
+
+                        <el-button size="mini" type="text"  @click="onDeleteClick(scope.row)">删除</el-button>
 
 
                     </template>
@@ -131,6 +133,47 @@
             radioChange(url) {
                 this.$router.push(url)
             },
+
+            // 删除卡项
+            onDeleteClick(item) {
+                this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.delCard(item.id)
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        })
+                    })
+            },
+
+            // 删除卡项
+            async delCard(id) {
+                try {
+                    const res = await cardApi.delCard(id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '删除卡项成功!'
+                        });
+                        this.getCardList()
+                    } else {
+                        console.error('error', res.status)
+                        this.$message({
+                            type: 'error',
+                            message: '删除卡项失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.error('error', error)
+                }
+            },
+
 
             // 卡项上下架
             cardStatusChange(card_id, disable) {

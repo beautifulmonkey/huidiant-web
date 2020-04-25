@@ -155,7 +155,7 @@ export function findNavTree() {
           {
             "id": "/goods/card",
             "name": "添加次卡",
-            "url": "/goods/card/add/numbers",
+            "url": "/goods/card/counting/add",
             "icon": "el-icon-plus",
             "hidden": true,
             "children": []
@@ -163,12 +163,20 @@ export function findNavTree() {
           {
             "id": "/goods/card",
             "name": "添加充值卡",
-            "url": "/goods/card/add/prepaid",
+            "url": "/goods/card/prepaid/add",
             "icon": "el-icon-plus",
             "hidden": true,
             "children": []
+          },
+          {
+            "id": "/goods/card",
+            "name": "编辑充值卡",
+            "url": "/goods/card/prepaid/edit/:id",
+            "component": "/goods/card/prepaid/edit",
+            "icon": "el-icon-edit",
+            "hidden": true,
+            "children": []
           }
-
         ]
       },
       {

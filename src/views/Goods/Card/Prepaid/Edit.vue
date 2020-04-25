@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="m-wrap-8">
-            <el-page-header @back="$router.push('/goods/card')" content="添加充值卡"></el-page-header>
+            <el-page-header @back="$router.push('/goods/card')" content="编辑充值卡"></el-page-header>
         </div>
 
         <div>
@@ -43,10 +43,10 @@
                     </el-form-item>
 
 
-<!--                    todo: 购卡赠送-->
-<!--                    <el-form-item label="购卡赠送" prop="gift">-->
-<!--                        <el-button type="text" @click="dialogVisible = true">添加赠送</el-button>-->
-<!--                    </el-form-item>-->
+                    <!--                    todo: 购卡赠送-->
+                    <!--                    <el-form-item label="购卡赠送" prop="gift">-->
+                    <!--                        <el-button type="text" @click="dialogVisible = true">添加赠送</el-button>-->
+                    <!--                    </el-form-item>-->
 
                     <el-form-item label="有效时间" prop="valid_days">
                         <el-radio-group v-model="valid_days_type">
@@ -66,20 +66,19 @@
 
                     <el-form-item>
                         <div style="float: left">
-                            <el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="mini">立即创建</el-button>
-                            <el-button @click="resetForm('ruleForm')" size="mini">重置</el-button>
+                            <el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="mini">保存</el-button>
                         </div>
                     </el-form-item>
                 </el-form>
             </div>
 
 
-<!--            todo: 高度50%如何定义-->
+            <!--            todo: 高度50%如何定义-->
             <el-dialog
                     title="添加权益"
                     width="90%"
                     :visible.sync="dialogVisible"
-                    >
+            >
                 <el-row>
                     <el-col :span="8">
                         <el-input
@@ -88,7 +87,7 @@
                                 v-model="filterText">
                         </el-input>
 
-<!--                        todo: 元素如溢出何滚动条显示?-->
+                        <!--                        todo: 元素如溢出何滚动条显示?-->
                         <el-tree
                                 node-key="code"
                                 ref="tree"
@@ -101,7 +100,7 @@
                         </el-tree>
                     </el-col>
                     <el-col :span="16">
-<!--                        todo: 表单未验证-->
+                        <!--                        todo: 表单未验证-->
                         <el-table
                                 empty-text="未定义任何权益"
                                 :data="rightsTableData">
@@ -233,6 +232,7 @@
                 dialogVisible: false,
                 filterText: '',
 
+                codeMap:{},
                 goodsTreeData: [],
                 rightsTableData: [],
                 rightsRealData: [],
@@ -244,12 +244,6 @@
             };
         },
         methods: {
-
-            resetForm(formName) {
-                this.rightsTableData = [];
-                this.rightsRealData = [];
-                this.$refs[formName].resetFields();
-            },
 
             filterNode(value, data) {
                 if (!value) return true;
@@ -313,45 +307,49 @@
             prepaidSubmitForm(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        for(var i=0;i<this.rightsRealData.length;i++){
-                            let right_item = this.rightsRealData[i]
+
+                        this.rightsRealData.forEach((right_item,index,array)=>{
                             const result = {
-                                "type": right_item.type,
+                                "code": right_item.code,
                                 "id": right_item.id,
+                                "isgoods_item": right_item.isgoods_item,
+                                "type": right_item.type,
+                                "mode": right_item.mode,
+                                "value": right_item.value
                             };
                             if (right_item.mode === "discount") {
                                 result.discount = parseFloat(right_item.value)
                             }else if (right_item.mode === "price") {
                                 result.price = parseFloat(right_item.value)
                             }
-                            console.log(result);
                             this.ruleForm.rule.rights_list.push(result)
-                        }
+                        });
+
                         if (this.valid_days_type === '-1'){
                             this.ruleForm.valid_days = -1
                         }
-                        this.addPrepaidCard()
+                        this.updatePrepaidCard()
                     } else {
                         return false;
                     }
                 });
             },
 
-            // 添加充值卡
-            async addPrepaidCard() {
+            // 修改充值卡
+            async updatePrepaidCard() {
                 try {
-                    const res = await cardApi.addPrepaidCard(this.ruleForm);
+                    const res = await cardApi.updatePrepaidCard(this.$route.params.id, this.ruleForm);
                     if (res.status >= 200 && res.status < 300) {
                         this.$message({
                             type: 'success',
-                            message: '添加充值卡成功!',
+                            message: '修改充值卡成功!',
                             offset: 60
                         });
                         this.$router.push("/goods/card")
                     } else {
                         this.$message({
                             type: 'error',
-                            message: '添加充值卡失败!'
+                            message: '修改充值卡失败!'
                         })
                     }
                 } catch (error) {
@@ -359,12 +357,30 @@
                 }
             },
 
+            // 递归获取code码和商品价格,名称的map
+            recursiveCodeMap(data) {
+                data.forEach((item,index,array)=>{
+                    if(item.children && item.children.length >= 1){
+                        this.recursiveCodeMap(item.children)
+                    }
+                    let price = "-";
+                    if (item.price) {
+                        price = "￥" + item.price;
+                    }
+                    this.codeMap[item.code] = {
+                        'label': item.label || '-',
+                        'price': price
+                    }
+                });
+            },
+
             // 获取商品树结构
             async getGoodsTree(){
                 try {
                     const res = await cardApi.getGoodsTree();
                     if (res.status >= 200 && res.status < 300) {
-                        this.goodsTreeData = res.data
+                        this.goodsTreeData = res.data;
+                        this.recursiveCodeMap(res.data)
                     } else {
                         this.$message({
                             type: 'error',
@@ -374,10 +390,40 @@
                 } catch (error) {
                     console.log(error)
                 }
+            },
+
+            // 获取单个卡
+            async getCardOne(){
+                await this.getGoodsTree();
+                try {
+                    const res = await cardApi.getCardOne(this.$route.params.id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.ruleForm = res.data;
+                        this.rightsRealData = res.data.rule.rights_list;
+                        this.ruleForm.rule = {'rights_list': []};
+
+                        this.rightsRealData.forEach((item,index,array)=>{
+                            item.label = this.codeMap[item.code].label;
+                            item.price = this.codeMap[item.code].price
+                        });
+                        if(res.data.valid_days!==-1){
+                            this.valid_days_type = "1";
+                        }else{
+                            this.ruleForm.valid_days = null;
+                        }
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取卡项失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }
         },
         mounted() {
-            this.getGoodsTree();
+            this.getCardOne();
         }
     }
 </script>
