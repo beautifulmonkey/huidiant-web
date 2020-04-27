@@ -31,7 +31,7 @@ export default {
     },
 
     // 修改充值卡
-    async updatePrepaidCard(id, params) {
+    async updateCard(id, params) {
         const url = `${config.server.url}/goods/card/${id}`;
         return await request('put', url, params)
     },

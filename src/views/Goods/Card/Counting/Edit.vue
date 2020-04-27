@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="m-wrap-8">
-            <el-page-header @back="$router.push('/goods/card')" content="添加次卡"></el-page-header>
+            <el-page-header @back="$router.push('/goods/card')" content="编辑次卡"></el-page-header>
         </div>
 
 
@@ -28,7 +28,7 @@
                 </el-form-item>
 
                 <el-form-item label="权益" prop="rule" style="width: 100vh;">
-                    <service-choose-component @return-value="setRights"></service-choose-component>
+                    <service-choose-component @return-value="setRights" ref="serviceComponent"></service-choose-component>
                     <el-table
                             v-if="this.ruleForm.rule.service.length"
                             size="mini"
@@ -70,8 +70,7 @@
 
                 <el-form-item>
                     <div style="float: left">
-                        <el-button type="primary" @click="countingSubmitForm('ruleForm')" size="mini">立即创建</el-button>
-                        <el-button @click="resetForm('ruleForm')" size="mini">重置</el-button>
+                        <el-button type="primary" @click="countingSubmitForm('ruleForm')" size="mini">保存</el-button>
                     </div>
                 </el-form-item>
 
@@ -174,21 +173,21 @@
                 });
             },
 
-            // 添加次卡
-            async addCountingCard() {
+            // 修改次卡
+            async updateCountingCard() {
                 try {
-                    const res = await cardApi.addCard(this.ruleForm);
+                    const res = await cardApi.updateCard(this.$route.params.id, this.ruleForm);
                     if (res.status >= 200 && res.status < 300) {
                         this.$message({
                             type: 'success',
-                            message: '添加次卡成功!',
+                            message: '修改次卡成功!',
                             offset: 60
                         });
                         this.$router.push("/goods/card")
                     } else {
                         this.$message({
                             type: 'error',
-                            message: '添加次卡失败!'
+                            message: '修改次卡失败!'
                         })
                     }
                 } catch (error) {
@@ -196,7 +195,7 @@
                 }
             },
 
-            // 立即创建
+            // 修改
             countingSubmitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -217,12 +216,34 @@
                             this.ruleForm.valid_days = -1
                         }
                         console.log(this.ruleForm)
-                        this.addCountingCard()
+                        this.updateCountingCard()
                     } else {
                         return false;
                     }
                 });
+            },
+
+            // 获取单个卡
+            async getCardOne(){
+                try {
+                    const res = await cardApi.getCardOne(this.$route.params.id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.ruleForm = res.data;
+                        this.ruleForm.counting_card_type = this.ruleForm.counting_card_type.toString()
+                        this.$refs.serviceComponent.initRight(this.ruleForm.rule.service)
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取卡项失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }
+        },
+        mounted() {
+            this.getCardOne();
         }
     }
 </script>

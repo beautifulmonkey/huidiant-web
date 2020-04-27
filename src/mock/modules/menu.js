@@ -162,6 +162,15 @@ export function findNavTree() {
           },
           {
             "id": "/goods/card",
+            "name": "编辑次卡",
+            "url": "/goods/card/counting/edit/:id",
+            "component": "/goods/card/counting/edit",
+            "icon": "el-icon-edit",
+            "hidden": true,
+            "children": []
+          },
+          {
+            "id": "/goods/card",
             "name": "添加充值卡",
             "url": "/goods/card/prepaid/add",
             "icon": "el-icon-plus",

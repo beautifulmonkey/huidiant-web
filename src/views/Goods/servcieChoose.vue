@@ -109,9 +109,19 @@
         methods: {
             // 添加权益
             rightsAdd(){
-                 console.log(this.checkServiceReal)
-                this.checkServiceRow = this.checkServiceReal;
+                 console.log(this.checkServiceRow)
+                // this.checkServiceRow = this.checkServiceReal;
                 this.dialogVisible = true
+            },
+
+            // 初始化
+            initRight(data){
+                data.forEach((item,index,array)=>{
+                    this.checkServiceRow.push({
+                        id: item.service_id,
+                        name: item.name
+                    })
+                });
             },
 
             // 保存当前编辑权益

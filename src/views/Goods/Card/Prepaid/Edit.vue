@@ -338,7 +338,7 @@
             // 修改充值卡
             async updatePrepaidCard() {
                 try {
-                    const res = await cardApi.updatePrepaidCard(this.$route.params.id, this.ruleForm);
+                    const res = await cardApi.updateCard(this.$route.params.id, this.ruleForm);
                     if (res.status >= 200 && res.status < 300) {
                         this.$message({
                             type: 'success',

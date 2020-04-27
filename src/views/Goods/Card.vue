@@ -71,8 +71,14 @@
                         <el-button
                                 type="text"
                                 size="mini"
-                                @click="$router.push('/goods/card/prepaid/edit/' + scope.row.id)"
-                                >编辑</el-button>
+                                v-if="scope.row.type===1"
+                                @click="$router.push('/goods/card/prepaid/edit/' + scope.row.id)">编辑</el-button>
+
+                        <el-button
+                                type="text"
+                                size="mini"
+                                v-if="scope.row.type===2"
+                                @click="$router.push('/goods/card/counting/edit/' + scope.row.id)">编辑</el-button>
 
                         <el-button size="mini" type="text">详情</el-button>
 
