@@ -24,8 +24,8 @@ export default {
         return await request('get', url)
     },
 
-    // 添加充值卡
-    async addPrepaidCard(params) {
+    // 添加卡
+    async addCard(params) {
         const url = `${config.server.url}/goods/card`;
         return await request('post', url, params)
     },

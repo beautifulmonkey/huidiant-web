@@ -26,9 +26,9 @@
 
         <div class="m-wrap-16 table-body" >
             <el-tabs type="card" @tab-click="tabsClick" v-model="activeName" >
-                <el-tab-pane label="全部卡类" :name=-1></el-tab-pane>
-                <el-tab-pane label="充值卡" :name=1></el-tab-pane>
-                <el-tab-pane label="次卡" :name=2></el-tab-pane>
+                <el-tab-pane label="全部卡类" name='-1'></el-tab-pane>
+                <el-tab-pane label="充值卡" name='1'></el-tab-pane>
+                <el-tab-pane label="次卡" name='2'></el-tab-pane>
             </el-tabs>
             <el-table
                     size="medium"
@@ -112,7 +112,7 @@
         data() {
             return {
                 cardType: '',
-                activeName: -1,
+                activeName: '-1',
                 filter: {
                     type: -1,
                     pageTotal: null,

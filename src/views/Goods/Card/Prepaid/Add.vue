@@ -346,7 +346,7 @@
             // 添加充值卡
             async addPrepaidCard() {
                 try {
-                    const res = await cardApi.addPrepaidCard(this.ruleForm);
+                    const res = await cardApi.addCard(this.ruleForm);
                     if (res.status >= 200 && res.status < 300) {
                         this.$message({
                             type: 'success',
