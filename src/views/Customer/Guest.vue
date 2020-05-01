@@ -4,8 +4,8 @@
 
 
             <div class="cond-row">
-                <el-button size="small" icon="el-icon-plus" type="primary">添加客户</el-button>
-                <el-button size="small" @click="$router.push('/goods/card')" plain>管理卡项</el-button>
+                <up-sert-customer-component @data-save="reloadData"></up-sert-customer-component>
+                <el-button style="margin-left: 15px;" size="small" @click="$router.push('/goods/card')" plain>管理卡项</el-button>
             </div>
 
 
@@ -134,8 +134,8 @@
 
                             <div style="margin-left: 10px;">
                                 <el-button size="medium" type="text" style="color: #5a5e66">{{scope.row.name}}</el-button>
-                                <i v-if="scope.row.sex===2" class="el-icon-female" style="color: #e6419c"></i>
-                                <i v-if="scope.row.sex===1" class="el-icon-male" style="color: #409df3"></i>
+                                <i v-if="scope.row.sex===1" class="el-icon-female" style="color: #e6419c"></i>
+                                <i v-if="scope.row.sex===2" class="el-icon-male" style="color: #409df3"></i>
                                 <br>
                                 <span>{{scope.row.tel}}</span>
                             </div>
@@ -159,9 +159,9 @@
                 <el-table-column prop="created_at" label="注册时间"></el-table-column>
                 <el-table-column prop="name" label="操作" fixed="right">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="text">详情</el-button>
+                        <el-button size="mini" type="text" @click="$router.push('/customer/guest/details/' + scope.row.id)">详情</el-button>
                         <el-button size="mini" type="text">开单</el-button>
-                        <el-button size="mini" type="text">删除</el-button>
+                        <el-button size="mini" type="text" @click="onDeleteClick(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
 
@@ -180,13 +180,12 @@
 
 <script>
     import customerApi from '@/service/customer.js'
-    import categoryTagApi from '@/service/categoryTag.js'
-    import categoryTagComponent from '@/views/Goods/categoryTag.vue'
+    import upSertCustomerComponent from '@/views/Customer/upSertCustomer.vue'
 
     export default {
         name: "Service",
         components: {
-            categoryTagComponent
+            upSertCustomerComponent
         },
         data() {
             return {
@@ -258,6 +257,45 @@
                 }
             },
 
+            async delCustomer(id) {
+                try {
+                    const res = await customerApi.delCustomer(id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '删除客户成功!'
+                        });
+                        this.getCustomerList();
+                    } else {
+                        console.error('error', res.status);
+                        this.$message({
+                            type: 'error',
+                            message: '删除客户失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.error('error', error)
+                }
+            },
+
+            // 删除客户
+            onDeleteClick(item) {
+                this.$confirm('此操作将删除该客户, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.delCustomer(item.id)
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        })
+                    })
+            },
+
             // 页数量变化
             onPageSizeChange(val) {
                 this.filter.page_size = val;
@@ -273,6 +311,11 @@
             // 搜索
             onSearchClick(){
                 console.log(this.filter)
+                this.getCustomerList();
+            },
+
+            // 重新加载页面
+            reloadData(){
                 this.getCustomerList();
             },
 

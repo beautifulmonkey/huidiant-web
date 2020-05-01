@@ -205,6 +205,15 @@ export function findNavTree() {
             "url": "/customer/guest",
             "icon": "el-icon-user",
             "children": []
+          },
+          {
+            "id": "/customer/guest",
+            "name": "客户详情",
+            "url": "/customer/guest/details/:id",
+            "component": "/customer/guest/details",
+            "icon": "el-icon-info",
+            "hidden": true,
+            "children": []
           }
         ]
       },
