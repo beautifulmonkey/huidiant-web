@@ -6,7 +6,7 @@
     </template>
     <MenuTree v-for="item in menu.children" :key="item.id" :menu="item"></MenuTree>
   </el-submenu>
-  <el-menu-item v-else :index="'' + menu.id" @click="handleRoute(menu)">
+  <el-menu-item v-else :index="'' + menu.id" @click="handleRoute(menu)" :disabled="menu.disabled">
     <i :class="menu.icon"></i>
     <span slot="title">{{menu.name}}</span>
   </el-menu-item>

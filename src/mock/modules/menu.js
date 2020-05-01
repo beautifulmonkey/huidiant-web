@@ -193,17 +193,26 @@ export function findNavTree() {
         "menuIndex": "/customer",
         "children": [
           {
-            "id": "/customer/vip",
-            "name": "会员管理",
-            "url": "/customer/vip",
-            "icon": "el-icon-s-opportunity",
-            "children": []
-          },
-          {
             "id": "/customer/guest",
             "name": "客户管理",
             "url": "/customer/guest",
             "icon": "el-icon-user",
+            "children": []
+          },
+          {
+            "id": "/customer/vip",
+            "name": "会员管理(开发中)",
+            "url": "/customer/vip",
+            "icon": "el-icon-s-opportunity",
+            "disabled": true,
+            "children": []
+          },
+          {
+            "id": "/customer/analysis",
+            "name": "客户分析(开发中)",
+            "url": "/customer/analysis",
+            "icon": "el-icon-data-analysis",
+            "disabled": true,
             "children": []
           },
           {
