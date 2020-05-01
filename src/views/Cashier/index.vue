@@ -40,6 +40,7 @@
             </div>
             <div class="padding-20">
                 <consume-component v-if="this.menuActive==='consume'"></consume-component>
+                <create-card-component v-if="this.menuActive==='createCard'"></create-card-component>
             </div>
         </div>
         <div class="main-shopping"></div>
@@ -51,11 +52,13 @@
     import {mapState} from "vuex";
 
     import consumeComponent from '@/views/Cashier/consumeSub.vue'
+    import createCardComponent from '@/views/Cashier/createCardSub.vue'
 
     export default {
         name: "index",
         components: {
-            consumeComponent
+            consumeComponent,
+            createCardComponent
         },
         data() {
             return {
@@ -144,5 +147,8 @@
 
     .el-tabs__content {
         padding: 5px;
+    }
+    .el-button+.el-button{
+        margin-left: 5px;
     }
 </style>

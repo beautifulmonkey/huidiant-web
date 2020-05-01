@@ -24,6 +24,7 @@
         <!--商品卡片区域-->
         <div class="box-card">
             <el-card shadow="always" :body-style="{ padding: '5px' }"
+                     @click.native="addGoods"
                      v-for="item in goodsCardList">
                 <div style="text-align: left;margin: 5px">
                     <span>{{item.name}}</span><br>
@@ -128,7 +129,16 @@
                 }else if (tabs_type==='product'){
                     this.getProductList()
                 }
+            },
+
+            // 添加到清单
+            addGoods() {
+                this.$message({
+                    type: 'success',
+                    message: '已经添加到清单列表'
+                })
             }
+
         },
         mounted() {
             this.getTagList();
@@ -143,6 +153,21 @@
         margin-top: 20px;
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .el-card {
+        box-sizing: border-box;
+        transition: all .3s;
+        -webkit-transition: all .3s; /* Safari */
+    }
+
+    .el-card:hover{
+        cursor: pointer;
+        transform: scale(1.05);
+        -ms-transform:scale(1.05);     /* IE 9 */
+        -moz-transform:scale(1.05);     /* Firefox */
+        -webkit-transform:scale(1.05); /* Safari 和 Chrome */
+        -o-transform:scale(1.05);
     }
 
     .box-card div{
