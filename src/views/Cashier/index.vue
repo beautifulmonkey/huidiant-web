@@ -39,7 +39,7 @@
                 </el-input>
             </div>
             <div class="padding-20">
-                <consume-component v-if="this.menuActive==='consume'"></consume-component>
+                <consume-component v-if="this.menuActive==='consume'" :prepaidCardId="chooseCustomerData.prepaid_card"></consume-component>
                 <counting-component v-if="this.menuActive==='counting'" :customerId="chooseCustomerData.id"></counting-component>
                 <create-card-component v-if="this.menuActive==='createCard'"></create-card-component>
             </div>

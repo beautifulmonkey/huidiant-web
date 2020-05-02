@@ -28,7 +28,8 @@
                      v-for="item in goodsCardList">
                 <div style="text-align: left;margin: 5px">
                     <span>{{item.name}}</span><br>
-                    <span style="color: #fe2278">￥{{item.price}}</span>
+                    <span style="color: #fe2278">￥{{item.discount_price}}</span>
+                    <s v-if="item.discount_price !== item.price"><span style="color: rgb(153, 153, 153)">￥{{item.price}}</span></s>
                 </div>
             </el-card>
         </div>
@@ -43,6 +44,12 @@
 
     export default {
         name: "consumeSub",
+        props: {
+            prepaidCardId: {
+                type: Number,
+                default: null
+            },
+        },
         data() {
             return {
                 tabsActiveName: 'service',
@@ -83,7 +90,8 @@
             // 获取服务列表
             async getServiceList(){
                 try {
-                    const res = await serviceApi.getServiceList({'tag_id': this.serviceTagId, "page_size": 999});
+                    const res = await serviceApi.getServiceList(
+                        {'tag_id': this.serviceTagId, "page_size": 999, 'prepaid_card': this.prepaidCardId});
                     if (res.status >= 200 && res.status < 300) {
                         this.goodsCardList = res.data.data
                     } else {
@@ -100,7 +108,8 @@
             // 获取产品列表
             async getProductList(){
                 try {
-                    const res = await productApi.getProductList({'tag_id': this.productTagId, "page_size": 999});
+                    const res = await productApi.getProductList(
+                        {'tag_id': this.productTagId, "page_size": 999, 'prepaid_card': this.prepaidCardId});
                     if (res.status >= 200 && res.status < 300) {
                         this.goodsCardList = res.data.data
                     } else {
@@ -142,7 +151,14 @@
         },
         mounted() {
             this.getTagList();
-            this.getGoodsList()
+        },
+        watch: {
+            prepaidCardId: {
+                immediate: true,
+                handler(val) {
+                    this.getGoodsList();
+                }
+            }
         }
     }
 </script>
