@@ -30,7 +30,7 @@
                     <div style="text-align: left;margin: 5px">
                         <span>{{item.name}}</span><br>
                         <span style="color: #fe2278">￥{{item.price}}</span><br>
-                        <span style="color: #999;font-size: 2vh;">{{item.counting_info}}</span>
+                        <span style="color: #999;font-size: 0.8rem;">{{item.counting_info}}</span>
                     </div>
                 </el-card>
             </div>
@@ -44,8 +44,7 @@
         <el-dialog
                 title="请选择消费项目"
                 :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
+                width="30%">
             <div style="text-align: left;margin-bottom: 20px;">
                 <span>{{countingClickItem.name}} ({{countingClickItem.counting_info}})</span>
             </div>
@@ -57,7 +56,7 @@
                         <div style="text-align: left;margin: 5px">
                             <span>{{item.name}}</span><br>
                             <span style="color: #fe2278">￥{{item.price}}</span><br>
-                            <span style="color: #999;font-size: 2vh;">{{item.counting_info}}</span>
+                            <span style="color: #999;font-size: 0.8rem;">{{item.counting_info}}</span>
                         </div>
                     </el-card>
                 </div>

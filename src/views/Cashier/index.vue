@@ -42,6 +42,7 @@
                 <consume-component v-if="this.menuActive==='consume'" :prepaidCardId="chooseCustomerData.prepaid_card"></consume-component>
                 <counting-component v-if="this.menuActive==='counting'" :customerId="chooseCustomerData.id"></counting-component>
                 <create-card-component v-if="this.menuActive==='createCard'" :prepaidCardId="chooseCustomerData.prepaid_card"></create-card-component>
+                <recharge-component v-if="this.menuActive==='recharge'" :customerData="chooseCustomerData"></recharge-component>
             </div>
         </div>
         <div class="main-shopping">
@@ -92,6 +93,8 @@
     import consumeComponent from '@/views/Cashier/consumeSub.vue'
     import createCardComponent from '@/views/Cashier/createCardSub.vue'
     import countingComponent from '@/views/Cashier/countingSub.vue'
+    import rechargeComponent from '@/views/Cashier/rechargeSub.vue'
+
     import customerApi from '@/service/customer.js'
 
     export default {
@@ -99,7 +102,8 @@
         components: {
             consumeComponent,
             createCardComponent,
-            countingComponent
+            countingComponent,
+            rechargeComponent
         },
         data() {
             return {
@@ -109,11 +113,11 @@
                 chooseCustomerData: {},  // 当前选择客户的信息
                 consumption: [
                     {name: "开单", id: "consume"},
-                    {name: "次卡", id: "counting"},
+                    {name: "划卡", id: "counting"},
                 ],
                 savings: [
                     {name: "开卡", id: "createCard"},
-                    {name: "充值", id: "increase"},
+                    {name: "充值", id: "recharge"}
                 ],
                 others: [
                     {name: "取单", id: "qudan"},
@@ -142,7 +146,8 @@
                                 tel: item.tel,
                                 sex: item.sex,
                                 identity: item.identity,
-                                prepaid_card: item.prepaid_card
+                                prepaid_card: item.prepaid_card,
+                                card_balance: item.card_balance
                             })
                         });
                         cb(cb_data);

@@ -22,7 +22,7 @@
                         ¥{{item.discount_price}}
                     </div>
 
-                    <div style="text-align: right;font-size: 2vh;">
+                    <div style="text-align: right;font-size: 0.8rem;">
                         <s v-if="item.discount_price !== item.price"><span>￥{{item.price}}</span></s>
                     </div>
 
