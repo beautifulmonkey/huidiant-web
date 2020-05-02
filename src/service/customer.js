@@ -43,5 +43,11 @@ export default {
     async delCustomer(id) {
         const url = `${config.server.url}/customer/customer/${id}`;
         return await request('delete', url)
+    },
+
+    // 模糊搜索客户
+    async SearchCustomer(query) {
+        const url = `${config.server.url}/customer/search`;
+        return await request('get', url, {query: query})
     }
 }
