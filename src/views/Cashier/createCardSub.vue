@@ -4,8 +4,8 @@
         <div class="box-tag">
             <div>
                 <el-radio-group v-model="cardType" size="mini" @change="tagChange">
-                    <el-radio-button :label="-1">全部</el-radio-button>
-                    <el-radio-button :label="1">充值卡</el-radio-button>
+                    <el-radio-button v-if="!this.prepaidCardId" :label="-1">全部</el-radio-button>
+                    <el-radio-button v-if="!this.prepaidCardId" :label="1">充值卡</el-radio-button>
                     <el-radio-button :label="2">次卡</el-radio-button>
                 </el-radio-group>
             </div>
@@ -18,7 +18,14 @@
                  v-for="item in cardList">
                 <div>{{item.name}}</div>
                 <div>
-                    <div style="text-align: right">¥{{item.price}}</div>
+                    <div style="text-align: right">
+                        ¥{{item.discount_price}}
+                    </div>
+
+                    <div style="text-align: right;font-size: 2vh;">
+                        <s v-if="item.discount_price !== item.price"><span>￥{{item.price}}</span></s>
+                    </div>
+
                     <div style="text-align: right">{{item.validity}}</div>
                 </div>
             </div>
@@ -30,6 +37,12 @@
     import cardApi from '@/service/card.js'
     export default {
         name: "createCardSub",
+        props: {
+            prepaidCardId: {
+                type: Number,
+                default: null
+            },
+        },
         data(){
             return {
                 czk_bgi_style: {
@@ -46,7 +59,8 @@
             // 获取卡项列表  todo: 获取999条数据改成分页 包括其他页面
             async getCardList(){
                 try {
-                    const res = await cardApi.getCardList({type: this.cardType, page_size: 999});
+                    const res = await cardApi.getCardList(
+                        {'type': this.cardType, 'page_size': 999, 'prepaid_card': this.prepaidCardId});
                     if (res.status >= 200 && res.status < 300) {
                         this.cardList = res.data.data;
                     } else {
@@ -72,7 +86,20 @@
             }
         },
         mounted(){
-            this.getCardList()
+            // this.getCardList()
+        },
+        watch: {
+            prepaidCardId: {
+                immediate: true,
+                handler(val) {
+                    if (val){
+                        this.cardType = 2
+                    }else {
+                        this.cardType = -1
+                    }
+                    this.getCardList();
+                }
+            }
         }
     }
 </script>

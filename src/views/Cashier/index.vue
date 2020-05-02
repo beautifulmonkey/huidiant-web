@@ -41,7 +41,7 @@
             <div class="padding-20">
                 <consume-component v-if="this.menuActive==='consume'" :prepaidCardId="chooseCustomerData.prepaid_card"></consume-component>
                 <counting-component v-if="this.menuActive==='counting'" :customerId="chooseCustomerData.id"></counting-component>
-                <create-card-component v-if="this.menuActive==='createCard'"></create-card-component>
+                <create-card-component v-if="this.menuActive==='createCard'" :prepaidCardId="chooseCustomerData.prepaid_card"></create-card-component>
             </div>
         </div>
         <div class="main-shopping">
