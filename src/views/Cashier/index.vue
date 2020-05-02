@@ -40,6 +40,7 @@
             </div>
             <div class="padding-20">
                 <consume-component v-if="this.menuActive==='consume'"></consume-component>
+                <counting-component v-if="this.menuActive==='counting'" :customerId="chooseCustomerData.id"></counting-component>
                 <create-card-component v-if="this.menuActive==='createCard'"></create-card-component>
             </div>
         </div>
@@ -90,13 +91,15 @@
 
     import consumeComponent from '@/views/Cashier/consumeSub.vue'
     import createCardComponent from '@/views/Cashier/createCardSub.vue'
+    import countingComponent from '@/views/Cashier/countingSub.vue'
     import customerApi from '@/service/customer.js'
 
     export default {
         name: "index",
         components: {
             consumeComponent,
-            createCardComponent
+            createCardComponent,
+            countingComponent
         },
         data() {
             return {

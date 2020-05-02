@@ -18,8 +18,8 @@
                  v-for="item in cardList">
                 <div>{{item.name}}</div>
                 <div>
-                    <div>¥{{item.price}}</div>
-                    <div>{{item.validity}}</div>
+                    <div style="text-align: right">¥{{item.price}}</div>
+                    <div style="text-align: right">{{item.validity}}</div>
                 </div>
             </div>
         </div>

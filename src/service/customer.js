@@ -49,5 +49,11 @@ export default {
     async SearchCustomer(query) {
         const url = `${config.server.url}/customer/search`;
         return await request('get', url, {query: query})
+    },
+
+    // 获取客户次卡次数和赠送服务
+    async getCustomerCounting(id) {
+        const url = `${config.server.url}/customer/data/counting/${id}`;
+        return await request('get', url)
     }
 }
