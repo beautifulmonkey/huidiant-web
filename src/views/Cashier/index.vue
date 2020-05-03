@@ -43,7 +43,7 @@
                 <consume-component
                         v-if="this.menuActive==='consume'"
                         :prepaidCardId="chooseCustomerData.prepaid_card"
-                        @addShoppingCart="addShoppingCartFunc">
+                        @addShoppingCart="addShoppingCartConsume">
 
                 </consume-component>
 
@@ -51,11 +51,15 @@
                 <counting-component
                         v-if="this.menuActive==='counting'"
                         :customerId="chooseCustomerData.id"
-                        @addShoppingCart="addShoppingCartFunc">
+                        @addShoppingCart="addShoppingCartConsume">
                 </counting-component>
 
                 <!--开卡组件-->
-                <create-card-component v-if="this.menuActive==='createCard'" :prepaidCardId="chooseCustomerData.prepaid_card"></create-card-component>
+                <create-card-component
+                        v-if="this.menuActive==='createCard'"
+                        :prepaidCardId="chooseCustomerData.prepaid_card"
+                        @addShoppingCart="addShoppingCartCreateCard">
+                </create-card-component>
 
                 <!--充值组件-->
                 <recharge-component v-if="this.menuActive==='recharge'" :customerData="chooseCustomerData"></recharge-component>
@@ -102,62 +106,148 @@
             </div>
             </div>
 
+
             <!--清单区域-->
-<!--            <div class="align-justify-center" style="height: 20vh;">-->
-<!--                <div><span style="color: #969799">点击服务产品添加到消费清单</span></div>-->
-<!--            </div>-->
-            <div style="margin-top: 30px;">
-                <el-table
-                        :data="shoppingCartList"
-                        style="width: 100%">
-                    <el-table-column
-                            label="项目名称">
-                        <template slot-scope="scope">
-                            <strong><span>{{scope.row.name}}</span></strong>
-                            <br>
 
-                            <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
-                            <s v-if="scope.row.discount_price !== scope.row.price">
-                                <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
-                            </s>
+            <div v-if="this.menuActive==='consume' || this.menuActive==='counting'">
+                <div v-if="!shoppingCartConsumeList.length" class="align-justify-center" style="height: 20vh;">
+                    <div><span style="color: #969799">点击服务产品添加到消费清单</span></div>
+                </div>
+                <div v-if="shoppingCartConsumeList.length" style="margin-top: 30px;">
+                    <el-table
+                            :data="shoppingCartConsumeList"
+                            style="width: 100%">
+                        <el-table-column
+                                label="项目名称">
+                            <template slot-scope="scope">
+                                <strong><span>{{scope.row.name}}</span></strong>
+                                <br>
 
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="数量">
-                        <template slot-scope="scope">
-                            <el-input-number style="width: 100px;" size="mini" v-model="scope.row.count" :min="1" :max="scope.row.counting || 999">
-                            </el-input-number>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="总价">
-                        <template slot-scope="scope">
-                            <strong><span style="color: #fe2278">¥{{scope.row.discount_price * scope.row.count}}</span></strong>
-                            <br>
-<!--                            todo: 四舍五入, 避免无限位-->
-                            <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                卡项优惠 - ¥{{scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count}}
-                            </span>
+                                <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
+                                <s v-if="scope.row.discount_price !== scope.row.price">
+                                    <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
+                                </s>
 
-                            <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                卡项权益抵扣{{scope.row.count}}次
-                            </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="数量">
+                            <template slot-scope="scope">
+                                <el-input-number style="width: 100px;" size="mini" v-model="scope.row.count" :min="1" :max="scope.row.counting || 999">
+                                </el-input-number>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="总价">
+                            <template slot-scope="scope">
+                                <strong><span style="color: #fe2278">¥{{scope.row.discount_price * scope.row.count}}</span></strong>
+                                <br>
+    <!--                            todo: 四舍五入, 避免无限位-->
+                                <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    卡项优惠 - ¥{{scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count}}
+                                </span>
 
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                            label="操作">
-                        <template slot-scope="scope">
-                            <el-button size="mini" type="text"
-                               @click.native.prevent="delShoppingItem(scope.$index, shoppingCartList)"
-                            >移除</el-button>
-                            <el-button size="mini" type="text" disabled>改价(开发中)</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                                <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    卡项权益抵扣{{scope.row.count}}次
+                                </span>
+
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="text"
+                                   @click.native.prevent="delShoppingItem(scope.$index, shoppingCartConsumeList)"
+                                >移除</el-button>
+                                <el-button size="mini" type="text" disabled>改价(开发中)</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
             </div>
 
+            <div v-if="this.menuActive==='createCard'">
+                <div v-if="(this.createType===1 && !this.shoppingCartCreatePrepaid) || (this.createType===2 && !this.shoppingCartCreateCountingList.length)"
+                     class="align-justify-center" style="height: 20vh;">
+                    <div><span style="color: #969799">点击卡项添加到消费清单</span></div>
+                </div>
+
+                <!--开充值卡-->
+                <div v-if="this.createType===1 && this.shoppingCartCreatePrepaid">
+                    <div class="align-justify-center border-b" style="height: 50px;justify-content: left" :style="{'border-left': '10px solid ' + themeColor}">
+                        <strong style="margin-left: 20px;">已选充值卡</strong>
+                    </div>
+
+                    <div class="justify-between border-b">
+                        <div>
+                            <strong><span>{{shoppingCartCreatePrepaid.name}}</span></strong>&nbsp;<span>x1</span>
+                        </div>
+                        <div>
+                            <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCreatePrepaid"></el-button>
+                        </div>
+                    </div>
+                    <div class="justify-between border-b">
+                        <span style="color: #999;font-size: 0.9rem">充值金额</span>
+                        <div>
+                            <span style="color: #999">¥{{shoppingCartCreatePrepaid.price}}</span>
+                            <el-button size="mini" type="text">修改</el-button>
+                        </div>
+                    </div>
+                </div>
+                <!--开次卡-->
+                <div v-if="this.createType===2 && this.shoppingCartCreateCountingList.length">
+                    <el-table
+                            :data="shoppingCartCreateCountingList"
+                            style="width: 100%">
+                        <el-table-column
+                                label="次卡名称">
+                            <template slot-scope="scope">
+                                <strong><span>{{scope.row.name}}</span></strong>
+                                <br>
+
+                                <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
+                                <s v-if="scope.row.discount_price !== scope.row.price">
+                                    <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
+                                </s>
+
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="数量">
+                            <template slot-scope="scope">
+                                <el-input-number style="width: 100px;" size="mini" v-model="scope.row.count" :min="1" :max="999">
+                                </el-input-number>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="总价">
+                            <template slot-scope="scope">
+                                <strong><span style="color: #fe2278">¥{{scope.row.discount_price * scope.row.count}}</span></strong>
+                                <br>
+                                <!--                            todo: 四舍五入, 避免无限位-->
+                                <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    卡项优惠 - ¥{{scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count}}
+                                </span>
+
+                                <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    卡项权益抵扣{{scope.row.count}}次
+                                </span>
+
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="操作">
+                            <template slot-scope="scope">
+                                <el-button size="mini" type="text"
+                                           @click.native.prevent="delShoppingItem(scope.$index, shoppingCartCreateCountingList)"
+                                >移除</el-button>
+                                <el-button size="mini" type="text" disabled>改价(开发中)</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                </div>
+            </div>
         </div>
     </div>
 
@@ -187,8 +277,14 @@
                 customerKeyWord: '',
                 isChooseCustomer: false,  // 当前是否选择了客户
                 chooseCustomerData: {},  // 当前选择客户的信息
-                // 消费清单列表
-                shoppingCartList: [],
+                // 消费清单列表-消费
+                shoppingCartConsumeList: [],
+                // 消费清单列表-开充值卡
+                shoppingCartCreatePrepaid: {},
+                // 消费清单列表-开次卡
+                shoppingCartCreateCountingList: [],
+                createType: null,
+
                 consumption: [
                     {name: "开单", id: "consume"},
                     {name: "划卡", id: "counting"},
@@ -250,7 +346,9 @@
 
             // 清空消费清单, 客户变更时需要清空购物车信息
             clearShoppingCart(){
-                this.shoppingCartList = [];
+                this.shoppingCartConsumeList = [];
+                this.shoppingCartCreatePrepaid = {};
+                this.shoppingCartCreateCountingList = []
             },
 
             // 选择客户
@@ -273,9 +371,9 @@
                 rows.splice(index, 1);
             },
 
-            // 消费清单添加
-            addShoppingCartFunc(data){
-                let goodsItems = this.shoppingCartList.filter(item => {
+            // 消费清单添加 - 开单/划卡
+            addShoppingCartConsume(data) {
+                let goodsItems = this.shoppingCartConsumeList.filter(item => {
                     return item.id === data.id && item.shoppingType === data.shoppingType
                 });
 
@@ -295,13 +393,40 @@
                     goodsItems[0].count += 1
                 }else {
                     // 如果该商品不存在购物车, 则添加商品
-                    this.shoppingCartList.push(data);
+                    this.shoppingCartConsumeList.push(data);
                 }
                 this.$message({
                     type: 'success',
                     message: '已经添加到清单列表',
                     duration: 1000
                 })
+            },
+
+            // 消费清单添加 - 开卡
+            addShoppingCartCreateCard(data){
+                this.createType = data.type;
+                if (data.type === 1){
+                    this.shoppingCartCreatePrepaid = data;
+                }else{
+                    let countingItem = this.shoppingCartCreateCountingList.filter(item => item.id === data.id);
+                    if (countingItem.length){
+                        // 如果该次卡已经存在购物车, 则增加数量
+                        countingItem[0].count += 1
+                    }else {
+                        // 如果该次卡不存在购物车, 则添加商品
+                        this.shoppingCartCreateCountingList.push(data);
+                    }
+                }
+                this.$message({
+                    type: 'success',
+                    message: '已经添加到清单列表',
+                    duration: 1000
+                })
+            },
+
+            //清除充值卡信息
+            clearCreatePrepaid() {
+                this.shoppingCartCreatePrepaid = null
             }
         }
     }
@@ -393,6 +518,18 @@
         justify-content: space-between;
         align-items: center;
     }
+
+    .justify-between {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .border-b {
+        border-bottom: 1px solid #eee
+    }
+
 
     .el-autocomplete {
         /*height: 300px;*/

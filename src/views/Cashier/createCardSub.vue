@@ -14,7 +14,7 @@
 <!--        卡列表-->
         <div class="box-card-list">
             <div class="card-item" :style="[item.type === 1 ? czk_bgi_style : ck_bgi_style]"
-                 @click="addCard"
+                 @click="addCard(item)"
                  v-for="item in cardList">
                 <div>{{item.name}}</div>
                 <div>
@@ -78,11 +78,15 @@
                 this.getCardList()
             },
 
-            addCard(){
-                this.$message({
-                    type: 'success',
-                    message: '已经添加到清单列表'
-                })
+            addCard(data){
+                this.$emit('addShoppingCart', {
+                    type: data.type,
+                    id: data.id,
+                    name: data.name,
+                    count: 1,
+                    price: data.price,
+                    discount_price: data.discount_price
+                });
             }
         },
         mounted(){
