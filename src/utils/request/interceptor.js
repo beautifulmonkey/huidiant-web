@@ -12,7 +12,7 @@ import { Notification } from 'element-ui'
 // })
 const requestInterceptorFunc = function(config) {
   // todo
-  config.headers.Authorization = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImNvZGVfbmFtZSI6ImN6engiLCJ0ZWwiOiIxNzYxMDE2MjkxOCIsInNjb3BlcyI6WyJzdHJpbmciXSwiZXhwaXJ5X3RpbWUiOjEuMCwiZXhwIjoxNTg4NDQwNjg3fQ.z-2_tsIts2VlMnB0hMMYtqVQE1XlTgl8FUnwaxOafQQ`
+  config.headers.Authorization = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImNvZGVfbmFtZSI6ImN6engiLCJ0ZWwiOiIxNzYxMDE2MjkxOCIsInNjb3BlcyI6WyJzdHJpbmciXSwiZXhwaXJ5X3RpbWUiOjEuMCwiZXhwIjoxNTg4NTMwNTU1fQ.oCxJAH4xzf6o5Y0uTXjaAEgre2vDn_jzPp8NuTB6AMI`
   return config
 }
 const requestInterceptorError = function(error) {

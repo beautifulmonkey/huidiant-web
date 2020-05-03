@@ -82,6 +82,10 @@
                     <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCustomer"></el-button>
                 </div>
             </div>
+
+            <div class="align-justify-center" style="height: 20vh;">
+                <div><span style="color: #969799">点击服务产品添加到消费清单</span></div>
+            </div>
         </div>
     </div>
 

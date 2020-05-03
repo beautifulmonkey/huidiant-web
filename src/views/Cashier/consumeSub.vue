@@ -29,7 +29,7 @@
                 <div style="text-align: left;margin: 5px">
                     <span>{{item.name}}</span><br>
                     <span style="color: #fe2278">￥{{item.discount_price}}</span>
-                    <s v-if="item.discount_price !== item.price"><span style="color: rgb(153, 153, 153)">￥{{item.price}}</span></s>
+                    <s v-if="item.discount_price !== item.price"><span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{item.price}}</span></s>
                 </div>
             </el-card>
         </div>
