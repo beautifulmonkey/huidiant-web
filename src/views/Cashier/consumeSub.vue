@@ -24,7 +24,7 @@
         <!--商品卡片区域-->
         <div class="box-card">
             <el-card shadow="always" :body-style="{ padding: '5px' }"
-                     @click.native="addGoods"
+                     @click.native="addGoods(item)"
                      v-for="item in goodsCardList">
                 <div style="text-align: left;margin: 5px">
                     <span>{{item.name}}</span><br>
@@ -141,11 +141,15 @@
             },
 
             // 添加到清单
-            addGoods() {
-                this.$message({
-                    type: 'success',
-                    message: '已经添加到清单列表'
-                })
+            addGoods(data) {
+                this.$emit('addShoppingCart', {
+                    shoppingType: 'consume',
+                    id: data.id,
+                    name: data.name,
+                    count: 1,
+                    price: data.price,
+                    discount_price: data.discount_price
+                });
             }
 
         },

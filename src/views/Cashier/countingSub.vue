@@ -25,7 +25,7 @@
             <div style="text-align: left"><strong>赠送权益</strong></div>
             <div class="box-card">
                 <el-card shadow="always" :body-style="{ padding: '5px' }"
-                         @click.native="addGoods"
+                         @click.native="addGoods(item)"
                          v-for="item in customerCountingList.gift">
                     <div style="text-align: left;margin: 5px">
                         <span>{{item.name}}</span><br>
@@ -51,7 +51,7 @@
             <div>
                 <div class="box-card" style="margin: 0">
                     <el-card shadow="always" :body-style="{ padding: '5px' }"
-                             @click.native="addGoods"
+                             @click.native="addGoods(item)"
                              v-for="item in countingClickItem.items">
                         <div style="text-align: left;margin: 5px">
                             <span>{{item.name}}</span><br>
@@ -106,6 +106,20 @@
             showCardItem(item){
                 this.countingClickItem = item;
                 this.dialogVisible = true
+            },
+
+            // 添加到清单  todo: 次卡和赠送同时划卡会出限制bug
+            addGoods(data) {
+                console.log(data)
+                this.$emit('addShoppingCart', {
+                    shoppingType: 'counting',
+                    id: data.id,
+                    name: data.name,
+                    count: 1,
+                    price: data.price,
+                    discount_price: 0,
+                    counting: data.counting
+                });
             }
         },
         mounted(){

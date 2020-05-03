@@ -39,28 +39,46 @@
                 </el-input>
             </div>
             <div class="padding-20">
-                <consume-component v-if="this.menuActive==='consume'" :prepaidCardId="chooseCustomerData.prepaid_card"></consume-component>
-                <counting-component v-if="this.menuActive==='counting'" :customerId="chooseCustomerData.id"></counting-component>
+                <!--消费组件-->
+                <consume-component
+                        v-if="this.menuActive==='consume'"
+                        :prepaidCardId="chooseCustomerData.prepaid_card"
+                        @addShoppingCart="addShoppingCartFunc">
+
+                </consume-component>
+
+                <!--划卡组件-->
+                <counting-component
+                        v-if="this.menuActive==='counting'"
+                        :customerId="chooseCustomerData.id"
+                        @addShoppingCart="addShoppingCartFunc">
+                </counting-component>
+
+                <!--开卡组件-->
                 <create-card-component v-if="this.menuActive==='createCard'" :prepaidCardId="chooseCustomerData.prepaid_card"></create-card-component>
+
+                <!--充值组件-->
                 <recharge-component v-if="this.menuActive==='recharge'" :customerData="chooseCustomerData"></recharge-component>
             </div>
         </div>
         <div class="main-shopping">
             <div class="align-justify-center shopping-title">消费清单</div>
-            <!--未选择客户显示搜索组件-->
-            <div v-if="!isChooseCustomer" class="customer-search">
-                <el-autocomplete
-                        v-model="customerKeyWord"
-                        placeholder="客户名、手机号  (不选择客户则为现金模式)"
-                        :trigger-on-focus="false"
-                        :fetch-suggestions="customerQuery"
-                        value-key="label"
-                        :debounce="500"
-                        @select="customerChoose"
-                ></el-autocomplete>
-            </div>
-            <!--选择客户显示客户信息-->
-            <div v-if="isChooseCustomer" class="customer-info">
+            <!--客户选择区域-->
+            <div style="height: 100px;">
+                <!--未选择客户显示搜索组件-->
+                <div v-if="!isChooseCustomer" class="customer-search">
+                    <el-autocomplete
+                            v-model="customerKeyWord"
+                            placeholder="客户名、手机号  (不选择客户则为现金模式)"
+                            :trigger-on-focus="false"
+                            :fetch-suggestions="customerQuery"
+                            value-key="label"
+                            :debounce="500"
+                            @select="customerChoose"
+                    ></el-autocomplete>
+                </div>
+                <!--选择客户显示客户信息-->
+                <div v-if="isChooseCustomer" class="customer-info">
                 <div class="align-justify-center" style="margin-left: 30px;">
                     <el-avatar icon="el-icon-user-solid"></el-avatar>
 
@@ -82,10 +100,64 @@
                     <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCustomer"></el-button>
                 </div>
             </div>
-
-            <div class="align-justify-center" style="height: 20vh;">
-                <div><span style="color: #969799">点击服务产品添加到消费清单</span></div>
             </div>
+
+            <!--清单区域-->
+<!--            <div class="align-justify-center" style="height: 20vh;">-->
+<!--                <div><span style="color: #969799">点击服务产品添加到消费清单</span></div>-->
+<!--            </div>-->
+            <div style="margin-top: 30px;">
+                <el-table
+                        :data="shoppingCartList"
+                        style="width: 100%">
+                    <el-table-column
+                            label="项目名称">
+                        <template slot-scope="scope">
+                            <strong><span>{{scope.row.name}}</span></strong>
+                            <br>
+
+                            <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
+                            <s v-if="scope.row.discount_price !== scope.row.price">
+                                <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
+                            </s>
+
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="数量">
+                        <template slot-scope="scope">
+                            <el-input-number style="width: 100px;" size="mini" v-model="scope.row.count" :min="1" :max="scope.row.counting || 999">
+                            </el-input-number>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="总价">
+                        <template slot-scope="scope">
+                            <strong><span style="color: #fe2278">¥{{scope.row.discount_price * scope.row.count}}</span></strong>
+                            <br>
+<!--                            todo: 四舍五入, 避免无限位-->
+                            <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                卡项优惠 - ¥{{scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count}}
+                            </span>
+
+                            <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                卡项权益抵扣{{scope.row.count}}次
+                            </span>
+
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            label="操作">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="text"
+                               @click.native.prevent="delShoppingItem(scope.$index, shoppingCartList)"
+                            >移除</el-button>
+                            <el-button size="mini" type="text" disabled>改价(开发中)</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+
         </div>
     </div>
 
@@ -115,6 +187,8 @@
                 customerKeyWord: '',
                 isChooseCustomer: false,  // 当前是否选择了客户
                 chooseCustomerData: {},  // 当前选择客户的信息
+                // 消费清单列表
+                shoppingCartList: [],
                 consumption: [
                     {name: "开单", id: "consume"},
                     {name: "划卡", id: "counting"},
@@ -174,17 +248,60 @@
 
             },
 
+            // 清空消费清单, 客户变更时需要清空购物车信息
+            clearShoppingCart(){
+                this.shoppingCartList = [];
+            },
+
             // 选择客户
             customerChoose(item){
+                this.clearShoppingCart();
                 this.isChooseCustomer = true;
                 this.chooseCustomerData = item
             },
 
             // 清除选择客户
             clearCustomer(){
+                this.clearShoppingCart();
                 this.isChooseCustomer = false;
                 this.chooseCustomerData = {};
                 this.customerKeyWord = ''
+            },
+
+            // 移除清单项
+            delShoppingItem(index, rows) {
+                rows.splice(index, 1);
+            },
+
+            // 消费清单添加
+            addShoppingCartFunc(data){
+                let goodsItems = this.shoppingCartList.filter(item => {
+                    return item.id === data.id && item.shoppingType === data.shoppingType
+                });
+
+                if (goodsItems.length && data.shoppingType === 'counting'){
+                    if (goodsItems[0].count >= data.counting){
+                        this.$notify({
+                            title: '剩余次数不足!',
+                            message: '该项目只剩余' + data.counting +  '次!',
+                            type: 'warning'
+                        });
+                        return
+                    }
+                }
+
+                if (goodsItems.length){
+                    // 如果该商品已经存在购物车, 则增加数量
+                    goodsItems[0].count += 1
+                }else {
+                    // 如果该商品不存在购物车, 则添加商品
+                    this.shoppingCartList.push(data);
+                }
+                this.$message({
+                    type: 'success',
+                    message: '已经添加到清单列表',
+                    duration: 1000
+                })
             }
         }
     }
@@ -271,13 +388,14 @@
     .customer-info {
         background-color: #ffffff;
         display: flex;
+        margin-top: 20px;
         height: 70px;
         justify-content: space-between;
         align-items: center;
     }
 
     .el-autocomplete {
-        height: 300px;
+        /*height: 300px;*/
         width: 100%
     }
 </style>
