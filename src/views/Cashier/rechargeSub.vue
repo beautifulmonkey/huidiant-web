@@ -14,9 +14,12 @@
                 </div>
             </div>
 
-            <div style="float: left; margin-top: 50px;">
-                <el-button style="width: 120px;">仅充值</el-button>
-                <el-button style="width: 120px;">升卡充值</el-button>
+            <div style="text-align: left;margin-top: 50px;color: #969799">选择充值类型</div>
+            <div style="float: left;margin-top: 20px;">
+                <el-button style="width: 120px;" @click="addRecharge('recharge')"
+                           :type=" activeBt == 'recharge' ? 'primary': '' ">仅充值</el-button>
+                <el-button style="width: 120px;" @click="addRecharge('rechargeUpgrade')"
+                           :type=" activeBt == 'rechargeUpgrade' ? 'primary': '' ">升卡充值</el-button>
             </div>
         </div>
 
@@ -37,6 +40,13 @@
         },
         data() {
             return {
+                activeBt: ''
+            }
+        },
+        methods: {
+            addRecharge(type){
+                this.activeBt = type;
+                this.$emit("addShoppingCart", type)
             }
         }
     }

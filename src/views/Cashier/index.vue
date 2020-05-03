@@ -62,7 +62,12 @@
                 </create-card-component>
 
                 <!--充值组件-->
-                <recharge-component v-if="this.menuActive==='recharge'" :customerData="chooseCustomerData"></recharge-component>
+                <recharge-component
+                        v-if="this.menuActive==='recharge'"
+                        :customerData="chooseCustomerData"
+                        @addShoppingCart="addShoppingCartReCharge">
+                </recharge-component>
+
             </div>
         </div>
         <div class="main-shopping">
@@ -109,6 +114,7 @@
 
             <!--清单区域-->
 
+            <!--消费-->
             <div v-if="this.menuActive==='consume' || this.menuActive==='counting'">
                 <div v-if="!shoppingCartConsumeList.length" class="align-justify-center" style="height: 20vh;">
                     <div><span style="color: #969799">点击服务产品添加到消费清单</span></div>
@@ -165,7 +171,7 @@
                     </el-table>
                 </div>
             </div>
-
+            <!--开卡-->
             <div v-if="this.menuActive==='createCard'">
                 <div v-if="(this.createType===1 && !this.shoppingCartCreatePrepaid) || (this.createType===2 && !this.shoppingCartCreateCountingList.length)"
                      class="align-justify-center" style="height: 20vh;">
@@ -173,7 +179,7 @@
                 </div>
 
                 <!--开充值卡-->
-                <div v-if="this.createType===1 && this.shoppingCartCreatePrepaid">
+                <div v-if="this.createType===1 && this.shoppingCartCreatePrepaid" style="background-color: white">
                     <div class="align-justify-center border-b" style="height: 50px;justify-content: left" :style="{'border-left': '10px solid ' + themeColor}">
                         <strong style="margin-left: 20px;">已选充值卡</strong>
                     </div>
@@ -183,7 +189,7 @@
                             <strong><span>{{shoppingCartCreatePrepaid.name}}</span></strong>&nbsp;<span>x1</span>
                         </div>
                         <div>
-                            <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCreatePrepaid"></el-button>
+                            <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="shoppingCartCreatePrepaid=null"></el-button>
                         </div>
                     </div>
                     <div class="justify-between border-b">
@@ -248,6 +254,52 @@
 
                 </div>
             </div>
+            <!--充值-->
+            <div v-if="this.menuActive==='recharge'">
+                <div v-if="!this.shoppingCardRecharge" class="align-justify-center" style="height: 20vh;">
+                    <div><span style="color: #969799">选择充值类型以继续操作</span></div>
+                </div>
+                <div v-if="this.shoppingCardRecharge" style="background-color: white">
+                    <div class="align-justify-center border-b" style="height: 50px;justify-content: left" :style="{'border-left': '10px solid ' + themeColor}">
+                        <strong style="margin-left: 20px;">已选充值卡</strong>
+                    </div>
+
+                    <div class="justify-between border-b">
+                        <div>
+                            <strong><span>{{chooseCustomerData.identity}}</span></strong>
+                        </div>
+                        <div>
+                            <span style="color: #999; font-size: 0.9rem">余额: ¥{{chooseCustomerData.card_balance}}</span>
+                            <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="shoppingCardRecharge=null"></el-button>
+                        </div>
+                    </div>
+
+                    <div v-if="rechargeType==='rechargeUpgrade'" class="justify-between border-b">
+                        <span style="color: #999;font-size: 0.9rem">升级后卡项</span>
+                        <div>
+                            <el-select v-model="shoppingCardRecharge.card" placeholder="请选择升级后卡项" @change="choosePrepaidCard">
+                                <el-option
+                                        v-for="item in prepaidCardList"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </div>
+
+
+                    <div class="justify-between border-b">
+                        <span style="color: #999;font-size: 0.9rem">充值金额</span>
+                        <div>
+                            <el-input v-model="shoppingCardRecharge.price" placeholder="请输入充值金额">
+                                <template slot="append">元</template>
+                            </el-input>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
@@ -262,6 +314,7 @@
     import rechargeComponent from '@/views/Cashier/rechargeSub.vue'
 
     import customerApi from '@/service/customer.js'
+    import cardApi from '@/service/card.js'
 
     export default {
         name: "index",
@@ -280,10 +333,14 @@
                 // 消费清单列表-消费
                 shoppingCartConsumeList: [],
                 // 消费清单列表-开充值卡
-                shoppingCartCreatePrepaid: {},
+                shoppingCartCreatePrepaid: null,
                 // 消费清单列表-开次卡
                 shoppingCartCreateCountingList: [],
                 createType: null,
+                // 消费清单列表-充值
+                shoppingCardRecharge: null,
+                rechargeType: null,
+                prepaidCardList: [],
 
                 consumption: [
                     {name: "开单", id: "consume"},
@@ -344,10 +401,29 @@
 
             },
 
+            // 获取充值卡列表
+            async getCardList(){
+                console.log("GET!!")
+                try {
+                    const res = await cardApi.getCardList({type: 1, page_size:999});
+                    if (res.status >= 200 && res.status < 300) {
+                        this.prepaidCardList = res.data.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取卡项列表失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
             // 清空消费清单, 客户变更时需要清空购物车信息
             clearShoppingCart(){
                 this.shoppingCartConsumeList = [];
-                this.shoppingCartCreatePrepaid = {};
+                this.shoppingCartCreatePrepaid = null;
+                this.shoppingCardRecharge = null;
                 this.shoppingCartCreateCountingList = []
             },
 
@@ -369,6 +445,12 @@
             // 移除清单项
             delShoppingItem(index, rows) {
                 rows.splice(index, 1);
+            },
+
+            // 选择升级卡项
+            choosePrepaidCard(id){
+                let prepaidCard = this.prepaidCardList.filter(item => item.id === id);
+                this.shoppingCardRecharge.price = prepaidCard[0].price
             },
 
             // 消费清单添加 - 开单/划卡
@@ -424,10 +506,15 @@
                 })
             },
 
-            //清除充值卡信息
-            clearCreatePrepaid() {
-                this.shoppingCartCreatePrepaid = null
+            // 消费清单添加 - 充值
+            addShoppingCartReCharge(type){
+                this.rechargeType = type;
+                if (type==='rechargeUpgrade'){
+                    this.getCardList()
+                }
+                this.shoppingCardRecharge = {}
             }
+
         }
     }
 </script>
