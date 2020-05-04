@@ -300,6 +300,18 @@
 
                 </div>
             </div>
+
+            <!--收款底栏-->
+            <div>
+                <div class="footer-amount border-b">
+                    <span style="margin-right: 70px;">待收款金额：￥0.00</span>
+                </div>
+
+                <div class="footer-handle">
+                    <el-button style="margin-right: 70px;width: 100px;border-radius: 2px;" type="primary">收款</el-button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -622,4 +634,27 @@
         /*height: 300px;*/
         width: 100%
     }
+
+    .footer-amount{
+        height: 40px;
+        width: 50%;
+        background-color: white;
+        position: fixed;
+        bottom: 80px;
+        color: #d40000;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .footer-handle{
+        height: 80px;
+        width: 50%;
+        background-color: white;
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
 </style>
