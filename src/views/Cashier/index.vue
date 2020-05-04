@@ -122,6 +122,7 @@
                 <div v-if="shoppingCartConsumeList.length" style="margin-top: 30px;">
                     <el-table
                             :data="shoppingCartConsumeList"
+                            height="50vh"
                             style="width: 100%">
                         <el-table-column
                                 label="项目名称">
@@ -304,7 +305,7 @@
             <!--收款底栏-->
             <div>
                 <div class="footer-amount border-b">
-                    <span style="margin-right: 70px;">待收款金额：￥0.00</span>
+                    <span style="margin-right: 70px;font-size: 0.9rem">待收款金额：<strong>￥{{getAmountContext()}}</strong></span>
                 </div>
 
                 <div class="footer-handle">
@@ -459,6 +460,27 @@
                 rows.splice(index, 1);
             },
 
+            // 获取待支付金额
+            getAmountContext(){
+                let amount = 0;
+                if (this.menuActive==='consume' || this.menuActive==='counting'){
+                    this.shoppingCartConsumeList.forEach((item,index,array)=>{
+                        amount += item.discount_price * item.count
+                    })
+                }else if (this.menuActive==='createCard'){
+                    if(this.createType===1){
+                        amount = this.shoppingCartCreatePrepaid.price
+                    }else if(this.createType===2){
+                        this.shoppingCartCreateCountingList.forEach((item,index,array)=>{
+                            amount += item.discount_price * item.count
+                        })
+                    }
+                }else if(this.menuActive==='recharge' && this.shoppingCardRecharge){
+                    amount = this.shoppingCardRecharge.price
+                }
+                return amount
+            },
+
             // 选择升级卡项
             choosePrepaidCard(id){
                 let prepaidCard = this.prepaidCardList.filter(item => item.id === id);
@@ -487,7 +509,7 @@
                     goodsItems[0].count += 1
                 }else {
                     // 如果该商品不存在购物车, 则添加商品
-                    this.shoppingCartConsumeList.push(data);
+                    this.shoppingCartConsumeList.unshift(data);
                 }
                 this.$message({
                     type: 'success',
@@ -508,7 +530,7 @@
                         countingItem[0].count += 1
                     }else {
                         // 如果该次卡不存在购物车, 则添加商品
-                        this.shoppingCartCreateCountingList.push(data);
+                        this.shoppingCartCreateCountingList.unshift(data);
                     }
                 }
                 this.$message({
