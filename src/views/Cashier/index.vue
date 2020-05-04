@@ -309,7 +309,7 @@
                 </div>
 
                 <div class="footer-handle">
-                    <el-button style="margin-right: 70px;width: 100px;border-radius: 2px;" type="primary">收款</el-button>
+                    <pay-component :payAmount="payAmount" :cardBalance="chooseCustomerData.card_balance" @settlement="createOrderDeal"></pay-component>
                 </div>
             </div>
 
@@ -325,6 +325,7 @@
     import createCardComponent from '@/views/Cashier/createCardSub.vue'
     import countingComponent from '@/views/Cashier/countingSub.vue'
     import rechargeComponent from '@/views/Cashier/rechargeSub.vue'
+    import payComponent from '@/views/Cashier/paySub.vue'
 
     import customerApi from '@/service/customer.js'
     import cardApi from '@/service/card.js'
@@ -332,6 +333,7 @@
     export default {
         name: "index",
         components: {
+            payComponent,
             consumeComponent,
             createCardComponent,
             countingComponent,
@@ -355,6 +357,7 @@
                 rechargeType: null,
                 prepaidCardList: [],
 
+                payAmount: 0, // 待支付金额
                 consumption: [
                     {name: "开单", id: "consume"},
                     {name: "划卡", id: "counting"},
@@ -478,6 +481,7 @@
                 }else if(this.menuActive==='recharge' && this.shoppingCardRecharge){
                     amount = this.shoppingCardRecharge.price
                 }
+                this.payAmount = amount;
                 return amount
             },
 
@@ -547,6 +551,13 @@
                     this.getCardList()
                 }
                 this.shoppingCardRecharge = {}
+            },
+
+            // 结算
+            createOrderDeal(orderPayInfo){
+                // let order_type =
+                let order = {}
+
             }
 
         }

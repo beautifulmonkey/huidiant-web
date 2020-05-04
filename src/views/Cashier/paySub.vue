@@ -1,0 +1,210 @@
+<template>
+    <div>
+        <el-button style="margin-right: 70px;width: 100px;border-radius: 2px;" type="primary" @click="payDialogOpen">收款</el-button>
+
+        <el-dialog title="结算" :visible.sync="dialogFormVisible" :append-to-body="true" :close-on-click-modal="false">
+            <el-form ref="form" :model="form" size="mini" :rules="rules" label-width="150px">
+
+<!--                todo: 效仿美盈易自动checkbox补全-->
+                <el-divider>金额相关</el-divider>
+                <el-form-item label="消费总额">
+                    <strong style="color: #d40000; font-size: 20px;">¥ {{payAmount}}</strong>
+                </el-form-item>
+
+                <el-form-item label="减免金额" prop="reduce_amount">
+                    <el-input v-model="form.reduce_amount" placeholder="减免金额">
+                        <template slot="append">元</template>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item label="还需支付">
+                    <strong>¥ {{getNeedPay()}}</strong>
+                </el-form-item>
+
+                <el-divider>支付相关</el-divider>
+                <el-form-item label="现金支付" prop="cash_pay_amount">
+                    <el-input v-model="form.cash_pay_amount" placeholder="现金支付">
+                        <template slot="append">元</template>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item label="储值支付" prop="balance_pay_amount" v-if="cardBalance">
+                    <el-input v-model="form.balance_pay_amount" placeholder="储值支付">
+                        <template slot="append">元</template>
+                    </el-input> 储值余额: ¥{{cardBalance}}
+                </el-form-item>
+
+                <el-form-item label="其他支付">
+                    <el-input v-model="form.name" placeholder="功能开发中..." disabled></el-input>
+                </el-form-item>
+
+                <el-form-item label="实际支付">
+                    <strong style="color: #d40000; font-size: 20px;">¥ {{getRealPay()}}</strong>
+                </el-form-item>
+
+                <el-divider></el-divider>
+
+                <el-form-item label="找零">
+                    <strong style="color: #d40000; font-size: 20px;">¥{{getRealPay() - getNeedPay()}}</strong>
+                </el-form-item>
+            </el-form>
+
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="onSubmit('form')">结 算</el-button>
+            </div>
+        </el-dialog>
+
+
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "paySub",
+        props: {
+            payAmount: {
+                type: Number
+            },
+            cardBalance: {
+                type: Number
+            }
+        },
+        data(){
+          return {
+              dialogFormVisible: false,
+              form: {
+                  reduce_amount: null,
+                  cash_pay_amount: null,
+                  balance_pay_amount: null
+              },
+              rules: {
+                  reduce_amount: [
+                      {
+                          validator:(rule,value,callback)=>{
+                              if(value){
+                                  if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
+                                      callback(new Error("金额为数字且不能小于0!"));
+                                  }else if(value > this.payAmount){
+                                      callback(new Error("减免金额不能大于消费总额!"));
+                                  }else{
+                                      callback();
+                                  }
+                              }else{
+                                  callback();
+                              }
+
+                          },
+                          trigger: 'blur'
+                      }
+                  ],
+                  balance_pay_amount: [
+                      {
+                          validator:(rule,value,callback)=>{
+                              if(value){
+                                  if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
+                                      callback(new Error("金额为数字且不能小于0!"));
+                                  }else if(value>this.payAmount){
+                                      callback(new Error("必须小于等于应收金额!"));
+                                  }else if(this.cardBalance && value>this.cardBalance){
+                                      callback(new Error("储值余额不足!"));
+                                  }else{
+                                      callback();
+                                  }
+                              }else{
+                                  callback();
+                              }
+
+                          },
+                          trigger: 'blur'
+                      }
+                  ],
+                  cash_pay_amount: [
+                      {
+                          validator:(rule,value,callback)=>{
+                              if(value){
+                                  if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
+                                      callback(new Error("金额为数字且不能小于0!"));
+                                  }else{
+                                      callback();
+                                  }
+                              }else{
+                                  callback();
+                              }
+
+                          },
+                          trigger: 'blur'
+                      }
+                  ]
+              }
+          }
+        },
+        methods: {
+            payDialogOpen() {
+                this.dialogFormVisible = true;
+                this.form = {
+                    reduce_amount: null,
+                    cash_pay_amount: null,
+                    balance_pay_amount: null
+                };
+                this.$nextTick(() => {
+                    this.$refs['form'].resetFields();
+                })
+            },
+            onSubmit(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.getRealPay() < this.getNeedPay()){
+                            this.$message({
+                                showClose: true,
+                                message: '支付金额有误，请输入正确的支付金额',
+                                type: 'error'
+                            });
+                            return false;
+                        }
+
+                        let result = {
+                            amount: {
+                                consume_amount: this.payAmount,
+                                reduce_amount: parseFloat(this.form.reduce_amount) || 0,
+                                paid_amount: this.getNeedPay()
+                            },
+                            pay: {
+                                pay_type: null,
+                                cash_pay_amount: this.form.cash_pay_amount - (this.getRealPay() - this.getNeedPay()),
+                                balance_pay_amount: this.form.balance_pay_amount
+                            }
+                        };
+
+                        if (result.pay.cash_pay_amount && !result.pay.balance_pay_amount){result.pay.pay_type=1}
+                        if (!result.pay.cash_pay_amount && result.pay.balance_pay_amount){result.pay.pay_type=2}
+                        if (result.pay.cash_pay_amount && result.pay.balance_pay_amount){result.pay.pay_type=3}
+
+                        this.$emit(
+                            'settlement',
+                            result
+                        )
+                    } else {
+                        return false;
+                    }
+                });
+            },
+
+            // 还需支付
+            getNeedPay(){
+                return parseFloat(this.payAmount - this.form.reduce_amount) || this.payAmount;
+            },
+
+            // 实际支付
+            getRealPay() {
+                return (parseFloat(this.form.balance_pay_amount) || 0) + (parseFloat(this.form.cash_pay_amount) || 0)
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .el-input {
+        width: 200px;
+    }
+</style>
