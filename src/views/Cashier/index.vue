@@ -309,7 +309,7 @@
                 </div>
 
                 <div class="footer-handle">
-                    <pay-component :payAmount="payAmount" :cardBalance="chooseCustomerData.card_balance" @settlement="createOrderDeal"></pay-component>
+                    <pay-component ref="payComponent" :payAmount="payAmount" :cardBalance="chooseCustomerData.card_balance" @settlement="createOrderDeal"></pay-component>
                 </div>
             </div>
 
@@ -440,11 +440,7 @@
                 try {
                     const res = await cashierApi.cashierDeal(params);
                     if (res.status >= 200 && res.status < 300) {
-                        this.$message({
-                            type: 'success',
-                            message: '收款成功!',
-                            offset: 60
-                        })
+                        this.$refs.payComponent.setPaySuccess()
                     } else {
                         this.$message({
                             type: 'error',

@@ -2,8 +2,14 @@
     <div>
         <el-button style="margin-right: 70px;width: 100px;border-radius: 2px;" type="primary" @click="payDialogOpen">收款</el-button>
 
-        <el-dialog title="结算" :visible.sync="dialogFormVisible" :append-to-body="true" :close-on-click-modal="false">
-            <el-form ref="form" :model="form" size="mini" :rules="rules" label-width="150px">
+        <el-dialog title="结算"
+                   :visible.sync="dialogFormVisible"
+                   :append-to-body="true"
+                   :close-on-click-modal="false"
+                   :before-close="handleClose">
+
+            <!--支付页面-->
+            <el-form v-if="!showPaySuccess" ref="form" :model="form" size="mini" :rules="rules" label-width="150px">
 
 <!--                todo: 效仿美盈易自动checkbox补全-->
                 <el-divider>金额相关</el-divider>
@@ -48,11 +54,23 @@
                     <strong style="color: #d40000; font-size: 20px;">¥{{getRealPay() - getNeedPay()}}</strong>
                 </el-form-item>
             </el-form>
-
-            <div slot="footer" class="dialog-footer">
+            <div v-if="!showPaySuccess" slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
                 <el-button type="primary" @click="onSubmit('form')">结 算</el-button>
             </div>
+
+            <!--支付成功页面-->
+            <div v-if="showPaySuccess" class="align-justify-center" style="margin-bottom: 70px;margin-top: 70px;">
+                <div>
+                    <div :style="paySuccessStyle"></div>
+                    <br>
+                    <div style="width: 96px;color: #999;text-align: center">收款完成</div>
+                </div>
+            </div>
+            <div v-if="showPaySuccess" slot="footer" class="dialog-footer">
+                <el-button @click="handleClose" type="primary">返回开单</el-button>
+            </div>
+
         </el-dialog>
 
 
@@ -73,6 +91,7 @@
         data(){
           return {
               dialogFormVisible: false,
+              showPaySuccess: false,
               form: {
                   reduce_amount: null,
                   cash_pay_amount: null,
@@ -136,7 +155,14 @@
                           trigger: 'blur'
                       }
                   ]
-              }
+              },
+
+              paySuccessStyle: {
+                  background: `url(${require('@/assets/img/paySuccess.png')}) no-repeat 50%`,
+                  backgroundSize: '96px',
+                  width: '96px',
+                  height: '96px'
+              },
           }
         },
         methods: {
@@ -199,6 +225,29 @@
             // 实际支付
             getRealPay() {
                 return (parseFloat(this.form.balance_pay_amount) || 0) + (parseFloat(this.form.cash_pay_amount) || 0)
+            },
+
+            // 支付成功页面显示
+            setPaySuccess() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: '正在保存订单信息...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                setTimeout(() => {
+                    loading.close();
+                    this.showPaySuccess = true
+                }, 1500);
+            },
+
+            // 关闭弹框
+            handleClose(done) {
+                if (this.showPaySuccess){
+                    this.$router.go(0)
+                }else {
+                    done();
+                }
             }
         }
     }
@@ -208,4 +257,11 @@
     .el-input {
         width: 200px;
     }
+
+    .align-justify-center{
+        display: flex;
+        align-items:center;
+        justify-content:center;
+    }
+
 </style>
