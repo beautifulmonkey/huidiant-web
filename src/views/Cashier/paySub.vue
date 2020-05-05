@@ -170,9 +170,10 @@
                                 paid_amount: this.getNeedPay()
                             },
                             pay: {
-                                pay_type: null,
+                                pay_type: 2,  // 防止为0元
+                                custom_pay_amount: 0,
                                 cash_pay_amount: this.form.cash_pay_amount - (this.getRealPay() - this.getNeedPay()),
-                                balance_pay_amount: this.form.balance_pay_amount
+                                balance_pay_amount: parseFloat(this.form.balance_pay_amount) || 0
                             }
                         };
 

@@ -142,7 +142,9 @@
 
             // 添加到清单
             addGoods(data) {
+                let goods_map = {'service': 1, 'product':2};
                 this.$emit('addShoppingCart', {
+                    goodsType: goods_map[this.tabsActiveName],
                     shoppingType: 'consume',
                     id: data.id,
                     name: data.name,

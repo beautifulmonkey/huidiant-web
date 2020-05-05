@@ -329,6 +329,7 @@
 
     import customerApi from '@/service/customer.js'
     import cardApi from '@/service/card.js'
+    import cashierApi from '@/service/cashier.js'
 
     export default {
         name: "index",
@@ -419,11 +420,31 @@
 
             // 获取充值卡列表
             async getCardList(){
-                console.log("GET!!")
                 try {
                     const res = await cardApi.getCardList({type: 1, page_size:999});
                     if (res.status >= 200 && res.status < 300) {
                         this.prepaidCardList = res.data.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取卡项列表失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 收款结账
+            async cashierDeal(params){
+                try {
+                    const res = await cashierApi.cashierDeal(params);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '收款成功!',
+                            offset: 60
+                        })
                     } else {
                         this.$message({
                             type: 'error',
@@ -555,10 +576,41 @@
 
             // 结算
             createOrderDeal(orderPayInfo){
-                // let order_type =
-                let order = {}
+                let orderData =  null;
+                if(this.menuActive==='consume' || this.menuActive==='counting'){
+                    orderData = this.createOrderGoods(orderPayInfo)
+                }
+                this.cashierDeal(orderData)
 
+            },
+
+            // 品项订单
+            createOrderGoods(orderPayInfo){
+                let order = {
+                    customer_id: this.chooseCustomerData.id || null,
+                    order_type: 1,
+                    amount: orderPayInfo.amount,
+                    pay: orderPayInfo.pay,
+                    order_items: []
+                };
+
+                this.shoppingCartConsumeList.forEach((item,index,array)=>{
+                    order.order_items.push({
+                        item_type: item.goodsType,
+                        item_id: item.id,
+                        counting_card_id: item.counting_card_id,
+                        item_name: item.name,
+                        original_price: item.price,
+                        reduce_amount: item.discount_price,
+                        reduce_text: '',
+                        count: item.count,
+                        paid_amount: item.discount_price * item.count
+                    })
+                });
+                return order
             }
+
+
 
         }
     }
