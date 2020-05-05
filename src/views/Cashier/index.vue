@@ -147,11 +147,10 @@
                         <el-table-column
                                 label="总价">
                             <template slot-scope="scope">
-                                <strong><span style="color: #fe2278">¥{{scope.row.discount_price * scope.row.count}}</span></strong>
+                                <strong><span style="color: #fe2278">¥{{(scope.row.discount_price * scope.row.count).toFixed(2)}}</span></strong>
                                 <br>
-    <!--                            todo: 四舍五入, 避免无限位-->
                                 <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    卡项优惠 - ¥{{scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count}}
+                                    卡项优惠 - ¥{{(scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count).toFixed(2)}}
                                 </span>
 
                                 <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
@@ -229,15 +228,10 @@
                         <el-table-column
                                 label="总价">
                             <template slot-scope="scope">
-                                <strong><span style="color: #fe2278">¥{{scope.row.discount_price * scope.row.count}}</span></strong>
+                                <strong><span style="color: #fe2278">¥{{(scope.row.discount_price * scope.row.count).toFixed(2)}}</span></strong>
                                 <br>
-                                <!--                            todo: 四舍五入, 避免无限位-->
-                                <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    卡项优惠 - ¥{{scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count}}
-                                </span>
-
-                                <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    卡项权益抵扣{{scope.row.count}}次
+                                <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    卡项优惠 - ¥{{(scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count).toFixed(2)}}
                                 </span>
 
                             </template>
@@ -498,8 +492,8 @@
                 }else if(this.menuActive==='recharge' && this.shoppingCardRecharge){
                     amount = this.shoppingCardRecharge.price
                 }
-                this.payAmount = amount;
-                return amount
+                this.payAmount = amount.toFixed(2);
+                return this.payAmount
             },
 
             // 选择升级卡项

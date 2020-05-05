@@ -51,7 +51,7 @@
                 <el-divider></el-divider>
 
                 <el-form-item label="找零">
-                    <strong style="color: #d40000; font-size: 20px;">¥{{getRealPay() - getNeedPay()}}</strong>
+                    <strong style="color: #d40000; font-size: 20px;">¥{{(getRealPay() - getNeedPay()).toFixed(2)}}</strong>
                 </el-form-item>
             </el-form>
             <div v-if="!showPaySuccess" slot="footer" class="dialog-footer">
@@ -104,7 +104,7 @@
                               if(value){
                                   if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
                                       callback(new Error("金额为数字且不能小于0!"));
-                                  }else if(value > this.payAmount){
+                                  }else if(parseFloat(value) > this.payAmount){
                                       callback(new Error("减免金额不能大于消费总额!"));
                                   }else{
                                       callback();
@@ -123,9 +123,9 @@
                               if(value){
                                   if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
                                       callback(new Error("金额为数字且不能小于0!"));
-                                  }else if(value>this.payAmount){
+                                  }else if(parseFloat(value)>this.payAmount){
                                       callback(new Error("必须小于等于应收金额!"));
-                                  }else if(this.cardBalance && value>this.cardBalance){
+                                  }else if(this.cardBalance && parseFloat(value)>this.cardBalance){
                                       callback(new Error("储值余额不足!"));
                                   }else{
                                       callback();
@@ -219,12 +219,12 @@
 
             // 还需支付
             getNeedPay(){
-                return parseFloat(this.payAmount - this.form.reduce_amount) || this.payAmount;
+                return (parseFloat(this.payAmount - this.form.reduce_amount) || this.payAmount).toFixed(2);
             },
 
             // 实际支付
             getRealPay() {
-                return (parseFloat(this.form.balance_pay_amount) || 0) + (parseFloat(this.form.cash_pay_amount) || 0)
+                return ((parseFloat(this.form.balance_pay_amount) || 0) + (parseFloat(this.form.cash_pay_amount) || 0)).toFixed(2);
             },
 
             // 支付成功页面显示
