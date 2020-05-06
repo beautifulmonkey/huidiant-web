@@ -180,7 +180,11 @@
             onSubmit(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        if (this.getRealPay() < this.getNeedPay()){
+                        //todo 注意: toFixed输出string,注意转换
+                        let realPay = parseFloat(this.getRealPay());
+                        let needPay = parseFloat(this.getNeedPay());
+
+                        if (realPay < needPay){
                             this.$message({
                                 showClose: true,
                                 message: '支付金额有误，请输入正确的支付金额',
@@ -193,12 +197,12 @@
                             amount: {
                                 consume_amount: this.payAmount,
                                 reduce_amount: parseFloat(this.form.reduce_amount) || 0,
-                                paid_amount: this.getNeedPay()
+                                paid_amount: needPay
                             },
                             pay: {
                                 pay_type: 2,  // 防止为0元
                                 custom_pay_amount: 0,
-                                cash_pay_amount: this.form.cash_pay_amount - (this.getRealPay() - this.getNeedPay()),
+                                cash_pay_amount: this.form.cash_pay_amount - (realPay - needPay),
                                 balance_pay_amount: parseFloat(this.form.balance_pay_amount) || 0
                             }
                         };

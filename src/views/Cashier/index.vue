@@ -303,7 +303,7 @@
                 </div>
 
                 <div class="footer-handle">
-                    <pay-component ref="payComponent" :payAmount="payAmount" :cardBalance="chooseCustomerData.card_balance" @settlement="createOrderDeal"></pay-component>
+                    <pay-component ref="payComponent" :payAmount="parseFloat(payAmount)" :cardBalance="chooseCustomerData.card_balance" @settlement="createOrderDeal"></pay-component>
                 </div>
             </div>
 
