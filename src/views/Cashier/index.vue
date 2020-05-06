@@ -58,6 +58,7 @@
                 <create-card-component
                         v-if="this.menuActive==='createCard'"
                         :prepaidCardId="chooseCustomerData.prepaid_card"
+                        :customerId="chooseCustomerData.id"
                         @addShoppingCart="addShoppingCartCreateCard">
                 </create-card-component>
 
@@ -303,7 +304,12 @@
                 </div>
 
                 <div class="footer-handle">
-                    <pay-component ref="payComponent" :payAmount="parseFloat(payAmount)" :cardBalance="chooseCustomerData.card_balance" @settlement="createOrderDeal"></pay-component>
+                    <pay-component ref="payComponent"
+                                   :payAmount="parseFloat(payAmount)"
+                                   :cardBalance="chooseCustomerData.card_balance"
+                                   :menuActive="menuActive"
+                                   :createType="createType"
+                                   @settlement="createOrderDeal"></pay-component>
                 </div>
             </div>
 
@@ -482,7 +488,7 @@
                         amount += item.discount_price * item.count
                     })
                 }else if (this.menuActive==='createCard'){
-                    if(this.createType===1){
+                    if(this.createType===1  && this.shoppingCartCreatePrepaid){
                         amount = this.shoppingCartCreatePrepaid.price
                     }else if(this.createType===2){
                         this.shoppingCartCreateCountingList.forEach((item,index,array)=>{
@@ -569,9 +575,12 @@
                 let orderData =  null;
                 if(this.menuActive==='consume' || this.menuActive==='counting'){
                     orderData = this.createOrderGoods(orderPayInfo)
+                }else if (this.menuActive==='createCard'){
+                    orderData = this.createOrderCardCreate(orderPayInfo)
                 }
+                console.log(orderData);
+                // 请求后端接口
                 this.cashierDeal(orderData)
-
             },
 
             // 品项订单
@@ -598,9 +607,49 @@
                     })
                 });
                 return order
-            }
+            },
 
+            // 开卡订单
+            createOrderCardCreate(orderPayInfo){
+                // 1: '充值卡', 2: '次卡'
+                let orderTypeMap = {1: 3, 2: 2};
+                let order = {
+                    customer_id: this.chooseCustomerData.id || null,
+                    order_type: orderTypeMap[this.createType],
+                    amount: orderPayInfo.amount,
+                    pay: orderPayInfo.pay,
+                    order_items: []
+                };
 
+                if (this.createType === 1){
+                    // 开充值卡
+                    order.order_items.push({
+                        item_type: 4,
+                        item_id: this.shoppingCartCreatePrepaid.id,
+                        item_name: this.shoppingCartCreatePrepaid.name,
+                        original_price: this.shoppingCartCreatePrepaid.price,
+                        reduce_amount: this.shoppingCartCreatePrepaid.price,
+                        reduce_text: '',
+                        count: 1,
+                        paid_amount: this.shoppingCartCreatePrepaid.price
+                    })
+                }else if (this.createType === 2){
+                    // 开次卡
+                    this.shoppingCartCreateCountingList.forEach((item,index,array)=>{
+                        order.order_items.push({
+                            item_type: 5,
+                            item_id: item.id,
+                            item_name: item.name,
+                            original_price: item.price,
+                            reduce_amount: item.discount_price,
+                            reduce_text: '',
+                            count: item.count,
+                            paid_amount: item.discount_price * item.count
+                        })
+                    });
+                }
+                return order
+            },
 
         }
     }

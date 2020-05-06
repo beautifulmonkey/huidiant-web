@@ -42,6 +42,9 @@
                 type: Number,
                 default: null
             },
+            customerId: {
+                type: Number
+            }
         },
         data(){
             return {
@@ -79,6 +82,13 @@
             },
 
             addCard(data){
+                if(!this.customerId) {
+                    this.$message({
+                        type: 'warning',
+                        message: '请先选择客户!',
+                    });
+                    return
+                }
                 this.$emit('addShoppingCart', {
                     type: data.type,
                     id: data.id,

@@ -17,7 +17,7 @@
                     <strong style="color: #d40000; font-size: 20px;">¥ {{payAmount}}</strong>
                 </el-form-item>
 
-                <el-form-item label="减免金额" prop="reduce_amount">
+                <el-form-item label="减免金额" prop="reduce_amount" v-if="!(menuActive==='createCard' && createType===1)">
                     <el-input v-model="form.reduce_amount" placeholder="减免金额">
                         <template slot="append">元</template>
                     </el-input>
@@ -86,6 +86,12 @@
             },
             cardBalance: {
                 type: Number
+            },
+            createType: {
+                type: Number
+            },
+            menuActive: {
+                type: String
             }
         },
         data(){
