@@ -1,8 +1,25 @@
 import request from '@/utils/request/index.js'
 import config from '@/config/env.js'
+import axios from 'axios'
 
 
 export default {
+    // 账号登录
+    async userLogin(username, pwd){
+        const url = `${config.server.url}/login/access-token`;
+        const loginData = {
+            username: username,
+            password: pwd
+        };
+
+        const requestConfig = {
+            url,
+            method: 'post',
+            withCredentials: false,
+            data: new URLSearchParams(loginData)
+        };
+        return await axios(requestConfig)
+    },
     // 获取客户列表
     async getCustomerList(filter) {
         const url = `${config.server.url}/customer/customer`;

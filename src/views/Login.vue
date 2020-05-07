@@ -41,6 +41,8 @@ import { mapState } from 'vuex'
 import Cookies from "js-cookie"
 import ThemePicker from "@/components/ThemePicker"
 import LangSelector from "@/components/LangSelector"
+import customerApi from '@/service/customer.js'
+
 export default {
   name: 'Login',
   components:{
@@ -72,29 +74,54 @@ export default {
     }
   },
   methods: {
-    login() {
-      this.loading = true
-      let userInfo = {account:this.loginForm.account, password:this.loginForm.password, captcha:this.loginForm.captcha}
-      this.$api.login.login(userInfo).then((res) => {
-          if(res.msg != null) {
-            this.$message({
-              message: res.msg,
-              type: 'error'
-            })
-          } else {
-            Cookies.set('token', res.data.token) // 放置token到Cookie
-            sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
-            this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
-            this.$router.push('/')  // 登录成功，跳转到主页
-          }
-          this.loading = false
-        }).catch((res) => {
+    // login() {
+    //   this.loading = true
+    //   let userInfo = {account:this.loginForm.account, password:this.loginForm.password, captcha:this.loginForm.captcha}
+    //   this.$api.login.login(userInfo).then((res) => {
+    //       if(res.msg != null) {
+    //         this.$message({
+    //           message: res.msg,
+    //           type: 'error'
+    //         })
+    //       } else {
+    //         Cookies.set('token', res.data.token) // 放置token到Cookie
+    //         sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
+    //         this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
+    //         this.$router.push('/')  // 登录成功，跳转到主页
+    //       }
+    //       this.loading = false
+    //     }).catch((res) => {
+    //       this.$message({
+    //       message: res.message,
+    //       type: 'error'
+    //       })
+    //     });
+    // },
+
+    async login(){
+      // this.loading = true;
+      try {
+        const res = await customerApi.userLogin(this.loginForm.account, this.loginForm.password);
+        if (res.status >= 200 && res.status < 300) {
+          const access_token = res.data.access_token;
+
+          // Cookies.set('token', res.data.token) // 放置token到Cookie
+          // sessionStorage.setItem('user', this.loginForm.account) // 保存用户到本地会话
+          // this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
+          localStorage.access_token = access_token;
+          this.$router.push('/')  // 登录成功，跳转到主页
+
+        } else {
           this.$message({
-          message: res.message,
-          type: 'error'
+            type: 'error',
+            message: '验证失败!'
           })
-        });
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
+
     refreshCaptcha: function(){
       this.loginForm.src = this.global.baseUrl + "/captcha.jpg?t=" + new Date().getTime();
     },

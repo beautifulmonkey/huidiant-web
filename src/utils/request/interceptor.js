@@ -11,8 +11,8 @@ import { Notification } from 'element-ui'
 //   timeout: 5000 // 请求超时时间
 // })
 const requestInterceptorFunc = function(config) {
-  // todo
-  config.headers.Authorization = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsImNvZGVfbmFtZSI6ImN6engiLCJ0ZWwiOiIxNzYxMDE2MjkxOCIsInNjb3BlcyI6WyJzdHJpbmciXSwiZXhwaXJ5X3RpbWUiOjEuMCwiZXhwIjoxNTg4ODE0NTAzfQ.wPcOVC4vrJ-uLRuzepKRwxyj7vHh1ydxGTk_VNj6nXM`
+  const token = localStorage.access_token;
+  config.headers.Authorization = `Bearer ${token}`;
   return config
 }
 const requestInterceptorError = function(error) {
