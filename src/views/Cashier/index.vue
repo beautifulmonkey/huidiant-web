@@ -395,7 +395,8 @@
                                 sex: item.sex,
                                 identity: item.identity,
                                 prepaid_card: item.prepaid_card,
-                                card_balance: item.card_balance
+                                card_balance: item.card_balance,
+                                prepaid_card_price: item.prepaid_card_price
                             })
                         });
                         cb(cb_data);
@@ -496,7 +497,7 @@
                         })
                     }
                 }else if(this.menuActive==='recharge' && this.shoppingCardRecharge){
-                    amount = this.shoppingCardRecharge.price
+                    amount = parseFloat(this.shoppingCardRecharge.price || 0)
                 }
                 this.payAmount = amount.toFixed(2);
                 return this.payAmount
@@ -567,7 +568,9 @@
                 if (type==='rechargeUpgrade'){
                     this.getCardList()
                 }
-                this.shoppingCardRecharge = {}
+                this.shoppingCardRecharge = {
+                    price: this.chooseCustomerData.prepaid_card_price
+                }
             },
 
             // 结算
@@ -577,6 +580,8 @@
                     orderData = this.createOrderGoods(orderPayInfo)
                 }else if (this.menuActive==='createCard'){
                     orderData = this.createOrderCardCreate(orderPayInfo)
+                }else if(this.menuActive==='recharge'){
+                    orderData = this.createOrderRecharge(orderPayInfo)
                 }
                 console.log(orderData);
                 // 请求后端接口
@@ -650,6 +655,30 @@
                 }
                 return order
             },
+
+            // 充值订单
+            createOrderRecharge(orderPayInfo){
+                let rechargeTypeMap = {'recharge': 6, 'rechargeUpgrade': 7};
+
+                let order = {
+                    customer_id: this.chooseCustomerData.id,
+                    order_type: 4,
+                    amount: orderPayInfo.amount,
+                    pay: orderPayInfo.pay,
+                    order_items: [{
+                        item_type: rechargeTypeMap[this.rechargeType],
+                        item_id: this.shoppingCardRecharge.card || null,
+                        item_name: "充值" + this.shoppingCardRecharge.price + "元",
+                        original_price: this.shoppingCardRecharge.price,
+                        reduce_amount: 0,
+                        reduce_text: '',
+                        count: 1,
+                        paid_amount: this.shoppingCardRecharge.price
+                    }]
+                };
+
+                return order
+            }
 
         }
     }

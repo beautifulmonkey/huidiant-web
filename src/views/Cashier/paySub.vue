@@ -17,7 +17,7 @@
                     <strong style="color: #d40000; font-size: 20px;">¥ {{payAmount}}</strong>
                 </el-form-item>
 
-                <el-form-item label="减免金额" prop="reduce_amount" v-if="!(menuActive==='createCard' && createType===1)">
+                <el-form-item label="减免金额" prop="reduce_amount" v-if="!((menuActive==='createCard' && createType===1) || menuActive==='recharge')">
                     <el-input v-model="form.reduce_amount" placeholder="减免金额">
                         <template slot="append">元</template>
                     </el-input>
@@ -34,7 +34,7 @@
                     </el-input>
                 </el-form-item>
 
-                <el-form-item label="储值支付" prop="balance_pay_amount" v-if="cardBalance">
+                <el-form-item label="储值支付" prop="balance_pay_amount" v-if="cardBalance && menuActive!=='recharge'">
                     <el-input v-model="form.balance_pay_amount" placeholder="储值支付">
                         <template slot="append">元</template>
                     </el-input> 储值余额: ¥{{cardBalance}}
