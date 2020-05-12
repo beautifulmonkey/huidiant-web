@@ -1,6 +1,6 @@
 export default {
     state: {
-        appName: "云逍收银",  // 应用名称
+        appName: "美国中情局情报系统",  // 应用名称
         themeColor: "#14889A",  // 主题颜色
         oldThemeColor: "#14889A",   // 上一次主题颜色
         collapse:false,  // 导航栏收缩状态
