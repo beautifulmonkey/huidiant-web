@@ -99,7 +99,7 @@
                     </div>
 
                     <div style="margin-right: 20px;">
-                        <el-button type="text">订单详情</el-button>
+                        <el-button type="text" @click="$router.push('/orders/details/' + order.order_number)">订单详情</el-button>
                         <el-button type="text">备注</el-button>
                     </div>
                 </div>
@@ -253,10 +253,17 @@
 
             objectSpanMethod({ row, column, rowIndex, columnIndex }) {
                 if (columnIndex === 3 || columnIndex === 4 || columnIndex === 5) {
-                    return {
-                        rowspan: 999,
-                        colspan: 1
-                    };
+                    if(rowIndex === 0){
+                        return {
+                            rowspan: 999,
+                            colspan: 1
+                        };
+                    }else{
+                        return {
+                            rowspan: 0,
+                            colspan: 0
+                        };
+                    }
                 }
             },
 

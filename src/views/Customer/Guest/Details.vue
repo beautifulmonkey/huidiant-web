@@ -83,6 +83,7 @@
                 <el-tabs type="card">
                     <el-tab-pane label="客户信息">
                         <div>
+                            <div class="title">基本档案</div>
                             <div v-for="item in detail_info" :key="item.key" class="align-center details-info">
                                 <div class="details-info-label"><span>{{ item.label }}:</span></div>
                                 <div class="details-info-value"><span>{{ customerData[item.key] }}</span></div>
@@ -220,6 +221,29 @@
 
     .main-value {
         font-size: 20px;
+    }
+
+    .title{
+        background: #f8f8f8;
+        height: 24px;
+        padding: 12px 16px;
+        font-family: PingFangSC-Semibold Helvetica,Arial,Verdana,Tahoma,sans-serif;
+        color: #323232;
+        letter-spacing: 0;
+        line-height: 24px;
+        position: relative;
+        text-align: left;
+        width: 30%;
+    }
+
+    .title:after{
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 16px;
+        width: 4px;
+        height: 16px;
+        background: #8558fa;
     }
 
 </style>

@@ -85,7 +85,22 @@
                             value-key="label"
                             :debounce="500"
                             @select="customerChoose"
-                    ></el-autocomplete>
+                    >
+
+                        <template slot-scope="{ item }">
+                            <div class="search-item">
+                                <div>
+                                    <span style="color: #222">{{ item.name }}</span><br>
+                                    <span style="font-size: 80%">{{item.identity}}</span>
+                                </div>
+
+                                <div>
+                                    <span style="font-family: Avenir, Monaco, Arial, sans-serif">{{ item.tel }}</span>
+                                </div>
+                            </div>
+                        </template>
+
+                    </el-autocomplete>
                 </div>
                 <!--选择客户显示客户信息-->
                 <div v-if="isChooseCustomer" class="customer-info">
@@ -389,7 +404,6 @@
                         res.data.forEach((item,index,array)=>{
                             cb_data.push({
                                 id: item.id,
-                                label: item.name + ' - ' + item.tel,
                                 name: item.name,
                                 tel: item.tel,
                                 sex: item.sex,
@@ -808,6 +822,13 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
+    }
+    .search-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        line-height: 20px;
+        margin: 5px 0
     }
 
 </style>

@@ -238,17 +238,28 @@ export function findNavTree() {
             "children": []
           },
           {
+            "id": "/orders/list",
+            "name": "订单详情",
+            "url": "/orders/details/:id",
+            "component": "/orders/details",
+            "icon": "el-icon-info",
+            "hidden": true,
+            "children": []
+          },
+          {
             "id": "/orders/refund",
-            "name": "退款列表",
+            "name": "退款列表(开发中)",
             "url": "/orders/refund",
             "icon": "el-icon-s-finance",
+            "disabled": true,
             "children": []
           },
           {
             "id": "/orders/debt",
-            "name": "欠款列表",
+            "name": "欠款列表(开发中)",
             "url": "/orders/debt",
             "icon": "el-icon-s-claim",
+            "disabled": true,
             "children": []
           }
         ]
