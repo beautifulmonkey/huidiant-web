@@ -85,6 +85,20 @@ export function findNavTree() {
       //     }
       //   ]
       // },
+
+      {
+        "name": "数据",
+        "menuIndex": "/analysis",
+        "children": [
+          {
+            "id": "/analysis/today",
+            "name": "今日概览",
+            "url": "/analysis/today",
+            "icon": "el-icon-data-line",
+            "children": []
+          }
+        ]
+      },
       {
         "name": "商品",
         "menuIndex": "/goods",
@@ -260,19 +274,6 @@ export function findNavTree() {
             "url": "/orders/debt",
             "icon": "el-icon-s-claim",
             "disabled": true,
-            "children": []
-          }
-        ]
-      },
-      {
-        "name": "数据",
-        "menuIndex": "/analysis",
-        "children": [
-          {
-            "id": "/analysis/summary",
-            "name": "数据概览",
-            "url": "/analysis/summary",
-            "icon": "el-icon-s-data",
             "children": []
           }
         ]
