@@ -1,44 +1,25 @@
 <template>
-  <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-    <span class="tool-bar">
-      <!-- 主题切换 -->
-      <theme-picker style="float:right;" class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
-      <!-- 语言切换 -->
-      <!-- <lang-selector class="lang-selector"></lang-selector>    -->
-    </span>
-    <h2 class="title" style="padding-left:22px;" >系统登录</h2>
+  <div class="login-bg">
+    <svg data-v-24549f7d="" id="clouds" alt="Gray Clouds Background" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677" viewBox="0 0 2611.084 485.677"><path data-v-24549f7d="" id="Path_39" data-name="Path 39" d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z" transform="translate(142.69 -634.312)" fill="#eee"></path></svg>
+
+    <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px" class="login-container">
+
+    <h2 class="title" style="text-align: center;font-weight: 100;font-size: 26px;" >云逍收银</h2>
     <el-form-item prop="account">
       <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
-    <el-form-item >
-      <el-col :span="12">
-        <el-form-item prop="captcha">
-          <el-input type="test" v-model="loginForm.captcha" auto-complete="off" placeholder="验证码, 单击图片刷新"
-            style="width: 100%;">
-          </el-input>
-        </el-form-item>
-      </el-col>
-      <el-col class="line" :span="1">&nbsp;</el-col>
-      <el-col :span="11">
-        <el-form-item>
-            <img style="width: 100%;" class="pointer" :src="loginForm.src" @click="refreshCaptcha">
-        </el-form-item>
-      </el-col>
-    </el-form-item>
-    <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
     <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:48%;" @click.native.prevent="reset">重 置</el-button>
-      <el-button type="primary" style="width:48%;" @click.native.prevent="login" :loading="loading">登 录</el-button>
+      <el-button type="primary" style="width: 100%" @click.native.prevent="SubmitForm('loginForm')" :loading="loading">登 录</el-button>
     </el-form-item>
   </el-form>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Cookies from "js-cookie"
 import ThemePicker from "@/components/ThemePicker"
 import LangSelector from "@/components/LangSelector"
 import customerApi from '@/service/customer.js'
@@ -53,9 +34,8 @@ export default {
     return {
       loading: false,
       loginForm: {
-        account: 'admin',
-        password: 'admin',
-        captcha:'',
+        account: '',
+        password: '',
         src: ''
       },
       fieldRules: {
@@ -65,10 +45,7 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
-        // ,
-        // captcha: [
-        //   { required: true, message: '请输入验证码', trigger: 'blur' }
-        // ]
+
       },
       checked: true
     }
@@ -98,8 +75,9 @@ export default {
     //     });
     // },
 
+
     async login(){
-      // this.loading = true;
+      this.loading = true;
       try {
         const res = await customerApi.userLogin(this.loginForm.account, this.loginForm.password);
         if (res.status >= 200 && res.status < 300) {
@@ -120,32 +98,27 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      this.loading = false;
     },
 
-    refreshCaptcha: function(){
-      this.loginForm.src = this.global.baseUrl + "/captcha.jpg?t=" + new Date().getTime();
+    SubmitForm(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.login()
+        }else {
+          return false;
+        }
+      });
     },
-    reset() {
-      this.$refs.loginForm.resetFields()
-    },
-    // 切换主题
-    onThemeChange: function(themeColor) {
-      this.$store.commit('setThemeColor', themeColor)
-    }
+
   },
-  mounted() {
-    this.refreshCaptcha()
-  },
-  computed:{
-    ...mapState({
-      themeColor: state=>state.app.themeColor
-    })
-  }
+
 }
 </script>
 
 <style lang="scss" scoped>
   .login-container {
+    display: inline-block;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -155,7 +128,7 @@ export default {
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
+    /*box-shadow: 0 0 25px #cac6c6;*/
     .title {
       margin: 0px auto 30px auto;
       text-align: center;
@@ -164,5 +137,30 @@ export default {
     .remember {
       margin: 0px 0px 35px 0px;
     }
+  }
+
+  #clouds {
+    position: fixed;
+    bottom: -160px;
+    left: -50px;
+    right: 100px;
+    width: 120vw;
+  }
+
+  .login-bg{
+    /*width: 6750px;*/
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    background: #005c97;
+    background: linear-gradient(90deg,#363795,#005c97);
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    height: 100%;
+    left: 0;
+    opacity: 1;
+    /*position: fixed;*/
+    top: 0;
   }
 </style>
