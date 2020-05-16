@@ -312,7 +312,7 @@ export function findNavTree() {
             "children": [
               {
                 "id":"/settings/customer/vip",
-                "name": "入会门槛",
+                "name": "自动入会",
                 "url": "/settings/customer/vip",
                 "icon": "el-icon-star-off",
               },
