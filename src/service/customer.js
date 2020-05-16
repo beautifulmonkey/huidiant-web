@@ -44,6 +44,24 @@ export default {
         return await request('get', url)
     },
 
+    // 修改客户来源
+    async updateCustomerSource(id, params) {
+        const url = `${config.server.url}/customer/source/${id}`;
+        return await request('put', url, params)
+    },
+
+    // 添加客户来源
+    async addCustomerSource(params) {
+        const url = `${config.server.url}/customer/source`;
+        return await request('post', url, params)
+    },
+
+    // 删除客户来源
+    async delCustomerSource(id) {
+        const url = `${config.server.url}/customer/source/${id}`;
+        return await request('delete', url)
+    },
+
     // 修改客户信息
     async updateCustomer(id, params) {
         const url = `${config.server.url}/customer/customer/${id}`;

@@ -72,20 +72,6 @@ export function findNavTree() {
   //     },
 
 
-      // {
-      //   "name": "首页",
-      //   "menuIndex": "/dashboard",
-      //   "children": [
-      //     {
-      //       "id": "/dashboard/summary",
-      //       "name": "今日数据",
-      //       "url": "/dashboard/summary",
-      //       "icon": "el-icon-data-line",
-      //       "children": []
-      //     }
-      //   ]
-      // },
-
       {
         "name": "数据",
         "menuIndex": "/analysis",
@@ -283,12 +269,68 @@ export function findNavTree() {
         "menuIndex": "/settings",
         "children": [
           {
-            "id": "/settings/cashier",
+            "id": "/settings/stores",
+            "name": "店铺设置",
+            "url": "/settings/stores",
+            "icon": "el-icon-s-shop",
+            "children": [
+              {
+                "id": "/settings/stores/info",
+                "name": "店铺信息",
+                "url": "/settings/stores/info",
+                "icon": "el-icon-s-shop",
+              }
+            ]
+          },
+          {
+            "id": "/settings/trading",
             "name": "交易设置",
-            "url": "/settings/cashier",
-            "icon": "el-icon-setting",
-            "children": []
-          }
+            "url": "/settings/trading",
+            "icon": "el-icon-money",
+            "children": [
+              {
+                "id": "/settings/trading/order",
+                "name": "开单设置(开发中)",
+                "url": "/settings/trading/order",
+                "icon": "el-icon-money",
+                "disabled": true,
+              },
+              {
+                "id": "/settings/trading/pay",
+                "name": "支付设置(开发中)",
+                "url": "/settings/trading/pay",
+                "icon": "el-icon-money",
+                "disabled": true,
+              },
+            ]
+          },
+          {
+            "id": "/settings/customer",
+            "name": "客户设置",
+            "url": "/settings/customer",
+            "icon": "el-icon-s-custom",
+            "children": [
+              {
+                "id":"/settings/customer/vip",
+                "name": "入会门槛",
+                "url": "/settings/customer/vip",
+                "icon": "el-icon-star-off",
+              },
+              {
+                "id": "/settings/customer/tag",
+                "name": "标签设置(开发中)",
+                "url": "/settings/customer/tag",
+                "icon": "el-icon-price-tag",
+                "disabled": true,
+              },
+              {
+                "id": "/settings/customer/source",
+                "name": "来源管理",
+                "url": "/settings/customer/source",
+                "icon": "el-icon-s-custom",
+              },
+            ]
+          },
         ]
       }
     ]

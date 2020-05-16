@@ -14,7 +14,7 @@
                     placement="right"
                     trigger="click"
                     v-model="visible">
-                    <el-input size="mini" v-model="Form.name"></el-input>
+                    <el-input size="mini" v-model="Form.name" :placeholder="'请输入' + dialogTitle + '名称'"></el-input>
                     <div style="text-align: right; margin: 5px;">
                         <el-button size="mini" type="text" @click="clearBindData()">取消</el-button>
                         <el-button type="primary" size="mini" @click="addData()">确定</el-button>
@@ -127,6 +127,11 @@
 
             // 添加
             async addData(){
+                if (!this.Form.name){
+                    this.$message.error('名称不能为空!');
+                    return
+                }
+
                 if (this.goods_type==="category"){
                     try {
                         const res = await categoryTagApi.addCategory(this.Form);
