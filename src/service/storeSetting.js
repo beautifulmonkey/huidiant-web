@@ -14,4 +14,10 @@ export default {
         const url = `${config.server.url}/setting/automaticVip`;
         return await request('post', url, params)
     },
+
+    // 获取门店信息
+    async getStoreInfo() {
+        const url = `${config.server.url}/setting/store_info`;
+        return await request('get', url)
+    },
 }
