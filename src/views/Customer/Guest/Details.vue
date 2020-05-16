@@ -90,7 +90,9 @@
                             </div>
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane label="消费记录">消费记录</el-tab-pane>
+                    <el-tab-pane label="消费记录">
+                        <order-list-component :customer_id="this.$route.params.id"></order-list-component>
+                    </el-tab-pane>
                     <el-tab-pane label="次卡信息">次卡信息</el-tab-pane>
                     <el-tab-pane disabled label="跟进记录(敬请期待)">跟进记录</el-tab-pane>
                 </el-tabs>
@@ -102,11 +104,13 @@
 <script>
     import customerApi from '@/service/customer.js'
     import upSertCustomerComponent from '@/views/Customer/upSertCustomer.vue'
+    import orderListComponent from '@/views/Orders/List.vue'
 
     export default {
         name: "Details",
         components: {
-            upSertCustomerComponent
+            upSertCustomerComponent,
+            orderListComponent
         },
         data() {
             return {

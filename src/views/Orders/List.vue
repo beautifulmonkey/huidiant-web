@@ -1,6 +1,6 @@
 <template>
     <div class="ServiceDiv">
-        <div class="m-wrap-16">
+        <div class="m-wrap-16" v-if="!customer_id">
 
             <div class="cond-row">
                 <div class="cond-column">
@@ -178,6 +178,12 @@
 
     export default {
         name: "Service",
+        props: {
+            customer_id: {
+                type: String,
+                default: null
+            },
+        },
         data() {
             return {
                 filter: {
@@ -282,7 +288,9 @@
 
             // 获取订单列表
             async getOrderList(){
-
+                if (this.customer_id){
+                    this.filter.customer_id = this.customer_id
+                }
                 if (this.filter.daterange){
                     this.filter.start = this.filter.daterange[0] / 1000;
                     this.filter.end = this.filter.daterange[1]  / 1000;
