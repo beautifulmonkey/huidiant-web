@@ -90,5 +90,11 @@ export default {
     async getCustomerCounting(id) {
         const url = `${config.server.url}/customer/data/counting/${id}`;
         return await request('get', url)
+    },
+
+    // 获取客户次卡消费记录
+    async getCustomerCountingUseRecord(id) {
+        const url = `${config.server.url}/customer/data/counting_use/${id}`;
+        return await request('get', url)
     }
 }

@@ -93,8 +93,10 @@
                     <el-tab-pane label="消费记录">
                         <order-list-component :customer_id="this.$route.params.id"></order-list-component>
                     </el-tab-pane>
-                    <el-tab-pane label="次卡信息">次卡信息</el-tab-pane>
-                    <el-tab-pane disabled label="跟进记录(敬请期待)">跟进记录</el-tab-pane>
+                    <el-tab-pane label="次卡信息">
+                        <counting-cart-component :customer_id="this.$route.params.id"></counting-cart-component>
+                    </el-tab-pane>
+                    <el-tab-pane disabled label="跟进记录(开发中)">跟进记录</el-tab-pane>
                 </el-tabs>
             </div>
         </div>
@@ -104,13 +106,15 @@
 <script>
     import customerApi from '@/service/customer.js'
     import upSertCustomerComponent from '@/views/Customer/upSertCustomer.vue'
+    import countingCartComponent from '@/views/Customer/Guest/countingCardSub.vue'
     import orderListComponent from '@/views/Orders/List.vue'
 
     export default {
         name: "Details",
         components: {
             upSertCustomerComponent,
-            orderListComponent
+            orderListComponent,
+            countingCartComponent
         },
         data() {
             return {

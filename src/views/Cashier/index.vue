@@ -156,7 +156,7 @@
                         <el-table-column
                                 label="数量">
                             <template slot-scope="scope">
-                                <el-input-number style="width: 100px;" size="mini" v-model="scope.row.count" :min="1" :max="scope.row.counting || 999">
+                                <el-input-number style="width: 100px;" size="mini" v-model="scope.row.count" :min="1" :max="getCountMax(scope.row.counting)">
                                 </el-input-number>
                             </template>
                         </el-table-column>
@@ -396,6 +396,14 @@
             ButtonClick(data){
                 this.menuActive = data
             },
+
+            getCountMax(counting){
+                if (counting && counting !== -1){
+                    return counting
+                }else {
+                    return 999
+                }
+            },
             async customerQuery(queryString, cb) {
                 try {
                     const res = await customerApi.SearchCustomer(queryString);
@@ -530,7 +538,7 @@
                 });
 
                 if (goodsItems.length && data.shoppingType === 'counting'){
-                    if (goodsItems[0].count >= data.counting){
+                    if (goodsItems[0].count >= data.counting && data.counting !== -1){
                         this.$notify({
                             title: '剩余次数不足!',
                             message: '该项目只剩余' + data.counting +  '次!',
