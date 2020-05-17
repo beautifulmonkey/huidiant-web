@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div @click="click" ><svg-icon style="color: white; font-size: 30px" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"/></div>
+        <div @click="click" ><svg-icon class="svg-icon" :icon-class="isFullscreen?'exit-fullscreen':'fullscreen'"/></div>
     </div>
 </template>
 
@@ -56,5 +56,10 @@
         width: 20px;
         height: 20px;
         vertical-align: 10px;
+    }
+
+    .svg-icon{
+        font-size: 20px;
+        color: white;
     }
 </style>

@@ -23,6 +23,7 @@ import { mapState } from 'vuex'
 import ThemePicker from "@/components/ThemePicker"
 import LangSelector from "@/components/LangSelector"
 import customerApi from '@/service/customer.js'
+import storeSettingApi from '@/service/storeSetting.js'
 
 export default {
   name: 'Login',
@@ -87,6 +88,7 @@ export default {
           // sessionStorage.setItem('user', this.loginForm.account) // 保存用户到本地会话
           // this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
           localStorage.access_token = access_token;
+          this.getStoreInfo();
           this.$router.push('/analysis/today')  // 登录成功，跳转到主页
 
         } else {
@@ -99,6 +101,23 @@ export default {
         console.log(error)
       }
       this.loading = false;
+    },
+
+    // 获取门店信息
+    async getStoreInfo(){
+      try {
+        const res = await storeSettingApi.getStoreInfo();
+        if (res.status >= 200 && res.status < 300) {
+          localStorage.userInfo = JSON.stringify(res.data)
+        } else {
+          this.$message({
+            type: 'error',
+            message: '获取数据失败!'
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     submitForm(formName){

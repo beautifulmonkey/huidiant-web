@@ -57,7 +57,7 @@
 <!--        </el-menu-item>-->
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
-          <span class="user-info"><img :src="user.avatar" />{{user.name}}</span>
+          <span class="user-info"><img :src="circleUrl" />{{user.stores_name}}</span>
           <el-popover ref="popover-personal" placement="bottom-end" trigger="click" :visible-arrow="false">
             <personal-panel :user="user"></personal-panel>
           </el-popover>
@@ -93,13 +93,9 @@ export default {
   },
   data() {
     return {
-      user: {
-        name: "Louis",
-        avatar: "",
-        role: "超级管理员",
-        registeInfo: "注册时间：2018-12-20 "
-      },
-      langVisible: false
+        user: {},
+        circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        langVisible: false
     }
   },
   methods: {
@@ -130,11 +126,14 @@ export default {
   },
   mounted() {
     this.sysName = "Kitty Platform"
-    var user = sessionStorage.getItem("user")
-    if (user) {
-      this.user.name = user
-      this.user.avatar = require("@/assets/user.png")
-    }
+
+      if (localStorage.userInfo) {
+          const userInfo = JSON.parse(localStorage.userInfo);
+          if (userInfo) {
+              this.user = userInfo
+          }
+      }
+
   },
   computed:{
     ...mapState({
@@ -177,7 +176,7 @@ export default {
   background: #b0d6ce4d;
 }
 .user-info {
-  font-size: 20px;
+  font-size: 17px;
   color: #fff;
   cursor: pointer;
   img {

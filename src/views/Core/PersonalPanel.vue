@@ -2,23 +2,24 @@
   <div class="personal-panel">
     <div class="personal-desc" :style="{'background':this.$store.state.app.themeColor}">
         <div class="avatar-container">
-          <img class="avatar" :src="require('@/assets/user.png')" />
+            <!--          <img class="avatar" :src="require('@/assets/user.png')" />-->
+        <img class="avatar" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
         </div>
         <div class="name-role">
-          <span class="sender">{{ user.name }} - {{ user.role }}</span>
+          <span class="sender">{{ user.stores_name }}</span>
         </div>
         <div class="registe-info">
           <span class="registe-info">
             <li class="fa fa-clock-o"></li>
-            {{ user.registeInfo }}
+             到期时间：{{ user.expiry_date }}
           </span>
         </div>
     </div>
-    <div class="personal-relation">
-        <span class="relation-item">followers</span>
-        <span class="relation-item">watches</span>
-        <span class="relation-item">friends</span>
-    </div>
+<!--    <div class="personal-relation">-->
+<!--        <span class="relation-item">followers</span>-->
+<!--        <span class="relation-item">watches</span>-->
+<!--        <span class="relation-item">friends</span>-->
+<!--    </div>-->
     <div class="main-operation">
         <span class="main-operation-item">
           <el-button size="small" icon="fa fa-male"> 个人中心</el-button>
@@ -28,49 +29,31 @@
         </span>
     </div>
     <div class="other-operation">
-        <div class="other-operation-item">
-          <li class="fa fa-eraser"></li>
-          清除缓存
-        </div>
+
         <div class="other-operation-item">
           <li class="fa fa-user"></li>
-          在线人数
+          技术支持
         </div>
         <div class="other-operation-item">
           <li class="fa fa-bell"></li>
-          访问次数
+          升级/续费
         </div>
-        <div class="other-operation-item" @click="showBackupDialog">
-          <li class="fa fa-undo"></li>
-          {{$t("common.backupRestore")}}
-        </div>
+
     </div>
     <div class="personal-footer" @click="logout">
       <li class="fa fa-sign-out"></li>
       {{$t("common.logout")}}
     </div>
-    <!--备份还原界面-->
-    <backup ref="backupDialog" @afterRestore="afterRestore"></backup>
   </div>
 </template>
 
 <script>
-import Cookies from "js-cookie"
-import Backup from "@/views/Backup/Backup"
 export default {
   name: 'PersonalPanel',
-  components:{
-    Backup
-  },
   props: {
     user: {
       type: Object,
-      default: {
-        name: "admin",
-        avatar: "@/assets/user.png",
-        role: "超级管理员",
-        registeInfo: "注册时间：2018-12-25 "
-      }
+      default: {}
     }
   },
   data() {
@@ -95,24 +78,6 @@ export default {
       })
       .catch(() => {})
     },
-    // 删除cookie
-    deleteCookie: function(name) {
-        Cookies.remove(name)
-    },
-    // 打开备份还原界面
-    showBackupDialog: function() {
-      this.$refs.backupDialog.setBackupVisible(true)
-    },
-    // 成功还原之后，重新登录
-    afterRestore: function() {
-        this.$refs.backupDialog.setBackupVisible(false)
-        sessionStorage.removeItem("user")
-        this.deleteCookie("token")
-        this.$router.push("/login")
-        this.$api.login.logout().then((res) => {
-          }).catch(function(res) {
-        })
-    }
   },
   mounted() {
   }
