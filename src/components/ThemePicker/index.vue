@@ -31,7 +31,7 @@ export default {
       theme: ORIGINAL_THEME,
       showSuccess: true, // 是否弹出换肤成功消息,
       predefineColors: [
-        '#2C869A',
+        '#14889A',
         '#d97600',
         '#e597b9',
         '#409EFF',

@@ -11,10 +11,16 @@
                 <el-form-item>
                     <!--            todo: 如何做成有赞的效果?-->
                     <el-radio-group v-model="ruleForm.counting_card_type" style="float: left">
-                        <el-radio-button label="1">有限次卡</el-radio-button>
-                        <el-radio-button label="2">不限次卡</el-radio-button>
-                        <el-radio-button label="3">通卡</el-radio-button>
-                    </el-radio-group>
+                        <el-radio-button disabled v-if="ruleForm.counting_card_type==='1'">有限次卡</el-radio-button>
+                        <el-radio-button disabled v-if="ruleForm.counting_card_type==='2'">不限次卡</el-radio-button>
+                        <el-radio-button disabled v-if="ruleForm.counting_card_type==='3'">通卡</el-radio-button>
+                    </el-radio-group><br>
+
+                    <div style="text-align: left; font-size: 80%;color: #666; line-height: 20px;">
+                        <span v-if="ruleForm.counting_card_type==='1'">有限次卡: 支持创建多个服务集合有限次数的次卡</span>
+                        <span v-if="ruleForm.counting_card_type==='2'">不限次卡: 支持创建多个服务集合且不限次数的次卡，月卡、年卡等</span>
+                        <span v-if="ruleForm.counting_card_type==='3'">通卡: 设定一个总次数，会员可在次数内消费卡中任意项目</span>
+                    </div>
                 </el-form-item>
 
                 <el-form-item label="名称" prop="name">
@@ -48,9 +54,13 @@
                         </el-table-column>
                     </el-table>
 
-                    <span v-if="ruleForm.counting_card_type==='3'&&ruleForm.rule.service.length>0" >以上{{ruleForm.rule.service.length}}个服务总次数： 共
-                        <el-input style="width: 20vh" size="mini" v-model="ruleForm.rule.count"></el-input>
-                    次 <br><span style="font-weight: normal">每次划卡时可以从以上项目中任选一个，并划扣总次数1次</span></span>
+                    <div style="text-align: left">
+                        <span v-if="ruleForm.counting_card_type==='3'&&ruleForm.rule.service.length>0" >以上{{ruleForm.rule.service.length}}个服务总次数： 共
+                            <el-input style="width: 50px;" size="mini" v-model="ruleForm.rule.count"></el-input> 次
+                            <span style="font-size: 80%;color: #646566">每次划卡时可以从以上项目中任选一个，并划扣总次数1次</span>
+                        </span>
+                    </div>
+
                 </el-form-item>
 
                 <el-form-item label="有效时间" prop="valid_days">
@@ -124,20 +134,33 @@
                             trigger: 'blur'
                         }
                     ],
-                    // rule: [
-                    //     {
-                    //         validator:(rule,value,callback)=>{
-                    //             if(!this.rightsRealData.length){
-                    //                 callback(new Error("至少添加一项卡权益"));
-                    //             }else{
-                    //                 callback();
-                    //             }
-                    //
-                    //         },
-                    //         trigger: 'blur',
-                    //         required: true
-                    //     }
-                    // ],
+                    rule: [
+                        {
+                            validator:(rule,value,callback)=>{
+                                let frule = this.ruleForm.rule;
+                                if(!frule.service.length){
+                                    callback(new Error("至少添加一项卡权益"));
+                                }else if (frule.service.length){
+
+                                    if(this.ruleForm.counting_card_type==='1'){
+                                        frule.service.forEach((item,index,array)=>{
+                                            if(!item.count){
+                                                callback(new Error("次数不能为空!"));
+                                            }
+                                        });
+                                    }else if(this.ruleForm.counting_card_type==='3' && !frule.count){
+                                        callback(new Error("次数不能为空!"));
+                                    }
+
+                                }else{
+                                    callback();
+                                }
+
+                            },
+                            trigger: 'blur',
+                            required: true
+                        }
+                    ],
                     valid_days: [
                         {
                             validator:(rule,value,callback)=>{

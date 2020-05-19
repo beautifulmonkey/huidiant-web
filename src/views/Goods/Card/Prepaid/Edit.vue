@@ -102,6 +102,7 @@
                     <el-col :span="16">
                         <!--                        todo: 表单未验证-->
                         <el-table
+                                height="50vh"
                                 empty-text="未定义任何权益"
                                 :data="rightsTableData">
                             <el-table-column
@@ -280,7 +281,7 @@
                         isgoods_item = true
                     }
                     this.rightsTableData = this.rightsTableData.filter(item => item.code !== data.code);
-                    this.rightsTableData.push({
+                    this.rightsTableData.unshift({
                         id: data.id,
                         code: data.code,
                         price: price,
