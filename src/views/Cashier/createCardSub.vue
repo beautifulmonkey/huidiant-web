@@ -62,8 +62,12 @@
             // 获取卡项列表  todo: 获取999条数据改成分页 包括其他页面
             async getCardList(){
                 try {
-                    const res = await cardApi.getCardList(
-                        {'type': this.cardType, 'page_size': 999, 'prepaid_card': this.prepaidCardId});
+                    const res = await cardApi.getCardList({
+                        'type': this.cardType,
+                        'page_size': 999,
+                        'prepaid_card': this.prepaidCardId,
+                        'disable': 0
+                    });
                     if (res.status >= 200 && res.status < 300) {
                         this.cardList = res.data.data;
                     } else {

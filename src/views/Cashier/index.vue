@@ -312,6 +312,9 @@
                 </div>
             </div>
 
+            <!--todo: 订单备注功能-->
+            <!--todo: 赠送服务功能-->
+
             <!--收款底栏-->
             <div>
                 <div class="footer-amount border-b">

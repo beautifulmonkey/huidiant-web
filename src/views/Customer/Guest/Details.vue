@@ -38,12 +38,12 @@
                             <span style="color: rgb(153, 153, 153)">注册时间:</span> {{customerData.created_at}}
                         </div>
                         <div class="head-item">
-                            <span style="color: rgb(153, 153, 153)">来源:</span> {{customerData.source}}
+                            <span style="color: rgb(153, 153, 153)">来源:</span> {{customerData.source || '-'}}
                         </div>
                     </div>
 
                     <div class="head-item" style="display:flex; margin-top: 10px;">
-                        <span style="color: rgb(153, 153, 153)">备注:&nbsp;</span> {{customerData.description}}
+                        <span style="color: rgb(153, 153, 153)">备注:&nbsp;</span> {{customerData.description || '-'}}
                     </div>
                 </div>
             </div>
@@ -52,30 +52,30 @@
 
         <div class="box-main">
             <div>
-                <span style="color: rgb(153, 153, 153)">余额:</span><br>
-                <span class="main-value">￥{{customerData.card_balance}}</span>
+                <div class="main-title">余额:</div>
+                <div class="main-value">￥{{customerData.card_balance}}</div>
             </div>
             <div>
-                <span style="color: rgb(153, 153, 153)">次卡:</span><br>
-                <span class="main-value">{{customerData.counting_card_length}}张</span>
+                <div class="main-title">次卡:</div>
+                <div class="main-value">{{customerData.counting_card_length}}张</div>
             </div>
             <div>
-                <span style="color: rgb(153, 153, 153)">累计消费:</span><br>
-                <span class="main-value">{{customerData.consume_total}}元</span>
+                <div class="main-title">累计消费:</div>
+                <div class="main-value">{{customerData.consume_total}}元</div>
             </div>
             <div>
-                <span style="color: rgb(153, 153, 153)">消费次数:</span><br>
-                <span class="main-value">{{customerData.consume_count}}次</span>
+                <div class="main-title">消费次数:</div>
+                <div class="main-value">{{customerData.consume_count}}次</div>
             </div>
             <div>
-                <span style="color: rgb(153, 153, 153)">最后消费时间:</span><br>
-                <span>{{customerData.last_consume_date}}</span>
+                <div class="main-title">最后消费时间:</div>
+                <div>{{customerData.last_consume_date}}</div>
             </div>
-            <div>
-                <span style="color: rgb(153, 153, 153)">充值卡过期时间:</span><br>
-                <span></span>
-            </div>
-
+<!--            <div>-->
+<!--                <span style="color: rgb(153, 153, 153)">充值卡过期时间:</span><br>-->
+<!--                <div class="main-title">余额:</div>-->
+<!--                <span></span>-->
+<!--            </div>-->
         </div>
 
         <div class="box-tabs">
@@ -168,15 +168,17 @@
 <style scoped>
     .box-head {
         display: flex;
+        padding: 30px 10px;
+        background-color: #f7f8fa;
     }
 
     .box-main {
         margin-top: 30px;
+        margin-left: 50px;
         display: flex;
-        align-items:center;
-        justify-content:center;
+        /*align-items:center;*/
+        /*justify-content:center;*/
         flex-wrap: wrap;
-
     }
 
     .box-tabs {
@@ -188,7 +190,8 @@
 
     .box-main div{
         width: 150px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        text-align: left;
     }
 
 
@@ -226,9 +229,8 @@
         width: 100px;
         text-align: left;
     }
-
-    .main-value {
-        font-size: 20px;
+    .main-title {
+        color: rgb(153, 153, 153)
     }
 
     .title{
@@ -254,4 +256,11 @@
         background: #8558fa;
     }
 
+    .main-value {
+        font-size: 26px;
+        font-weight: 500;
+        line-height: 24px;
+        vertical-align: middle;
+        /*color: #8558fa;*/
+    }
 </style>

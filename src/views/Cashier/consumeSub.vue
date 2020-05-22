@@ -90,8 +90,12 @@
             // 获取服务列表
             async getServiceList(){
                 try {
-                    const res = await serviceApi.getServiceList(
-                        {'tag_id': this.serviceTagId, "page_size": 999, 'prepaid_card': this.prepaidCardId});
+                    const res = await serviceApi.getServiceList({
+                        'tag_id': this.serviceTagId,
+                        "page_size": 999,
+                        'prepaid_card': this.prepaidCardId,
+                        'disable': 0,
+                    });
                     if (res.status >= 200 && res.status < 300) {
                         this.goodsCardList = res.data.data
                     } else {
@@ -108,8 +112,12 @@
             // 获取产品列表
             async getProductList(){
                 try {
-                    const res = await productApi.getProductList(
-                        {'tag_id': this.productTagId, "page_size": 999, 'prepaid_card': this.prepaidCardId});
+                    const res = await productApi.getProductList({
+                        'tag_id': this.productTagId,
+                        "page_size": 999,
+                        'prepaid_card': this.prepaidCardId,
+                        'disable': 0,
+                    });
                     if (res.status >= 200 && res.status < 300) {
                         this.goodsCardList = res.data.data
                     } else {
