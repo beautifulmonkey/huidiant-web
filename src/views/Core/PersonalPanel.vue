@@ -39,6 +39,10 @@
           升级/续费
         </div>
 
+        <div  style="text-align: center">
+            <span style="font-size: 80%;color: #969799">版本: v1.0 (抢先版)</span>
+        </div>
+
     </div>
     <div class="personal-footer" @click="logout">
       <li class="fa fa-sign-out"></li>

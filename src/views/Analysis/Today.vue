@@ -55,8 +55,9 @@
 
 
 
-            <el-card class="card-items" shadow="always" style="width: 28%;height: 200px">
-            </el-card>
+            <div class="card-items" style="width: 28%;padding: 0px;">
+                <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
+            </div>
 
 
         </div>
@@ -127,6 +128,10 @@
                 } catch (error) {
                     console.log(error)
                 }
+            },
+
+            guidePage(){
+                this.$router.push("/guide")
             }
         },
         mounted() {
@@ -197,5 +202,12 @@
 
     .g-widget svg {
         color: #8558fa;
+    }
+
+    .init_widget {
+        display: block;
+        width: 316px;
+        height: 248px;
+        cursor: pointer;
     }
 </style>

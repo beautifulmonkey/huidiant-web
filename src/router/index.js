@@ -22,11 +22,11 @@ const router = new Router({
       component: Home,
       children: [
         {
-          path: '',
-          name: '系统介绍',
+          path: '/guide',
+          name: '系统导航',
           component: Intro,
           meta: {
-            icon: 'fa fa-home fa-lg',
+            icon: 'el-icon-question',
             index: 0
           }
         }
@@ -67,6 +67,11 @@ router.beforeEach((to, from, next) => {
       // 如果访问非登录界面，且户会话信息不存在，代表未登录，则跳转到登录界面
       next({ path: '/login' })
     } else {
+      if(to.path === "/"){
+        next({ path: '/analysis/today' });
+        to.path = '/analysis/today'
+      }
+
       // 加载动态菜单和路由
       addDynamicMenuAndRoutes(userName, to, from);
       // todo: 艹 OBServer如何获取数据????????

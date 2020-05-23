@@ -78,9 +78,18 @@ export function findNavTree() {
         "children": [
           {
             "id": "/analysis/today",
-            "name": "今日概览",
+            "name": "概览",
             "url": "/analysis/today",
             "icon": "el-icon-data-line",
+            "children": []
+          },
+
+          {
+            "id": "/analysis/summary",
+            "name": " 营业汇总(开发中)",
+            "url": "/analysis/summary",
+            "icon": "el-icon-s-data",
+            "disabled": true,
             "children": []
           }
         ]

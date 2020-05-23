@@ -19,8 +19,8 @@
                     </div>
 
                     <div>
-                        <el-button size="mini">开单</el-button>
-                        <el-button size="mini">办卡</el-button>
+                        <el-button size="mini" @click="$router.push('/cashier')">开单</el-button>
+                        <el-button size="mini" @click="$router.push('/cashier')">办卡</el-button>
                     </div>
                 </div>
 

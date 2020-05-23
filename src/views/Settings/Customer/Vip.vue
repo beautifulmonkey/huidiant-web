@@ -13,7 +13,7 @@
 					<div class="radio-items"><el-radio v-model="FormData.type" :label=0>不使用自动入会功能</el-radio></div>
 
 					<div class="radio-items">
-						<el-radio v-model="FormData.type" :label=1>消费指定卡类型</el-radio>
+						<el-radio v-model="FormData.type" :label=1>办理指定卡类型</el-radio>
 						<el-checkbox-group v-model="FormData.card_type_list" style="margin-left: 30px;" v-if="FormData.type===1">
 							<el-checkbox label="prepaid_card">充值卡</el-checkbox><br>
 							<el-checkbox label="counting_card">次卡</el-checkbox>

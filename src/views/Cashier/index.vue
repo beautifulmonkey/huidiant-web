@@ -6,6 +6,7 @@
             </div>
 
             <el-button
+                    :style="{'--color': themeColor}"
                     class="menu-button"
                     :type=" item.id == menuActive ? 'primary': '' "
                     :plain=" item.id == menuActive ? false: true "
@@ -17,6 +18,7 @@
             </div>
 
             <el-button
+                    :style="{'--color': themeColor}"
                     class="menu-button"
                     :type=" item.id == menuActive ? 'primary': '' "
                     :plain=" item.id == menuActive ? false: true "
@@ -27,10 +29,14 @@
             </div>
 
             <el-button
+                    :style="{'--color': themeColor}"
                     class="menu-button"
                     :type=" item.id == menuActive ? 'primary': '' "
                     :plain=" item.id == menuActive ? false: true "
                     v-for="item in others" @click="ButtonClick(item.id)">{{ item.name }}</el-button>
+
+            <theme-picker v-show="false" class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
+
         </div>
         <div class="main-box">
             <div class="padding-10">
@@ -348,6 +354,7 @@
     import customerApi from '@/service/customer.js'
     import cardApi from '@/service/card.js'
     import cashierApi from '@/service/cashier.js'
+    import ThemePicker from "@/components/ThemePicker"
 
     export default {
         name: "index",
@@ -356,7 +363,8 @@
             consumeComponent,
             createCardComponent,
             countingComponent,
-            rechargeComponent
+            rechargeComponent,
+            ThemePicker
         },
         data() {
             return {
@@ -744,13 +752,13 @@
     }
 
     .el-button--primary:hover{
-        background:#409eff !important;
+        background: var(--color) !important;
     }
     .el-button--primary:active{
-        background:#409eff !important;
+        background: var(--color) !important;
     }
     .el-button--primary:focus{
-        background:#409eff !important;
+        background: var(--color) !important;
     }
 
     .padding-20{

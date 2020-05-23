@@ -160,7 +160,7 @@
                 <el-table-column prop="name" label="操作" fixed="right">
                     <template slot-scope="scope">
                         <el-button size="mini" type="text" @click="$router.push('/customer/guest/details/' + scope.row.id)">详情</el-button>
-                        <el-button size="mini" type="text">开单</el-button>
+                        <el-button size="mini" type="text" @click="$router.push('/cashier')">开单</el-button>
                         <el-button size="mini" type="text" @click="onDeleteClick(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
