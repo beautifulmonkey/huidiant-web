@@ -2,61 +2,108 @@
     <div>
 
         <div class="justify-between">
-            <el-card class="card-items" shadow="always" style="width: 70%">
+            <div style="width: 70%">
+                <el-card class="card-items" shadow="always">
 
-                <div class="g-start">
+                    <div class="g-start">
                         <span style="font-size: 120%; font-weight: 500;">今日数据</span>
-                </div>
+                    </div>
 
-                <div class="content">
-                    <div class="flex-box">
-                        <div class="overview" v-for="item in analysisFlag1">
-                            <div class="text-unit small column">
-                                <div>
+                    <div class="content">
+                        <div class="flex-box">
+                            <div class="overview" v-for="item in analysisFlag1">
+                                <div class="text-unit small column">
+                                    <div>
                                     <span class="g-widget">
                                         <svg-icon :icon-class="item.iconClass" width="10" height="10" /><span style="font-size: 90%">{{item.title}}</span>
                                     </span>
-                                    <el-popover
-                                        placement="bottom"
-                                        trigger="hover">
-                                        <span class="sub-text" v-for="desc in item.description">{{desc}}<br></span>
-                                        <svg-icon slot="reference" icon-class="dashboard_question" width="10" height="10" />
-                                    </el-popover>
+                                        <el-popover
+                                            placement="bottom"
+                                            trigger="hover">
+                                            <span class="sub-text" v-for="desc in item.description">{{desc}}<br></span>
+                                            <svg-icon slot="reference" icon-class="dashboard_question" width="10" height="10" />
+                                        </el-popover>
+                                    </div>
+                                    <span class="value">{{summaryData.today[item.key]}}</span>
                                 </div>
-                                <span class="value">{{summaryData.today[item.key]}}</span>
+                                <p class="sub-text">昨日全天<span>{{summaryData.yesterday[item.key]}}</span></p>
                             </div>
-                            <p class="sub-text">昨日全天<span>{{summaryData.yesterday[item.key]}}</span></p>
                         </div>
-                    </div>
 
-                    <div class="flex-box">
-                        <div class="overview" v-for="item in analysisFlag2">
-                            <div class="text-unit small column">
-                                <div>
+                        <div class="flex-box">
+                            <div class="overview" v-for="item in analysisFlag2">
+                                <div class="text-unit small column">
+                                    <div>
                                     <span class="g-widget">
                                         <svg-icon :icon-class="item.iconClass" width="10" height="10" /><span style="font-size: 90%">{{item.title}}</span>
                                     </span>
-                                    <el-popover
-                                        placement="bottom"
-                                        trigger="hover">
-                                        <span class="sub-text" v-for="desc in item.description">{{desc}}<br></span>
-                                        <svg-icon slot="reference" icon-class="dashboard_question" width="10" height="10" />
-                                    </el-popover>
+                                        <el-popover
+                                            placement="bottom"
+                                            trigger="hover">
+                                            <span class="sub-text" v-for="desc in item.description">{{desc}}<br></span>
+                                            <svg-icon slot="reference" icon-class="dashboard_question" width="10" height="10" />
+                                        </el-popover>
 
+                                    </div>
+                                    <span class="value">{{summaryData.today[item.key]}}</span>
                                 </div>
-                                <span class="value">{{summaryData.today[item.key]}}</span>
+                                <p class="sub-text">昨日全天<span>{{summaryData.yesterday[item.key]}}</span></p>
                             </div>
-                            <p class="sub-text">昨日全天<span>{{summaryData.yesterday[item.key]}}</span></p>
                         </div>
                     </div>
-                </div>
-            </el-card>
+                </el-card>
+                <el-card class="card-items" shadow="always">
 
+                    <div class="g-start">
+                        <span style="font-size: 120%; font-weight: 500;">常用功能</span>
+                    </div>
+
+                    <div class="nav-box">
+
+                        <el-card shadow="hover" @click.native="$router.push('/cashier')">
+                            <div class="data-center"><span>开单收银</span></div>
+                        </el-card>
+
+                        <el-card shadow="hover" @click.native="$router.push('/customer/guest')">
+                            <div class="data-center"><span>添加客户</span></div>
+                        </el-card>
+
+                        <el-card shadow="hover" @click.native="$router.push('/orders/list')">
+                            <div class="data-center"><span>订单列表</span></div>
+                        </el-card>
+
+                    </div>
+                </el-card>
+            </div>
 
 
 
             <div class="card-items" style="width: 28%;padding: 0px;">
-                <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
+                <div style="display: flex; justify-content: center">
+                    <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
+                </div>
+
+                <el-card class="right-bar">
+                    <div style="display: flex">
+                        <div><svg-icon icon-class="nav_service" style="height: 44px;width: 44px" /></div>
+                        <div class="info">
+                            <p>技术支持</p>
+                            <p class="sub-text">提供 7*12 小时的技术服务</p>
+                        </div>
+                    </div>
+                </el-card>
+
+                <el-card class="right-bar">
+                    <div style="display: flex">
+                        <div><svg-icon icon-class="nav_ipad" style="height: 44px;width: 44px" /></div>
+                        <div class="info">
+                            <p>兼容 平板/ipad收银</p>
+                            <p class="sub-text">在平板/ipad中输入网址即可使用</p>
+                        </div>
+                    </div>
+                </el-card>
+
+
             </div>
 
 
@@ -146,6 +193,21 @@
         justify-content: space-between
     }
 
+    .data-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-box{
+        padding: 20px;
+        display: flex;
+    }
+
+    .nav-box .el-card{
+        margin-right: 20px;
+    }
+
     .card-items {
         margin: 20px;
         text-align: left;
@@ -210,4 +272,25 @@
         height: 248px;
         cursor: pointer;
     }
+
+    .right-bar {
+        margin-top: 20px;
+    }
+    .info {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: distribute;
+        justify-content: space-around;
+        margin-left: 16px;
+    }
+
+    .info p{
+        margin: 0;
+    }
+
 </style>

@@ -104,7 +104,7 @@ export function findNavTree() {
             "id": "/goods/service",
             "name": "服务管理",
             "url": "/goods/service",
-            "icon": "el-icon-bell",
+            "icon": "el-icon-thumb",
             "children": []
           },
           {
