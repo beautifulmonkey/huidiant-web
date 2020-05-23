@@ -152,7 +152,7 @@
                                     }else if(this.ruleForm.counting_card_type==='3' && !frule.count){
                                         callback(new Error("次数不能为空!"));
                                     }
-
+                                    callback();
                                 }else{
                                     callback();
                                 }
@@ -222,6 +222,7 @@
             // 立即创建
             countingSubmitForm(formName) {
                 this.$refs[formName].validate((valid) => {
+                    debugger
                     if (valid) {
                         this.ruleForm.rule.service.forEach((right_item,index,array)=>{
                             if (this.ruleForm.counting_card_type!=='1'){
