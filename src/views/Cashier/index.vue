@@ -216,9 +216,19 @@
                     </div>
                     <div class="justify-between border-b">
                         <span style="color: #999;font-size: 0.9rem">充值金额</span>
-                        <div>
+                        <div v-if="!changeAmount">
                             <span style="color: #999">¥{{shoppingCartCreatePrepaid.price}}</span>
-                            <el-button size="mini" type="text">修改</el-button>
+                            <el-button size="mini" type="text" @click="changeAmountBtn">修改</el-button>
+                        </div>
+
+                        <div v-if="changeAmount">
+<!--                            <el-input size="mini" style="width: 100px;" v-model.number="changeAmountVal"></el-input>-->
+                            <el-input v-model.number="changeAmountVal" placeholder="请输入充值金额" style="width: 200px;">
+                                <template slot="append">元</template>
+                            </el-input>
+
+                            <el-button size="mini" type="text" @click="amountChangeBtn">确定</el-button>
+                            <el-button size="mini" type="text" @click="changeAmount=false">取消</el-button>
                         </div>
                     </div>
                 </div>
@@ -309,7 +319,7 @@
                     <div class="justify-between border-b">
                         <span style="color: #999;font-size: 0.9rem">充值金额</span>
                         <div>
-                            <el-input v-model="shoppingCardRecharge.price" placeholder="请输入充值金额">
+                            <el-input v-model.number="shoppingCardRecharge.price" placeholder="请输入充值金额">
                                 <template slot="append">元</template>
                             </el-input>
                         </div>
@@ -376,6 +386,8 @@
                 shoppingCartConsumeList: [],
                 // 消费清单列表-开充值卡
                 shoppingCartCreatePrepaid: null,
+                changeAmount: false,
+                changeAmountVal: null,
                 // 消费清单列表-开次卡
                 shoppingCartCreateCountingList: [],
                 createType: null,
@@ -408,6 +420,16 @@
                 this.menuActive = data
             },
 
+            changeAmountBtn(){
+                this.changeAmountVal = this.shoppingCartCreatePrepaid.price;
+                this.changeAmount = true;
+            },
+
+            amountChangeBtn(){
+                this.shoppingCartCreatePrepaid.price = this.changeAmountVal;
+                this.changeAmount = false;
+            },
+
             getCountMax(counting){
                 if (counting && counting !== -1){
                     return counting
@@ -433,13 +455,13 @@
                             })
                         });
                         cb(cb_data);
-                        if (!cb_data.length){
-                            this.$notify({
-                                title: '查询结果',
-                                message: '未匹配到任何客户!',
-                                type: 'warning'
-                            });
-                        }
+                        // if (!cb_data.length){
+                        //     this.$notify({
+                        //         title: '查询结果',
+                        //         message: '未匹配到任何客户!',
+                        //         type: 'warning'
+                        //     });
+                        // }
                     } else {
                         this.$message({
                             type: 'error',

@@ -81,7 +81,13 @@
         <div class="box-tabs">
             <div>
                 <el-tabs type="card">
-                    <el-tab-pane label="客户信息">
+                    <el-tab-pane label="消费记录">
+                        <order-list-component :customer_id="this.$route.params.id"></order-list-component>
+                    </el-tab-pane>
+                    <el-tab-pane label="次卡信息">
+                        <counting-cart-component :customer_id="this.$route.params.id"></counting-cart-component>
+                    </el-tab-pane>
+                    <el-tab-pane label="客户档案">
                         <div>
                             <div class="title">基本档案</div>
                             <div v-for="item in detail_info" :key="item.key" class="align-center details-info">
@@ -89,12 +95,6 @@
                                 <div class="details-info-value"><span>{{ customerData[item.key] }}</span></div>
                             </div>
                         </div>
-                    </el-tab-pane>
-                    <el-tab-pane label="消费记录">
-                        <order-list-component :customer_id="this.$route.params.id"></order-list-component>
-                    </el-tab-pane>
-                    <el-tab-pane label="次卡信息">
-                        <counting-cart-component :customer_id="this.$route.params.id"></counting-cart-component>
                     </el-tab-pane>
                     <el-tab-pane disabled label="跟进记录(开发中)">跟进记录</el-tab-pane>
                 </el-tabs>

@@ -72,7 +72,7 @@ export default {
       })
       .then(() => {
         localStorage.removeItem('access_token');
-
+        localStorage.removeItem('userInfo');
         // sessionStorage.removeItem("user")
         // this.deleteCookie("token")
         this.$router.push("/login")

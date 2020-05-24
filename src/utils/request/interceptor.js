@@ -4,6 +4,7 @@
  * @Date: 2017.11.14
  * */
 import axios from 'axios'
+import { Message } from 'element-ui';
 import { Notification } from 'element-ui'
 // 创建axios实例
 // const service = axios.create({
@@ -65,6 +66,14 @@ const errorDetail = function(error) {
     }
     console.log(error.response)
     const resData = error.response.data
+    const resStatus = error.response.status
+    if (resStatus === 403){
+      alert('登录信息失效, 请您从新登录!!')
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('userInfo');
+      window.location.href="/login";
+      return
+    }
     if (resData) {
       const resDetail = resData.detail
       detail = `${detail}--${resDetail}`
