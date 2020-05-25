@@ -2,7 +2,7 @@
     <div>
 
         <div class="justify-between">
-            <div style="width: 70%">
+            <div style="width: 75%">
                 <el-card class="card-items" shadow="always">
 
                     <div class="g-start">
@@ -15,7 +15,7 @@
                                 <div class="text-unit small column">
                                     <div>
                                     <span class="g-widget">
-                                        <svg-icon :icon-class="item.iconClass" width="10" height="10" /><span style="font-size: 90%">{{item.title}}</span>
+                                        <svg-icon :style="{'--color': themeColor}" :icon-class="item.iconClass" width="10" height="10" /><span style="font-size: 90%">{{item.title}}</span>
                                     </span>
                                         <el-popover
                                             placement="bottom"
@@ -31,11 +31,13 @@
                         </div>
 
                         <div class="flex-box">
+                            <div class="echarts-for-vue" id="myChart" ref="myChart"></div>
+
                             <div class="overview" v-for="item in analysisFlag2">
                                 <div class="text-unit small column">
                                     <div>
                                     <span class="g-widget">
-                                        <svg-icon :icon-class="item.iconClass" width="10" height="10" /><span style="font-size: 90%">{{item.title}}</span>
+                                        <svg-icon :style="{'--color': themeColor}" :icon-class="item.iconClass" width="10" height="10" /><span style="font-size: 90%">{{item.title}}</span>
                                     </span>
                                         <el-popover
                                             placement="bottom"
@@ -78,7 +80,7 @@
 
 
 
-            <div class="card-items" style="width: 28%;padding: 0px;">
+            <div class="card-items" style="width: 25%;padding: 0px;">
                 <div style="display: flex; justify-content: center">
                     <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
                 </div>
@@ -116,9 +118,15 @@
 
 <script>
     import analysisApi from '@/service/analysis.js'
+    import {mapState} from "vuex";
 
     export default {
         name: "Today",
+        computed:{
+            ...mapState({
+                themeColor: state=>state.app.themeColor
+            })
+        },
         data() {
             return {
                 analysisFlag1: [
@@ -156,7 +164,24 @@
                         ]}
                 ],
 
-                summaryData: {}
+                summaryData: {
+                    today: {
+                        income: 0,
+                        consumption_card: 0,
+                        passenger_flow:  0,
+                        vip_add_count: 0,
+                        order_count: 0,
+                        card_create_count: 0,
+                    },
+                    yesterday: {
+                        income: 0,
+                        consumption_card: 0,
+                        passenger_flow:  0,
+                        vip_add_count: 0,
+                        order_count: 0,
+                        card_create_count: 0,
+                    },
+                }
             }
         },
         methods: {
@@ -166,6 +191,7 @@
                     const res = await analysisApi.getAnalysisToday();
                     if (res.status >= 200 && res.status < 300) {
                         this.summaryData = res.data;
+                        this.drawLine();
                     } else {
                         this.$message({
                             type: 'error',
@@ -179,10 +205,70 @@
 
             guidePage(){
                 this.$router.push("/guide")
+            },
+            drawLine(){
+                // 基于准备好的dom，初始化echarts实例
+                // let myChart = this.$echarts.init(document.getElementById('myChart'))
+                var bar_dv = this.$refs.myChart;
+                let myChart = this.$echarts.init(bar_dv);
+
+                // 绘制图表
+                myChart.setOption({
+                    tooltip: {},
+                    xAxis: {
+                        data: ["产品销售","服务销售","开卡充值"],
+                        axisTick:{       //y轴
+                            show:false
+                        },
+                    },
+                    yAxis: {
+                        name: "示例",
+                        splitNumber : 3,
+                        axisLine:{       //y轴
+                            show:false
+                        },
+                        axisLabel: {
+                            show:false
+                        },
+                        axisTick:{       //y轴刻度线
+                            show:false
+                        },
+                        splitLine: {     //网格线
+                            show:true,
+                            lineStyle: {
+                                // 使用深浅的间隔色
+                                color: ['#ddd'],
+                                type: 'dotted'
+                            }
+                        }
+
+                    },
+                    series: [{
+                        name: '现金类业绩',
+                        type: 'bar',
+                        data: [500, 1680, 6850],
+                        barWidth : 40,//柱图宽度,
+                        itemStyle:{
+                            normal:{
+                                color: this.themeColor,
+                                label : {show: true, position: 'top', color: 'black'}
+                            },
+                        },
+                    }]
+                });
             }
+
         },
         mounted() {
             this.getAnalysisToday();
+        },
+        watch: {
+            themeColor: {
+                immediate: true,
+                handler(val) {
+                    // this.drawLine();
+                }
+            }
         }
     }
 </script>
@@ -220,7 +306,7 @@
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
-        margin-bottom: 50px;
+        /*margin-bottom: 50px;*/
     }
 
     .overview {
@@ -263,7 +349,7 @@
     }
 
     .g-widget svg {
-        color: #8558fa;
+        color: var(--color);
     }
 
     .init_widget {
@@ -291,6 +377,16 @@
 
     .info p{
         margin: 0;
+    }
+
+    .echarts-for-vue {
+        height: 235px;
+        margin: -30px 35px -30px -35px;
+        min-width: 200px;
+        width: 100%;
+        flex: 2 1 0%;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
     }
 
 </style>

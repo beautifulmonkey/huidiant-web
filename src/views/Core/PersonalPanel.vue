@@ -34,7 +34,7 @@
           <li class="fa fa-user"></li>
           技术支持
         </div>
-        <div class="other-operation-item">
+        <div class="other-operation-item"  @click="dialogVisible=true">
           <li class="fa fa-bell"></li>
           升级/续费
         </div>
@@ -48,6 +48,21 @@
       <li class="fa fa-sign-out"></li>
       {{$t("common.logout")}}
     </div>
+
+
+      <el-dialog
+          title="升级续费弹框示例"
+          append-to-body
+          :visible.sync="dialogVisible"
+          width="30%">
+          请联系代理商续费:
+            <br><br>
+          微信号:<el-input size="small" disabled value="o868688888888"></el-input>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+      </el-dialog>
   </div>
 </template>
 
@@ -62,6 +77,7 @@ export default {
   },
   data() {
     return {
+        dialogVisible: false
     }
   },
   methods: {
