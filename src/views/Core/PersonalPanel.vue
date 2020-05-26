@@ -51,15 +51,19 @@
 
 
       <el-dialog
-          title="升级续费弹框示例"
+          title="升级/续费"
           append-to-body
           :visible.sync="dialogVisible"
           width="30%">
-          请联系代理商续费:
-            <br><br>
-          微信号:<el-input size="small" disabled value="o868688888888"></el-input>
+
+          <strong>请联系代理商</strong>
+          <br>
+          <br>
+          <div style="display: flex; align-items: center">
+              <span>微信号:</span>
+              <el-input size="small" disabled value="o868688888888" style="width: 200px;margin-left: 20px;"></el-input>
+          </div>
           <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
           </span>
       </el-dialog>

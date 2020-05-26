@@ -32,18 +32,15 @@ export default {
       showSuccess: true, // 是否弹出换肤成功消息,
       predefineColors: [
         '#14889A',
-        '#d97600',
+        '#BF6800',
         '#e597b9',
-        '#409EFF',
-        '#a278dc',
-        '#90ee90',
-        '#00ced1',
         '#1e90ff',
         '#699ce6',
         '#334154',
-        '#303e4f',
         '#F4257F',
-        '#8558fa'
+        '#8558fa',
+        '#C20000',
+        '#007411'
       ]
     }
   },
@@ -95,6 +92,7 @@ export default {
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })
 
+      localStorage.skin = val;
       // 响应外部操作
       this.$emit('onThemeChange', val)
       if(this.showSuccess) {

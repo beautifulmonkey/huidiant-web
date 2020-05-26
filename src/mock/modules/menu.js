@@ -71,6 +71,11 @@ export function findNavTree() {
   // ]
   //     },
 
+      {
+        "name": "收银",
+        "menuIndex": "/cashier",
+        "svg": "cashier"
+      },
 
       {
         "name": "数据",

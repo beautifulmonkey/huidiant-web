@@ -22,7 +22,8 @@ export default {
                 navTree.forEach((item,index,array)=>{
                     state.headMenu.push({
                         "menuIndex": item.menuIndex,
-                        "name": item.name
+                        "name": item.name,
+                        "svg": item.svg
                     })
                 });
             }

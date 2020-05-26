@@ -158,7 +158,7 @@
                         description: [
                             "包含 消费,充值,售卡的订单数量。"
                         ]},
-                    {title: "办卡张数", iconClass: "dashboard_delivery", key: "card_create_count",
+                    {title: "办卡张数", iconClass: "dashboard_card", key: "card_create_count",
                         description: [
                             "指售充值卡, 次卡的总张数"
                         ]}
@@ -172,6 +172,12 @@
                         vip_add_count: 0,
                         order_count: 0,
                         card_create_count: 0,
+                        chart: {
+                            cash_product_service: 0,
+                            cash_counting: 0,
+                            cash_prepaid: 0,
+                            cash_recharge: 0
+                        }
                     },
                     yesterday: {
                         income: 0,
@@ -212,17 +218,23 @@
                 var bar_dv = this.$refs.myChart;
                 let myChart = this.$echarts.init(bar_dv);
 
+                let chartData = [
+                    this.summaryData.today.chart.cash_product_service,
+                    this.summaryData.today.chart.cash_counting,
+                    this.summaryData.today.chart.cash_prepaid,
+                    this.summaryData.today.chart.cash_recharge
+                ];
                 // 绘制图表
                 myChart.setOption({
                     tooltip: {},
                     xAxis: {
-                        data: ["产品销售","服务销售","开卡充值"],
+                        data: ["产品服务","办次卡","办充值卡", "充值"],
                         axisTick:{       //y轴
                             show:false
                         },
                     },
                     yAxis: {
-                        name: "示例",
+                        // name: "现金业绩",
                         splitNumber : 3,
                         axisLine:{       //y轴
                             show:false
@@ -246,7 +258,7 @@
                     series: [{
                         name: '现金类业绩',
                         type: 'bar',
-                        data: [500, 1680, 6850],
+                        data: chartData,
                         barWidth : 40,//柱图宽度,
                         itemStyle:{
                             normal:{
