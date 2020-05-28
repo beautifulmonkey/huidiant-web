@@ -2,9 +2,9 @@
 	<div>
 
 		<div style="text-align: left">
-			<el-radio-group v-model="radio1" size="mini">
-				<el-radio-button label="有效"></el-radio-button>
-				<el-radio-button label="失效"></el-radio-button>
+			<el-radio-group v-model="cardAvailable" size="mini" @change="cardAvailableChange">
+				<el-radio-button label="1">有效</el-radio-button>
+				<el-radio-button label="0">失效</el-radio-button>
 			</el-radio-group>
 		</div>
 
@@ -26,6 +26,7 @@
 						<span>{{scope.row.expiry_date || "永久有效"}}</span>
 					</template>
 				</el-table-column>
+				<el-table-column prop="created_at" label="办卡时间"></el-table-column>
 
 				<el-table-column
 					label="操作">
@@ -66,17 +67,22 @@
         },
 	    data() {
             return {
-                radio1: "有效",
+                cardAvailable: "1",
                 dialogTableVisible: false,
                 customerCountingList: [],
                 usingRecordList: []
             }
 	    },
 	    methods: {
+            // 更换状态
+            cardAvailableChange(label){
+                this.getCustomerCounting(label)
+            },
+
             // 获取客户次卡数据
-            async getCustomerCounting(){
+            async getCustomerCounting(available){
                 try {
-                    const res = await customerApi.getCustomerCounting(this.customer_id);
+                    const res = await customerApi.getCustomerCounting(this.customer_id, {available: available});
                     if (res.status >= 200 && res.status < 300) {
                         this.customerCountingList = res.data.counting;
                     } else {
@@ -109,7 +115,7 @@
 		    }
 	    },
 	    mounted() {
-            this.getCustomerCounting()
+            this.getCustomerCounting(1)
         }
     }
 </script>

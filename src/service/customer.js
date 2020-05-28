@@ -77,9 +77,9 @@ export default {
     },
 
     // 获取客户次卡次数和赠送服务
-    async getCustomerCounting(id) {
+    async getCustomerCounting(id, params) {
         const url = `${config.server.url}/customer/data/counting/${id}`;
-        return await request('get', url)
+        return await request('get', url, params)
     },
 
     // 获取客户次卡消费记录
