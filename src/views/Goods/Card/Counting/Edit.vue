@@ -4,24 +4,49 @@
             <el-page-header @back="$router.push('/goods/card')" content="编辑次卡"></el-page-header>
         </div>
 
+        <div style="display: flex;margin-left: 50px; margin-top: 30px;">
+            <label class="zent-radio-wrap" @click="ruleForm.counting_card_type='1'"
+                   v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='1'}">
+                <span>
+                    <div class="title">有限次卡</div>
+                    <p class="desc">支持创建多个服务集合有限次数的次卡</p>
+
+                    <div v-if="ruleForm.counting_card_type==='1'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 1024 1024" id="components_icon/img/tag_sel.svg"><path d="M1024 0v1024H0L1024 0zM852.864 565.248h-.061L687.488 768.512l-128-81.92a32.195 32.195 0 00-30.592-1.92 29.635 29.635 0 00-17.536 24.064 27.843 27.843 0 0013.056 25.923l151.936 97.213a32.19 32.19 0 0041.728-6.723l183.23-225.28a27.776 27.776 0 005.314-29.373 29.824 29.824 0 00-24.96-17.853 32 32 0 00-28.8 12.605z"></path></svg>
+                    </div>
+
+                </span>
+            </label>
+
+
+            <label class="zent-radio-wrap" @click="ruleForm.counting_card_type='2'"
+                   v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='2'}">
+                <span>
+                    <div class="title">不限次卡</div>
+                    <p class="desc">支持创建多个服务集合且不限次数的次卡，月卡、年卡等</p>
+
+                    <div v-if="ruleForm.counting_card_type==='2'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 1024 1024" id="components_icon/img/tag_sel.svg"><path d="M1024 0v1024H0L1024 0zM852.864 565.248h-.061L687.488 768.512l-128-81.92a32.195 32.195 0 00-30.592-1.92 29.635 29.635 0 00-17.536 24.064 27.843 27.843 0 0013.056 25.923l151.936 97.213a32.19 32.19 0 0041.728-6.723l183.23-225.28a27.776 27.776 0 005.314-29.373 29.824 29.824 0 00-24.96-17.853 32 32 0 00-28.8 12.605z"></path></svg>
+                    </div>
+                </span>
+            </label>
+
+            <label class="zent-radio-wrap" @click="ruleForm.counting_card_type='3'"
+                   v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='3'}">
+                <span>
+                    <div class="title">通卡</div>
+                    <p class="desc">设定一个总次数，会员可在次数内消费卡中任意项目</p>
+
+                    <div v-if="ruleForm.counting_card_type==='3'">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 1024 1024" id="components_icon/img/tag_sel.svg"><path d="M1024 0v1024H0L1024 0zM852.864 565.248h-.061L687.488 768.512l-128-81.92a32.195 32.195 0 00-30.592-1.92 29.635 29.635 0 00-17.536 24.064 27.843 27.843 0 0013.056 25.923l151.936 97.213a32.19 32.19 0 0041.728-6.723l183.23-225.28a27.776 27.776 0 005.314-29.373 29.824 29.824 0 00-24.96-17.853 32 32 0 00-28.8 12.605z"></path></svg>
+                    </div>
+                </span>
+            </label>
+        </div>
+
 
         <div class="m-wrap-from" style="width: 40%">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-
-                <el-form-item>
-                    <!--            todo: 如何做成有赞的效果?-->
-                    <el-radio-group v-model="ruleForm.counting_card_type" style="float: left">
-                        <el-radio-button disabled v-if="ruleForm.counting_card_type==='1'">有限次卡</el-radio-button>
-                        <el-radio-button disabled v-if="ruleForm.counting_card_type==='2'">不限次卡</el-radio-button>
-                        <el-radio-button disabled v-if="ruleForm.counting_card_type==='3'">通卡</el-radio-button>
-                    </el-radio-group><br>
-
-                    <div style="text-align: left; font-size: 80%;color: #666; line-height: 20px;">
-                        <span v-if="ruleForm.counting_card_type==='1'">有限次卡: 支持创建多个服务集合有限次数的次卡</span>
-                        <span v-if="ruleForm.counting_card_type==='2'">不限次卡: 支持创建多个服务集合且不限次数的次卡，月卡、年卡等</span>
-                        <span v-if="ruleForm.counting_card_type==='3'">通卡: 设定一个总次数，会员可在次数内消费卡中任意项目</span>
-                    </div>
-                </el-form-item>
 
                 <el-form-item label="名称" prop="name">
                     <el-input v-model="ruleForm.name" class="from-item-input" size="mini"></el-input>
@@ -36,6 +61,7 @@
                 <el-form-item label="权益" prop="rule" style="width: 100vh;">
                     <service-choose-component @return-value="setRights" ref="serviceComponent"></service-choose-component>
                     <el-table
+                            border
                             v-if="this.ruleForm.rule.service.length"
                             size="mini"
                             :data="ruleForm.rule.service">
@@ -54,11 +80,14 @@
                         </el-table-column>
                     </el-table>
 
-                    <div style="text-align: left">
-                        <span v-if="ruleForm.counting_card_type==='3'&&ruleForm.rule.service.length>0" >以上{{ruleForm.rule.service.length}}个服务总次数： 共
-                            <el-input style="width: 50px;" size="mini" v-model="ruleForm.rule.count"></el-input> 次
-                            <span style="font-size: 80%;color: #646566">每次划卡时可以从以上项目中任选一个，并划扣总次数1次</span>
-                        </span>
+
+                    <div style="text-align: left;margin-top: 10px" class="batch-box"
+                         v-if="ruleForm.counting_card_type==='3'&&ruleForm.rule.service.length>0" >
+                        <span class="set-span">以上{{ruleForm.rule.service.length}}个服务总次数：</span>
+                        <span class="batch-input"><span>共&nbsp;</span>
+                            <el-input style="width: 50px;" size="mini" v-model="ruleForm.rule.count"></el-input>
+                            <span>&nbsp;次</span></span>
+                        <span class="input-tip">&nbsp;每次划卡时可以从以上项目中任选一个，并划扣总次数1次</span>
                     </div>
 
                 </el-form-item>
@@ -286,4 +315,68 @@
         width: 100%;
     }
 
+
+    .icon {
+        position: absolute;
+        right: -1px;
+        bottom: -1px;
+        width: 20px;
+        height: 20px;
+        display: block;
+        fill: #8558fa;
+    }
+
+    .zent-radio-wrap {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 300px;
+        margin-left: 5px;
+        margin-right: 5px;
+        border: 1px solid #e5e5e5;
+        padding: 20px 0;
+        position: relative;
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 24px;
+        text-align: center;
+        margin-bottom: 3px;
+    }
+    .desc {
+        text-align: center;
+        color: #969799;
+        font-size: 12px;
+        line-height: 18px;
+        margin-bottom: 5px;
+        margin-left: 5px;
+    }
+
+    .zent-radio-checked {
+        border: 1px solid #8558fa;
+    }
+
+    .batch-box {
+        background-color: #f8f8f8;
+        border-left: 5px solid #e5e5e5!important;
+        padding: 10px;
+        border: 1px solid #ebedf0;
+        display: flex;
+        align-items: center;
+    }
+
+    .set-span {
+        width: auto!important;
+        color: #555;
+    }
+
+    .batch-input {
+        display: flex;
+    }
+
+    .input-tip {
+        line-height: 32px;
+        color: #9b9b9b;
+    }
 </style>
