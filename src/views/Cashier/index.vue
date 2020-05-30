@@ -153,7 +153,7 @@
                                 <strong><span>{{scope.row.name}}</span></strong>
                                 <br>
 
-                                <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
+                                <span style="color: #fe2278">￥{{scope.row.discount_price.toFixed(2)}}</span>
                                 <s v-if="scope.row.discount_price !== scope.row.price">
                                     <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
                                 </s>
@@ -173,7 +173,7 @@
                                 <strong><span style="color: #fe2278">¥{{(scope.row.discount_price * scope.row.count).toFixed(2)}}</span></strong>
                                 <br>
                                 <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    卡项优惠 - ¥{{(scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count).toFixed(2)}}
+                                    优惠 - ¥{{(scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count).toFixed(2)}}
                                 </span>
 
                                 <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
@@ -185,10 +185,37 @@
                         <el-table-column
                                 label="操作">
                             <template slot-scope="scope">
+                                <el-popover
+                                    v-if="scope.row.shoppingType === 'consume'"
+                                    placement="top">
+                                    <div>
+
+                                        <div class="change-price-item">
+                                            <el-input placeholder="改价格" v-model.number="scope.row.discount_price" size="mini"
+                                                    @input="discountChangeVal=scope.row.discount_price / scope.row.price * 100">
+                                                <template slot="prepend">￥</template>
+                                            </el-input>
+
+                                            <svg style="width: 15px;height: 15px;margin: 0 9px;" viewBox="0 0 1536 1024"><path d="M970.65344 127.616L1103.00544 0l395.392 262.4c74.624 49.408 30.72 146.56-66.304 146.56H0.02944V243.2h1144.704L970.65344 127.616zM565.40544 896.384L433.05344 1024 37.66144 761.6c-74.624-49.408-30.72-146.56 66.304-146.56H1536.02944V780.8H391.32544l174.08 115.584z" fill="#6B6B6B"></path></svg>
+
+                                            <el-input placeholder="改折扣" v-model.number="discountChangeVal" size="mini"
+                                                      @input="scope.row.discount_price=scope.row.price * discountChangeVal/100">
+                                                <template slot="append">%</template>
+                                            </el-input>
+                                        </div>
+
+                                    </div>
+<!--                                    <div style="text-align: right; margin: 0">-->
+<!--                                        <el-button size="mini" type="text" @click="cancelInput(scope.$index)">取消</el-button>-->
+<!--                                        <el-button type="primary" size="mini" @click="cancelInput(scope.$index)">确定</el-button>-->
+<!--                                    </div>-->
+                                    <el-button slot="reference" size="mini" type="text"
+                                               @click="discountChangeVal=scope.row.discount_price / scope.row.price * 100">改价</el-button>
+                                </el-popover>
+
                                 <el-button size="mini" type="text"
-                                   @click.native.prevent="delShoppingItem(scope.$index, shoppingCartConsumeList)"
+                                           @click.native.prevent="delShoppingItem(scope.$index, shoppingCartConsumeList)"
                                 >移除</el-button>
-                                <el-button size="mini" type="text" disabled>改价(开发中)</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -244,7 +271,7 @@
                                 <strong><span>{{scope.row.name}}</span></strong>
                                 <br>
 
-                                <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
+                                <span style="color: #fe2278">￥{{scope.row.discount_price.toFixed(2)}}</span>
                                 <s v-if="scope.row.discount_price !== scope.row.price">
                                     <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
                                 </s>
@@ -272,10 +299,38 @@
                         <el-table-column
                                 label="操作">
                             <template slot-scope="scope">
+
+                                <el-popover
+                                    placement="top">
+                                    <div>
+
+                                        <div class="change-price-item">
+                                            <el-input placeholder="改价格" v-model.number="scope.row.discount_price" size="mini"
+                                                      @input="cardDiscountChangeVal=scope.row.discount_price / scope.row.price * 100">
+                                                <template slot="prepend">￥</template>
+                                            </el-input>
+
+                                            <svg style="width: 15px;height: 15px;margin: 0 9px;" viewBox="0 0 1536 1024"><path d="M970.65344 127.616L1103.00544 0l395.392 262.4c74.624 49.408 30.72 146.56-66.304 146.56H0.02944V243.2h1144.704L970.65344 127.616zM565.40544 896.384L433.05344 1024 37.66144 761.6c-74.624-49.408-30.72-146.56 66.304-146.56H1536.02944V780.8H391.32544l174.08 115.584z" fill="#6B6B6B"></path></svg>
+
+                                            <el-input placeholder="改折扣" v-model.number="cardDiscountChangeVal" size="mini"
+                                                      @input="scope.row.discount_price=scope.row.price * cardDiscountChangeVal/100">
+                                                <template slot="append">%</template>
+                                            </el-input>
+                                        </div>
+
+                                    </div>
+                                    <!--                                    <div style="text-align: right; margin: 0">-->
+                                    <!--                                        <el-button size="mini" type="text" @click="cancelInput(scope.$index)">取消</el-button>-->
+                                    <!--                                        <el-button type="primary" size="mini" @click="cancelInput(scope.$index)">确定</el-button>-->
+                                    <!--                                    </div>-->
+                                    <el-button slot="reference" size="mini" type="text"
+                                               @click="cardDiscountChangeVal=scope.row.discount_price / scope.row.price * 100">改价</el-button>
+                                </el-popover>
+
+
                                 <el-button size="mini" type="text"
                                            @click.native.prevent="delShoppingItem(scope.$index, shoppingCartCreateCountingList)"
                                 >移除</el-button>
-                                <el-button size="mini" type="text" disabled>改价(开发中)</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -385,6 +440,7 @@
                 chooseCustomerData: {},  // 当前选择客户的信息
                 // 消费清单列表-消费
                 shoppingCartConsumeList: [],
+                discountChangeVal: null,
                 // 消费清单列表-开充值卡
                 shoppingCartCreatePrepaid: null,
                 changeAmount: false,
@@ -392,6 +448,7 @@
                 // 消费清单列表-开次卡
                 shoppingCartCreateCountingList: [],
                 createType: null,
+                cardDiscountChangeVal: null,
                 // 消费清单列表-充值
                 shoppingCardRecharge: null,
                 rechargeType: null,
@@ -778,13 +835,13 @@
         width: 30px;
     }
 
-    .el-button--primary:hover{
+    .menu-box .el-button--primary:hover{
         background: var(--color) !important;
     }
-    .el-button--primary:active{
+    .menu-box .el-button--primary:active{
         background: var(--color) !important;
     }
-    .el-button--primary:focus{
+    .menu-box .el-button--primary:focus{
         background: var(--color) !important;
     }
 
@@ -875,6 +932,21 @@
         align-items: center;
         line-height: 20px;
         margin: 5px 0
+    }
+
+    .change-price-item{
+        display: flex;
+        align-items: center;
+        padding: 10px 5px;
+    }
+    .change-price-item .el-input {
+        width: 100px;
+    }
+    .change-price-item /deep/ .el-input-group__prepend{
+        padding: 0 9px !important;
+    }
+    .change-price-item /deep/ .el-input-group__append {
+        padding: 0 9px !important;
     }
 
 </style>
