@@ -20,4 +20,28 @@ export default {
         const url = `${config.server.url}/setting/store_info`;
         return await request('get', url)
     },
+
+    // 获取支付方式列表
+    async getCustomPayList() {
+        const url = `${config.server.url}/setting/pay`;
+        return await request('get', url)
+    },
+
+    // 修改支付方式
+    async updateCustomPay(id, params) {
+        const url = `${config.server.url}/setting/pay/${id}`;
+        return await request('put', url, params)
+    },
+
+    // 添加支付方式
+    async addCustomPay(params) {
+        const url = `${config.server.url}/setting/pay`;
+        return await request('post', url, params)
+    },
+
+    // 删除支付方式
+    async delCustomPay(id) {
+        const url = `${config.server.url}/setting/pay/${id}`;
+        return await request('delete', url)
+    },
 }

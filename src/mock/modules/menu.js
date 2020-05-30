@@ -91,10 +91,9 @@ export function findNavTree() {
 
           {
             "id": "/analysis/summary",
-            "name": " 营业汇总(开发中)",
+            "name": " 营业汇总",
             "url": "/analysis/summary",
             "icon": "el-icon-s-data",
-            "disabled": true,
             "children": []
           }
         ]
@@ -311,10 +310,9 @@ export function findNavTree() {
               },
               {
                 "id": "/settings/trading/pay",
-                "name": "支付设置(开发中)",
+                "name": "支付设置",
                 "url": "/settings/trading/pay",
                 "icon": "el-icon-money",
-                "disabled": true,
               },
             ]
           },
