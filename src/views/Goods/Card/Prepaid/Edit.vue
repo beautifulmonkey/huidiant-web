@@ -118,7 +118,8 @@
                                     width="200px;"
                                     label="优惠设置">
                                 <template slot-scope="scope">
-                                    <el-input size="mini" placeholder="请输入内容" v-model="scope.row.value">
+                                    <el-input size="mini" placeholder="请输入内容" v-model="scope.row.value"
+                                              oninput="value=value.replace(/[^\d.]/g,'')">
                                         <template slot="append">
                                             <el-select v-model="scope.row.mode" size="mini" style="width: 100px">
                                                 <el-option label="折" value="discount"></el-option>
