@@ -143,7 +143,7 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column fixed label="客户身份" width="130">
+                <el-table-column fixed label="客户身份" width="160">
                     <template slot-scope="scope">
                         <div>
                             <span>{{scope.row.identity}}</span><br>

@@ -35,7 +35,7 @@
                     :plain=" item.id == menuActive ? false: true "
                     v-for="item in others" @click="ButtonClick(item.id)">{{ item.name }}</el-button>
 
-            <theme-picker v-show="false" class="theme-picker" :default="themeColor" @onThemeChange="onThemeChange"></theme-picker>
+            <theme-picker v-show="false" class="theme-picker" :default="themeColor"></theme-picker>
 
         </div>
         <div class="main-box">
@@ -115,7 +115,8 @@
 
                     <div style="margin-left: 10px;">
                         <div style="float: left">
-                            <el-button size="medium" type="text" style="color: #5a5e66">{{chooseCustomerData.name}}</el-button>
+                            <el-button size="medium" type="text" style="color: #5a5e66"
+                                       @click="customerDetailsOpen(chooseCustomerData.id)">{{chooseCustomerData.name}}</el-button>
                             <i v-if="chooseCustomerData.sex===1" class="el-icon-female" style="color: #e6419c"></i>
                             <i v-if="chooseCustomerData.sex===2" class="el-icon-male" style="color: #409df3"></i>
                         </div><br>
@@ -418,6 +419,10 @@
         methods: {
             ButtonClick(data){
                 this.menuActive = data
+            },
+
+            customerDetailsOpen(id){
+                window.open("#/customer/guest/details/" + id);
             },
 
             changeAmountBtn(){

@@ -134,7 +134,7 @@
                         <template slot-scope="scope">
                             <div style="text-align: center">
                                 <span v-if="!order.customer_id">{{order.customer_name}}</span>
-                                <el-button style="padding: 0;color: #8558fa" v-if="order.customer_id" type="text"
+                                <el-button :style="{'padding': 0, 'color': themeColor}" v-if="order.customer_id" type="text"
                                            @click="$router.push('/customer/guest/details/' + order.customer_id)">{{order.customer_name}}</el-button>
                                 <span class="color-999" v-if="order.customer_tel"><br>{{order.customer_tel}}</span>
                                 <span class="color-999" v-if="order.customer_identity"><br>{{order.customer_identity}}</span>
@@ -175,6 +175,7 @@
 
 <script>
     import orderApi from '@/service/order.js'
+    import {mapState} from "vuex";
 
     export default {
         name: "Service",
@@ -183,6 +184,11 @@
                 type: String,
                 default: null
             },
+        },
+        computed: {
+            ...mapState({
+                themeColor: state=>state.app.themeColor
+            })
         },
         data() {
             return {
