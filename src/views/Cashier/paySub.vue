@@ -18,7 +18,7 @@
                 </el-form-item>
 
                 <el-form-item label="减免金额" prop="reduce_amount" v-if="!((menuActive==='createCard' && createType===1) || menuActive==='recharge')">
-                    <el-input v-model="form.reduce_amount" placeholder="减免金额">
+                    <el-input v-model="form.reduce_amount" placeholder="减免金额" clearable>
                         <template slot="append">元</template>
                     </el-input>
                 </el-form-item>
@@ -29,19 +29,24 @@
 
                 <el-divider>支付相关</el-divider>
                 <el-form-item label="现金支付" prop="cash_pay_amount">
-                    <el-input v-model="form.cash_pay_amount" placeholder="现金支付">
+                    <el-input v-model="form.cash_pay_amount" placeholder="现金支付" clearable>
                         <template slot="append">元</template>
                     </el-input>
+                    <el-button type="text" @click="fillAmount('cash_pay_amount')">补全</el-button>
                 </el-form-item>
 
                 <el-form-item label="储值支付" prop="balance_pay_amount" v-if="cardBalance && menuActive!=='recharge'">
-                    <el-input v-model="form.balance_pay_amount" placeholder="储值支付">
+                    <el-input v-model="form.balance_pay_amount" placeholder="储值支付" clearable>
                         <template slot="append">元</template>
-                    </el-input> 储值余额: ¥{{cardBalance}}
+                    </el-input>
+                    <el-button type="text" @click="fillAmount('balance_pay_amount')">补全</el-button>
+                    <br>
+                    余额: ¥{{cardBalance}}
                 </el-form-item>
 
                 <el-form-item label="其他支付" prop="custom_pay_amount">
-                    <el-select v-model="form.custom_pay" placeholder="请选择" style="width: 100px;">
+                    <el-select v-model="form.custom_pay" placeholder="请选择" style="width: 100px;" @change="customPayChange">
+                        <el-option :value='null' label="请选择"></el-option>
                         <el-option
                             v-for="item in customPayList"
                             :key="item.id"
@@ -50,9 +55,10 @@
                         </el-option>
                     </el-select>
 
-                    <el-input v-model="form.custom_pay_amount" placeholder="自定义支付">
+                    <el-input v-model="form.custom_pay_amount" placeholder="自定义支付" :disabled="!form.custom_pay" clearable>
                         <template slot="append">元</template>
                     </el-input>
+<!--                    <el-button type="text" @click="fillAmount('custom_pay_amount')">补全</el-button>-->
 
                 </el-form-item>
 
@@ -209,6 +215,31 @@
           }
         },
         methods: {
+            // 支付金额补全
+            fillAmount(mode){
+                if (mode === 'balance_pay_amount'){
+                    let val = this.getNeedPay() - this.form.custom_pay_amount - this. form.cash_pay_amount;
+                    if (val < 0){val=0}
+                    this.form.balance_pay_amount = val
+                }else if (mode === 'cash_pay_amount'){
+                    let val = this.getNeedPay() - this.form.custom_pay_amount - this. form.balance_pay_amount;
+                    if (val < 0){val=0}
+                    this.form.cash_pay_amount = val
+                }else if (mode === 'custom_pay_amount'){
+                    let val = this.getNeedPay() - this.form.cash_pay_amount - this. form.balance_pay_amount;
+                    if (val < 0){val=0}
+                    this.form.custom_pay_amount = val
+                }
+            },
+
+            customPayChange(val) {
+                if (!val){
+                    this.form.custom_pay_amount = null
+                }else {
+                    this.fillAmount('custom_pay_amount')
+                }
+            },
+
             // 获取支付方式列表
             async getCustomPayList(){
                 try {
@@ -281,6 +312,14 @@
                         if (result.pay.custom_pay_amount && !result.pay.cash_pay_amount && !result.pay.balance_pay_amount){result.pay.pay_type=4}
 
                         if (!result.pay.custom_pay_amount){result.pay.custom_pay=null}
+                        if (result.pay.custom_pay_amount && !result.pay.custom_pay){
+                            this.$message({
+                                showClose: true,
+                                message: '请选择支付方式!',
+                                type: 'error'
+                            });
+                            return false;
+                        }
 
                         this.$emit(
                             'settlement',
