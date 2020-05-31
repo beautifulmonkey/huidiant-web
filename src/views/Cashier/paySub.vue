@@ -40,8 +40,20 @@
                     </el-input> 储值余额: ¥{{cardBalance}}
                 </el-form-item>
 
-                <el-form-item label="其他支付">
-                    <el-input v-model="form.name" placeholder="功能开发中..." disabled></el-input>
+                <el-form-item label="其他支付" prop="custom_pay_amount">
+                    <el-select v-model="form.custom_pay" placeholder="请选择" style="width: 100px;">
+                        <el-option
+                            v-for="item in customPayList"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+
+                    <el-input v-model="form.custom_pay_amount" placeholder="自定义支付">
+                        <template slot="append">元</template>
+                    </el-input>
+
                 </el-form-item>
 
                 <el-form-item label="实际支付">
@@ -78,6 +90,9 @@
 </template>
 
 <script>
+
+    import storeSettingApi from '@/service/storeSetting.js'
+
     export default {
         name: "paySub",
         props: {
@@ -98,10 +113,13 @@
           return {
               dialogFormVisible: false,
               showPaySuccess: false,
+              customPayList: [],
               form: {
                   reduce_amount: null,
                   cash_pay_amount: null,
-                  balance_pay_amount: null
+                  balance_pay_amount: null,
+                  custom_pay: null,
+                  custom_pay_amount: null
               },
               rules: {
                   reduce_amount: [
@@ -144,6 +162,25 @@
                           trigger: 'blur'
                       }
                   ],
+                  custom_pay_amount: [
+                      {
+                          validator:(rule,value,callback)=>{
+                              if(value){
+                                  if((/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/).test(value) == false){
+                                      callback(new Error("金额为数字且不能小于0!"));
+                                  }else if(parseFloat(value)>this.payAmount){
+                                      callback(new Error("必须小于等于应收金额!"));
+                                  }else{
+                                      callback();
+                                  }
+                              }else{
+                                  callback();
+                              }
+
+                          },
+                          trigger: 'blur'
+                      }
+                  ],
                   cash_pay_amount: [
                       {
                           validator:(rule,value,callback)=>{
@@ -172,12 +209,32 @@
           }
         },
         methods: {
+            // 获取支付方式列表
+            async getCustomPayList(){
+                try {
+                    const res = await storeSettingApi.getCustomPayList();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.customPayList = res.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取支付方式失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
             payDialogOpen() {
                 this.dialogFormVisible = true;
                 this.form = {
                     reduce_amount: null,
                     cash_pay_amount: null,
-                    balance_pay_amount: null
+                    balance_pay_amount: null,
+                    custom_pay: null,
+                    custom_pay_amount: null
+
                 };
                 this.$nextTick(() => {
                     this.$refs['form'].resetFields();
@@ -190,7 +247,11 @@
                         let realPay = parseFloat(this.getRealPay());
                         let needPay = parseFloat(this.getNeedPay());
 
-                        if (realPay < needPay){
+                        let cash_pay_amount = parseFloat((this.form.cash_pay_amount - (realPay - needPay)).toFixed(2)) || 0;
+                        let balance_pay_amount = parseFloat(this.form.balance_pay_amount) || 0;
+                        let custom_pay_amount = parseFloat(this.form.custom_pay_amount) || 0;
+
+                        if (realPay < needPay || (balance_pay_amount + custom_pay_amount) > needPay){
                             this.$message({
                                 showClose: true,
                                 message: '支付金额有误，请输入正确的支付金额',
@@ -206,16 +267,20 @@
                                 paid_amount: needPay
                             },
                             pay: {
-                                pay_type: 2,  // 防止为0元
-                                custom_pay_amount: 0,
-                                cash_pay_amount: this.form.cash_pay_amount - (realPay - needPay),
-                                balance_pay_amount: parseFloat(this.form.balance_pay_amount) || 0
+                                pay_type: 3,
+                                cash_pay_amount: cash_pay_amount,
+                                balance_pay_amount: balance_pay_amount,
+                                custom_pay: this.form.custom_pay,
+                                custom_pay_amount: custom_pay_amount
                             }
                         };
 
-                        if (result.pay.cash_pay_amount && !result.pay.balance_pay_amount){result.pay.pay_type=1}
-                        if (!result.pay.cash_pay_amount && result.pay.balance_pay_amount){result.pay.pay_type=2}
-                        if (result.pay.cash_pay_amount && result.pay.balance_pay_amount){result.pay.pay_type=3}
+                        if (!needPay){result.pay.pay_type=2}  // 消耗次数为0元, 所以扣余额
+                        if (result.pay.cash_pay_amount && !result.pay.balance_pay_amount && !result.pay.custom_pay_amount){result.pay.pay_type=1}
+                        if (!result.pay.cash_pay_amount && !result.pay.custom_pay_amount && result.pay.balance_pay_amount){result.pay.pay_type=2}
+                        if (result.pay.custom_pay_amount && !result.pay.cash_pay_amount && !result.pay.balance_pay_amount){result.pay.pay_type=4}
+
+                        if (!result.pay.custom_pay_amount){result.pay.custom_pay=null}
 
                         this.$emit(
                             'settlement',
@@ -234,7 +299,11 @@
 
             // 实际支付
             getRealPay() {
-                return ((parseFloat(this.form.balance_pay_amount) || 0) + (parseFloat(this.form.cash_pay_amount) || 0)).toFixed(2);
+                return (
+                    (parseFloat(this.form.balance_pay_amount) || 0) +
+                    (parseFloat(this.form.cash_pay_amount) || 0) +
+                    (parseFloat(this.form.custom_pay_amount) || 0)
+                ).toFixed(2);
             },
 
             // 支付成功页面显示
@@ -259,6 +328,10 @@
                     done();
                 }
             }
+        },
+
+        mounted() {
+            this.getCustomPayList();
         }
     }
 </script>
