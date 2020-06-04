@@ -91,9 +91,10 @@ export function findNavTree() {
 
           {
             "id": "/analysis/summary",
-            "name": " 营业汇总",
+            "name": " 营业汇总(开发中)",
             "url": "/analysis/summary",
             "icon": "el-icon-s-data",
+            "disabled": true,
             "children": []
           }
         ]

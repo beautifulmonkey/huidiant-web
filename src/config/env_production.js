@@ -3,7 +3,7 @@
  * */
 export default {
     server: {
-        url: 'http://47.111.20.15:8899'
+        url: 'https://api.skyunx.com'
     },
     // 用于控制开发阶段和发布阶段的一些调用控制，可以无缝接入
     setting: {

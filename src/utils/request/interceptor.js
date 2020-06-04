@@ -71,7 +71,7 @@ const errorDetail = function(error) {
       alert('登录信息失效, 请您从新登录!!')
       localStorage.removeItem('access_token');
       localStorage.removeItem('userInfo');
-      window.location.href="/login";
+      window.location.reload();
       return
     }
     if (resData) {

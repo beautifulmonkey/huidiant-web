@@ -75,6 +75,7 @@ export default {
       const chalkHandler = getHandler('chalk', 'chalk-style')
 
       if (!this.chalk) {
+        // todo: 稳定性差
         const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
         this.getCSSString(url, chalkHandler, 'chalk')
       } else {
