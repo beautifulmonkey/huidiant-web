@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="flex-box">
-                            <div class="echarts-for-vue" id="myChart" ref="myChart"></div>
+                            <div class="echarts-for-vue" ref="chartToday"></div>
 
                             <div class="overview" v-for="item in analysisFlag2">
                                 <div class="text-unit small column">
@@ -54,6 +54,16 @@
                         </div>
                     </div>
                 </el-card>
+
+
+
+                <el-card class="card-items" shadow="always">
+                    <div class="g-start">
+                        <span style="font-size: 120%; font-weight: 500;">近7日现金业绩</span>
+                    </div>
+                    <div class="echarts-for-vue-7" ref="chartWeeK"></div>
+                </el-card>
+
                 <el-card class="card-items" shadow="always">
 
                     <div class="g-start">
@@ -187,6 +197,10 @@
                         order_count: 0,
                         card_create_count: 0,
                     },
+                    week: {
+                        x: [],
+                        y: []
+                    }
                 }
             }
         },
@@ -197,7 +211,8 @@
                     const res = await analysisApi.getAnalysisToday();
                     if (res.status >= 200 && res.status < 300) {
                         this.summaryData = res.data;
-                        this.drawLine();
+                        this.drawTodayData();
+                        this.drawWeekData()
                     } else {
                         this.$message({
                             type: 'error',
@@ -212,11 +227,11 @@
             guidePage(){
                 this.$router.push("/guide")
             },
-            drawLine(){
+            drawTodayData(){
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
-                var bar_dv = this.$refs.myChart;
-                let myChart = this.$echarts.init(bar_dv);
+                var bar_dv = this.$refs.chartToday;
+                let chartToday = this.$echarts.init(bar_dv);
 
                 let chartData = [
                     this.summaryData.today.chart.cash_product_service,
@@ -225,7 +240,7 @@
                     this.summaryData.today.chart.cash_recharge
                 ];
                 // 绘制图表
-                myChart.setOption({
+                chartToday.setOption({
                     tooltip: {},
                     xAxis: {
                         data: ["产品服务","办次卡","办充值卡", "充值"],
@@ -250,7 +265,7 @@
                             lineStyle: {
                                 // 使用深浅的间隔色
                                 color: ['#ddd'],
-                                type: 'dotted'
+                                type: 'dashed'
                             }
                         }
 
@@ -268,7 +283,69 @@
                         },
                     }]
                 });
+            },
+
+            drawWeekData(){
+                // 基于准备好的dom，初始化echarts实例
+                // let myChart = this.$echarts.init(document.getElementById('myChart'))
+                var bar_dv = this.$refs.chartWeeK;
+                let chartWeeK = this.$echarts.init(bar_dv);
+
+                var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
+
+                // 绘制图表
+                chartWeeK.setOption({
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: '{b0} <br />' + dotHtml + '实际收款金额: <strong>{c0}</strong>元'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: this.summaryData.week.x
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine:{       //y轴
+                            show:false
+                        },
+                        // axisLabel: {
+                        //     show:false
+                        // },
+                        axisTick:{       //y轴刻度线
+                            show:false
+                        },
+
+                        splitLine: {     //网格线
+                            show:true,
+                            lineStyle: {
+                                // 使用深浅的间隔色
+                                color: ['#ddd'],
+                                type: 'dashed',
+                            }
+                        }
+                    },
+                    series: [{
+                        data: this.summaryData.week.y,
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            color: this.themeColor,
+                            width: 5
+                        },
+                        areaStyle: {
+                            color: this.themeColor,
+                            opacity: 0.2
+                        },
+                        itemStyle: {
+                            color: this.themeColor,
+                        }
+
+                    }]
+
+                });
             }
+
 
         },
         mounted() {
@@ -399,6 +476,12 @@
         flex: 2 1 0%;
         -webkit-tap-highlight-color: transparent;
         user-select: none;
+    }
+
+    .echarts-for-vue-7 {
+        height: 235px;
+        margin: -30px 0 -30px 0;
+        width: 100%;
     }
 
 </style>
