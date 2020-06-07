@@ -12,7 +12,7 @@
                     <p class="desc">支持创建多个服务集合有限次数的次卡</p>
 
                     <div v-if="ruleForm.counting_card_type==='1'">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 1024 1024" id="components_icon/img/tag_sel.svg"><path d="M1024 0v1024H0L1024 0zM852.864 565.248h-.061L687.488 768.512l-128-81.92a32.195 32.195 0 00-30.592-1.92 29.635 29.635 0 00-17.536 24.064 27.843 27.843 0 0013.056 25.923l151.936 97.213a32.19 32.19 0 0041.728-6.723l183.23-225.28a27.776 27.776 0 005.314-29.373 29.824 29.824 0 00-24.96-17.853 32 32 0 00-28.8 12.605z"></path></svg>
+							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
                     </div>
 
                 </span>
@@ -26,7 +26,7 @@
                     <p class="desc">支持创建多个服务集合且不限次数的次卡，月卡、年卡等</p>
 
                     <div v-if="ruleForm.counting_card_type==='2'">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 1024 1024" id="components_icon/img/tag_sel.svg"><path d="M1024 0v1024H0L1024 0zM852.864 565.248h-.061L687.488 768.512l-128-81.92a32.195 32.195 0 00-30.592-1.92 29.635 29.635 0 00-17.536 24.064 27.843 27.843 0 0013.056 25.923l151.936 97.213a32.19 32.19 0 0041.728-6.723l183.23-225.28a27.776 27.776 0 005.314-29.373 29.824 29.824 0 00-24.96-17.853 32 32 0 00-28.8 12.605z"></path></svg>
+							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
                     </div>
                 </span>
             </label>
@@ -38,7 +38,7 @@
                     <p class="desc">设定一个总次数，会员可在次数内消费卡中任意项目</p>
 
                     <div v-if="ruleForm.counting_card_type==='3'">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 1024 1024" id="components_icon/img/tag_sel.svg"><path d="M1024 0v1024H0L1024 0zM852.864 565.248h-.061L687.488 768.512l-128-81.92a32.195 32.195 0 00-30.592-1.92 29.635 29.635 0 00-17.536 24.064 27.843 27.843 0 0013.056 25.923l151.936 97.213a32.19 32.19 0 0041.728-6.723l183.23-225.28a27.776 27.776 0 005.314-29.373 29.824 29.824 0 00-24.96-17.853 32 32 0 00-28.8 12.605z"></path></svg>
+							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
                     </div>
                 </span>
             </label>

@@ -4,7 +4,7 @@
 
     <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px" class="login-container">
 
-    <h2 class="title" style="text-align: center;font-weight: 100;font-size: 26px;" >云逍收银</h2>
+    <h2 class="title" style="text-align: center;font-weight: 100;font-size: 26px;" >云逍软件</h2>
     <el-form-item prop="account">
       <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>

@@ -59,7 +59,7 @@
 
                 <el-card class="card-items" shadow="always">
                     <div class="g-start">
-                        <span style="font-size: 120%; font-weight: 500;">近7日现金业绩</span>
+                        <span style="font-size: 120%; font-weight: 500;">近7日实收</span>
                     </div>
                     <div class="echarts-for-vue-7" ref="chartWeeK"></div>
                 </el-card>
