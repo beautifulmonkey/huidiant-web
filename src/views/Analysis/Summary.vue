@@ -34,13 +34,21 @@
 				<div class="mei-components-data-overview__row">
 					<div class="mei-components-data-overview__item" style="width: 25%;" v-for="item in indicators"
 					     @click="indicatorsChange(item.key)"
+					     :style="{'--color': themeColor}"
 					     v-bind:class="{ 'active': indicators_key_active===item.key}">
 						<div class="mei-components-data-overview__item-wrap">
 							<div class="mei-components-data-overview__item-title">
 								<span class="mei-components-data-overview__item-title">{{item.label}}({{item.unit}})</span>
 
 								<div class="zent-popover-wrapper zent-pop-wrapper" style="display: inline-block;">
-									<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />
+<!--									<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />-->
+
+									<el-popover
+										placement="bottom"
+										trigger="hover">
+										<span class="sub-text" v-for="desc in item.description">{{desc}}<br></span>
+										<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />
+									</el-popover>
 								</div>
 							</div>
 							<div class="mei-components-data-overview__item-value">{{summaryData[item.key].sum}}</div>
@@ -48,7 +56,8 @@
 
 
 						<div v-if="indicators_key_active===item.key">
-							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
+							<svg-icon slot="reference" icon-class="check_mark" class="icon"
+							          :style="{'--color': themeColor}"/>
 						</div>
 
 					</div>
@@ -148,14 +157,26 @@
                 },
                 indicators_key_active: 'income',
                 indicators: [
-                    {"label": '实际收款金额', "key": 'income', 'unit': '元'},
-                    {"label": '客户耗卡金额', "key": 'consumption_card', 'unit': '元'},
-                    {"label": '开卡充值金额', "key": 'income_card', 'unit': '元'},
-                    {"label": '客单价', "key": 'guest_avg_consume', 'unit': '元'},
-                    {"label": '总客流', "key": 'passenger_flow', 'unit': '人'},
-                    {"label": '新增会员数', "key": 'vip_add_count', 'unit': '人'},
-                    {"label": '办卡张数', "key": 'card_create_count', 'unit': '张'},
-                    {"label": '订单数量', "key": 'order_count', 'unit': '个'}
+                    {"label": '实际收款金额', "key": 'income', 'unit': '元', 'description': [
+                            "1.实际收款金额是指现金类收款的金额总和；",
+                            "2.现金类包含：现金、微信、支付宝、刷卡、自定义记账。"]},
+                    {"label": '客户耗卡金额', "key": 'consumption_card', 'unit': '元', 'description': [
+                            "1.客户耗卡金额指客户消耗充值卡余额的金额总和；"]},
+                    {"label": '开卡充值金额', "key": 'income_card', 'unit': '元', 'description':[
+                            '1.开卡充值金额指开卡（充值卡、次卡)或充值的实际收款金额总和；',
+		                    '2.消耗会员余额进行开卡的金额不计入开卡充值金额。']},
+                    {"label": '客单价', "key": 'guest_avg_consume', 'unit': '元', 'description': [
+                            '1.即消费客单价，成交金额和成交客户数均不包括开卡充值的数据；',
+		                    '2.客单价 = 品项订单的实际收款金额+客户耗卡金额 / 客户数']},
+                    {"label": '总客流', "key": 'passenger_flow', 'unit': '人', 'description': [
+                            "1.总客流是指消费付款的客户人数；",
+                            "2.一个客户多订单算一个人，散客订单按订单数统计。"]},
+                    {"label": '新增会员数', "key": 'vip_add_count', 'unit': '人', 'description': [
+                            "1.成为会员的数量"]},
+                    {"label": '办卡张数', "key": 'card_create_count', 'unit': '张', 'description': [
+                            "1.指售充值卡, 次卡的总张数"]},
+                    {"label": '订单数量', "key": 'order_count', 'unit': '个', 'description': [
+                            "1.包含 消费,充值,售卡的订单数量。"]}
                 ],
             }
 	    },
@@ -315,9 +336,9 @@
                             rich: {
                                 value: {
                                     color: '#303133',
-                                    fontSize: 30,
+                                    fontSize: 22,
                                     fontWeight: 'bold',
-                                    lineHeight: 30,
+                                    lineHeight: 20,
                                 },
                                 name: {
                                     color: '#909399',
@@ -464,7 +485,7 @@
 		padding-top: 10px;
 	}
 	.active {
-		border: 1px solid #8558fa;
+		border: 1px solid var(--color) !important;
 		z-index: 1;
 	}
 
@@ -485,7 +506,7 @@
 		width: 20px;
 		height: 20px;
 		display: block;
-		fill: #8558fa;
+		fill: var(--color) !important;
 	}
 
 	.body-box {

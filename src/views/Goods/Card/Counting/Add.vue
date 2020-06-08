@@ -6,13 +6,14 @@
 
         <div style="display: flex;margin-left: 50px; margin-top: 30px;">
             <label class="zent-radio-wrap" @click="ruleForm.counting_card_type='1'"
+                   :style="{'--color': themeColor}"
                    v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='1'}">
                 <span>
                     <div class="title">有限次卡</div>
                     <p class="desc">支持创建多个服务集合有限次数的次卡</p>
 
                     <div v-if="ruleForm.counting_card_type==='1'">
-							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
+							<svg-icon slot="reference" icon-class="check_mark" class="icon" :style="{'--color': themeColor}"/>
                     </div>
 
                 </span>
@@ -20,25 +21,27 @@
 
 
             <label class="zent-radio-wrap" @click="ruleForm.counting_card_type='2'"
+                   :style="{'--color': themeColor}"
                    v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='2'}">
                 <span>
                     <div class="title">不限次卡</div>
                     <p class="desc">支持创建多个服务集合且不限次数的次卡，月卡、年卡等</p>
 
                     <div v-if="ruleForm.counting_card_type==='2'">
-							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
+							<svg-icon slot="reference" icon-class="check_mark" class="icon" :style="{'--color': themeColor}"/>
                     </div>
                 </span>
             </label>
 
             <label class="zent-radio-wrap" @click="ruleForm.counting_card_type='3'"
+                   :style="{'--color': themeColor}"
                    v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='3'}">
                 <span>
                     <div class="title">通卡</div>
                     <p class="desc">设定一个总次数，会员可在次数内消费卡中任意项目</p>
 
                     <div v-if="ruleForm.counting_card_type==='3'">
-                        <svg-icon slot="reference" icon-class="check_mark" class="icon" />
+                        <svg-icon slot="reference" icon-class="check_mark" class="icon" :style="{'--color': themeColor}"/>
                     </div>
                 </span>
             </label>
@@ -129,11 +132,17 @@
 <script>
     import serviceChooseComponent from '@/views/Goods/servcieChoose.vue'
     import cardApi from '@/service/card.js'
+    import {mapState} from "vuex";
 
     export default {
         name: "Numbers",
         components: {
             serviceChooseComponent
+        },
+        computed:{
+            ...mapState({
+                themeColor: state=>state.app.themeColor
+            })
         },
         data () {
             return {
@@ -309,7 +318,7 @@
         width: 20px;
         height: 20px;
         display: block;
-        fill: #8558fa;
+        fill: var(--color) !important;
     }
 
     .zent-radio-wrap {
@@ -340,7 +349,7 @@
     }
 
     .zent-radio-checked {
-        border: 1px solid #8558fa;
+        border: 1px solid var(--color) !important;
     }
 
     .batch-box {

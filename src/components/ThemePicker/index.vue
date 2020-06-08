@@ -32,11 +32,11 @@ export default {
       showSuccess: true, // 是否弹出换肤成功消息,
       predefineColors: [
         '#14889A',
+        '#334154',
         '#BF6800',
         '#e597b9',
         '#1e90ff',
         '#699ce6',
-        '#334154',
         '#F4257F',
         '#8558fa',
         '#C20000',

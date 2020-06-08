@@ -7,6 +7,10 @@
 
                     <div class="g-start">
                         <span style="font-size: 120%; font-weight: 500;">今日数据</span>
+
+                        <el-button style="margin-left: 10px;" type="text" size="mini"
+                                @click="$router.push('/analysis/summary')">更多数据</el-button>
+
                     </div>
 
                     <div class="content">
@@ -159,18 +163,18 @@
                         ]},
                     {title: "新增会员数", iconClass: "dashboard_user_add", key: "vip_add_count",
                         description: [
-                            "成为会员的数量"
+                            "1.成为会员的数量"
                         ]}
                 ],
 
                 analysisFlag2: [
                     {title: "订单数量", iconClass: "dashboard_order", key: "order_count",
                         description: [
-                            "包含 消费,充值,售卡的订单数量。"
+                            "1.包含 消费,充值,售卡的订单数量。"
                         ]},
                     {title: "办卡张数", iconClass: "dashboard_card", key: "card_create_count",
                         description: [
-                            "指售充值卡, 次卡的总张数"
+                            "1.指售充值卡, 次卡的总张数"
                         ]}
                 ],
 
@@ -309,6 +313,8 @@
                         axisLine:{       //y轴
                             show:false
                         },
+                        splitNumber : 4,
+
                         // axisLabel: {
                         //     show:false
                         // },
