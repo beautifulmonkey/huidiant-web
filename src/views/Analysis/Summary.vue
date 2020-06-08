@@ -1,18 +1,24 @@
 <template>
 	<div>
 		<div class="m-wrap-16" style="display: flex; justify-content: flex-end">
-			<el-button type="primary" size="mini">今天</el-button>
-			<el-button type="info" size="mini">近7天</el-button>
-			<el-button type="info" size="mini">本月</el-button>
+<!--			<el-button :type="item.id == menuActive ? 'primary': 'info'" size="mini">今日</el-button>-->
+			<el-button :type="timeMode == 'day7' ? 'primary': 'info'" size="mini" @click="timeModeClick('day7')">近7天</el-button>
+			<el-button :type="timeMode == 'thisMonth' ? 'primary': 'info'" size="mini" @click="timeModeClick('thisMonth')">本月</el-button>
+			<el-button :type="timeMode == 'day100' ? 'primary': 'info'" size="mini" @click="timeModeClick('day100')">近100天</el-button>
 
 			<el-date-picker
+				@change="datePickerChange"
+				:clearable="false"
 				style="margin-left: 30px;"
-				v-model="value1"
+				v-model="dateRange"
 				size="small"
+				value-format="timestamp"
 				type="daterange"
 				range-separator="至"
 				start-placeholder="开始日期"
-				end-placeholder="结束日期">
+				end-placeholder="结束日期"
+				:picker-options="pickerOptions">
+
 			</el-date-picker>
 		</div>
 
@@ -27,21 +33,21 @@
 
 				<div class="mei-components-data-overview__row">
 					<div class="mei-components-data-overview__item" style="width: 25%;" v-for="item in indicators"
-					     @click="indicators_key=item.key"
-					     v-bind:class="{ 'active': indicators_key===item.key}">
+					     @click="indicatorsChange(item.key)"
+					     v-bind:class="{ 'active': indicators_key_active===item.key}">
 						<div class="mei-components-data-overview__item-wrap">
 							<div class="mei-components-data-overview__item-title">
-								<span class="mei-components-data-overview__item-title">{{item.label}}</span>
+								<span class="mei-components-data-overview__item-title">{{item.label}}({{item.unit}})</span>
 
 								<div class="zent-popover-wrapper zent-pop-wrapper" style="display: inline-block;">
 									<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />
 								</div>
 							</div>
-							<div class="mei-components-data-overview__item-value">39955.21</div>
+							<div class="mei-components-data-overview__item-value">{{summaryData[item.key].sum}}</div>
 						</div>
 
 
-						<div v-if="indicators_key===item.key">
+						<div v-if="indicators_key_active===item.key">
 							<svg-icon slot="reference" icon-class="check_mark" class="icon" />
 						</div>
 
@@ -49,16 +55,16 @@
 				</div>
 
 
-				<div class="echarts-for-vue-7" ref="chartWeeK"></div>
+				<div class="echarts-for-vue-7" ref="chartIndicators"></div>
 
 			</el-card>
 
 			<el-card class="card-items" shadow="always">
 				<div class="g-start">
 					<span style="font-size: 100%; font-weight: 500;">交易看板</span>
-					<el-radio-group v-model="radio" size="small" style="margin-right: 50px;">
-						<el-radio-button label="1">实收方式</el-radio-button>
-						<el-radio-button label="2">实收构成</el-radio-button>
+					<el-radio-group v-model="tradingRadio" size="small" style="margin-right: 50px;" @change="tradingRadioChange">
+						<el-radio-button label="pay_way">实收方式</el-radio-button>
+						<el-radio-button label="constitute">实收构成</el-radio-button>
 					</el-radio-group>
 				</div>
 
@@ -66,33 +72,34 @@
 
 
 				<div class="zent-card-body" style="display: flex; padding-bottom: 0px;">
-					<div class="body-box"><p class="title">实收方式按金额排行</p>
+					<div class="body-box">
+						<p v-if="tradingRadio==='pay_way'" class="title">实收方式按金额排行</p>
+						<p v-if="tradingRadio==='constitute'" class="title">实收构成按金额排行</p>
 						<div class="zent-table-container">
 							<el-table
-								:data="tableData"
+								v-if="tradingRadio==='pay_way'"
+								:data="summaryData.pay_way"
 								style="width: 100%">
-								<el-table-column
-									type="index"
-									label="排名">
-								</el-table-column>
-								<el-table-column
-									prop="name"
-									label="实收方式">
-								</el-table-column>
-								<el-table-column
-									prop="amount"
-									label="实际收款金额">
-								</el-table-column>
-								<el-table-column
-									prop="rate"
-									label="占比">
-								</el-table-column>
+								<el-table-column type="index" label="排名" width="70"></el-table-column>
+								<el-table-column prop="name" label="实收方式"></el-table-column>
+								<el-table-column prop="value" label="实际收款金额"></el-table-column>
+							</el-table>
+
+							<el-table
+								v-if="tradingRadio==='constitute'"
+								:data="summaryData.constitute"
+								style="width: 100%">
+								<el-table-column type="index" label="排名" width="70"></el-table-column>
+								<el-table-column prop="name" label="实收构成"></el-table-column>
+								<el-table-column prop="value" label="实际收款金额"></el-table-column>
 							</el-table>
 						</div>
 					</div>
-					<div class="body-box"><p class="title">实收方式按金额占比</p>
+					<div class="body-box">
+						<p v-if="tradingRadio==='pay_way'" class="title">实收方式按金额占比</p>
+						<p v-if="tradingRadio==='constitute'" class="title">实收构成按金额占比</p>
 						<div class="zent-table-container">
-							<div class="echarts-for-vue-7" ref="chartPie"></div>
+							<div class="echarts-for-vue-7" style="height: 250px;" ref="chartPie"></div>
 						</div>
 					</div>
 				</div>
@@ -107,6 +114,7 @@
 
 <script>
     import {mapState} from "vuex";
+    import analysisApi from '@/service/analysis.js'
 
     export default {
         name: "Summary",
@@ -117,53 +125,98 @@
         },
 	    data() {
             return {
-                value1: '',
-                radio: '1',
-                indicators_key: 1,
-                indicators: [
-                    {"label": '实际收款金额(元)', "key": 1},
-                    {"label": '客户耗卡金额(元)', "key": 2},
-                    {"label": '开卡充值金额(元)', "key": 3},
-                    {"label": '客单价(元)', "key": 4},
-                    {"label": '总客流(人)', "key": 5},
-                    {"label": '新增会员数(人)', "key": 6},
-                    {"label": '办卡张数(张)', "key": 7},
-                    {"label": '小兔子', "key": 8},
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                },
+	            timeMode: 'day7',
+                dateRange: [
+                    new Date(new Date().toLocaleDateString()).getTime() - 3600 * 1000 * 24 * 6,
+                    new Date(new Date().toLocaleDateString()).getTime()
                 ],
-                tableData: [{
-                    amount: '50000',
-                    name: '现金',
-                    rate: '50%'
-                }, {
-                    amount: '30000',
-                    name: '支付宝',
-                    rate: '20%'
-                }, {
-                    amount: '30000',
-                    name: '微信',
-                    rate: '20%'
-                },{
-                    amount: '10000',
-                    name: '银联',
-                    rate: '10%'
-                }]
+                tradingRadio: 'pay_way',
+                summaryData: {
+                    income: {sum: 0},
+                    consumption_card: {sum: 0},
+                    income_card: {sum: 0},
+                    guest_avg_consume: {sum: 0},
+                    passenger_flow: {sum: 0},
+                    vip_add_count: {sum: 0},
+                    card_create_count: {sum: 0},
+                    order_count: {sum: 0},
+                },
+                indicators_key_active: 'income',
+                indicators: [
+                    {"label": '实际收款金额', "key": 'income', 'unit': '元'},
+                    {"label": '客户耗卡金额', "key": 'consumption_card', 'unit': '元'},
+                    {"label": '开卡充值金额', "key": 'income_card', 'unit': '元'},
+                    {"label": '客单价', "key": 'guest_avg_consume', 'unit': '元'},
+                    {"label": '总客流', "key": 'passenger_flow', 'unit': '人'},
+                    {"label": '新增会员数', "key": 'vip_add_count', 'unit': '人'},
+                    {"label": '办卡张数', "key": 'card_create_count', 'unit': '张'},
+                    {"label": '订单数量', "key": 'order_count', 'unit': '个'}
+                ],
             }
 	    },
 
 	    methods: {
-            drawWeekData(){
+            // 指标切换
+            indicatorsChange(key){
+                this.indicators_key_active=key;
+	            this.drawHistoryData()
+            },
+
+		    // 快捷时间窗切换
+            timeModeClick(key){
+                this.timeMode = key;
+                let today_start = new Date(new Date().toLocaleDateString()).getTime();
+	            if (key === 'day7'){
+		            this.dateRange = [today_start-86400*1000*6, today_start]
+	            }else if (key === 'thisMonth'){
+                    let nowdate= new Date();
+                    nowdate.setDate(1);
+                    this.dateRange = [new Date(nowdate.toLocaleDateString()).getTime(), today_start]
+	            }else if (key === 'day100'){
+                    this.dateRange = [today_start-86400*1000*99, today_start]
+	            }
+                this.getAnalysisHistory()
+
+            },
+
+		    // 交易看板切换
+            tradingRadioChange(){
+                this.drawPieData()
+            },
+
+		    // 日期选择切换
+            datePickerChange(val){
+                let start = val[0]/1000;
+                let end = val[1]/1000;
+                if ((end - start) / 86400 > 99){
+                    this.$message.error('最大区间为100天');
+                    return
+                }
+                this.getAnalysisHistory()
+            },
+            drawHistoryData(){
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
-                var bar_dv = this.$refs.chartWeeK;
-                let chartWeeK = this.$echarts.init(bar_dv);
+                var bar_dv = this.$refs.chartIndicators;
+                let chartIndicators = this.$echarts.init(bar_dv);
+
+                let label_name = this.indicators.filter(item => item.key === this.indicators_key_active)[0].label;
+
+                let x = this.summaryData.x;
+                let y = this.summaryData[this.indicators_key_active].y;
 
                 var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
                 // 绘制图表
-                chartWeeK.setOption({
+                chartIndicators.setOption({
 
                     tooltip: {
                         trigger: 'axis',
-                        formatter: '{b0} <br />' + dotHtml + '实际收款金额: <strong>{c0}</strong>元',
+                        formatter: '{b0} <br />' + dotHtml + label_name + ': <strong>{c0}</strong>',
                         axisPointer: {
                             type: 'cross',
                             label: {
@@ -171,10 +224,15 @@
                             }
                         }
                     },
+                    legend: {
+                        data: [label_name],
+                        left: '10%',
+	                    top: 10
+                    },
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: [1,2,3,4,5,6,7],
+                        data: x,
                     },
                     yAxis: {
                         type: 'value',
@@ -198,12 +256,16 @@
                         }
                     },
                     series: [{
-                        data: [200, 500, 100, 500, 400,111, 0],
+                        name: label_name,
+                        data: y,
                         type: 'line',
+                        symbol: 'circle',
+                        // symbolSize:8,   //拐点圆的大小
+
                         smooth: true,
                         lineStyle: {
                             color: this.themeColor,
-                            width: 5
+                            width: 4
                         },
                         areaStyle: {
                             color: this.themeColor,
@@ -223,22 +285,13 @@
                 var bar_dv = this.$refs.chartPie;
                 let chartPie = this.$echarts.init(bar_dv);
 
-                var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
+                let data = this.summaryData[this.tradingRadio];
 
+                let color = ['#e9264c','#410ADF','#F6A93B','#7ED321','#282828','#F9D858','#4CD0DD','#DF86F0','#F5A7C1']
+                if (this.tradingRadio === 'constitute'){
+                    color = ['#410ADF', '#F9D858', '#7ED321', '#F6A93B']
+                }
 
-
-	            let data = [
-                    { value: 300, name: '现金' },
-                    { value: 350, name: '微信' },
-                    { value: 250, name: '支付宝' },
-                    { value: 100, name: '银联' },
-                    { value: 100, name: '1' },
-                    { value: 100, name: '2' },
-                    { value: 100, name: '3' },
-                    { value: 100, name: '4' },
-                    { value: 100, name: '5' },
-                    { value: 100, name: '6' },
-                ];
                 let dataName = [];
                 let total = 0;
                 data.forEach((res) => {
@@ -251,8 +304,8 @@
                     title: {
                         zlevel: 0,
                         text: [
-                            '{value|' + 3333 + '}',
-                            '{name|实际收款金额(元)}',
+                            '{value|' + this.summaryData.income.sum + '}',
+                            '{name|实际收款金额}',
                         ].join('\n'),
 
                         top: 'center',
@@ -262,9 +315,9 @@
                             rich: {
                                 value: {
                                     color: '#303133',
-                                    fontSize: 40,
+                                    fontSize: 30,
                                     fontWeight: 'bold',
-                                    lineHeight: 40,
+                                    lineHeight: 30,
                                 },
                                 name: {
                                     color: '#909399',
@@ -275,7 +328,7 @@
                     },
                     tooltip: { // 悬停指示
                         trigger: 'item',
-                        formatter: "{b}: {c} ({d}%)"
+                        formatter: "{b}: {c} <br>占比: {d}%"
                     },
                     legend: {
                         orient: 'vertical',
@@ -291,56 +344,50 @@
                     },
                     series: [
                         {
-                            name: '访问来源',
+                            name: '占比',
                             type: 'pie',
                             radius: ['65%', '78%'],
                             center: [150, '50%'],
-                            stillShowZeroSum: false,
-                            avoidLabelOverlap: false,
-                            zlevel: 1,
                             label: {
                                 normal: {
-                                    padding: [30, 30, 30, 30],
-                                    backgroundColor: '#fff',
                                     show: false,
-                                    position: 'center',
-                                    formatter: [
-                                        '{value|{c}}',
-                                        '{name|{b}}'
-                                    ].join('\n'),
-                                    rich: {
-                                        value: {
-                                            color: '#303133',
-                                            fontSize: 40,
-                                            fontWeight: 'bold',
-                                            lineHeight: 40,
-                                        },
-                                        name: {
-                                            color: '#909399',
-                                            lineHeight: 20
-                                        },
-                                    },
                                 },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '16',
-                                        fontWeight: 'bold'
-                                    }
-                                }
                             },
                             data: data
                         }
                     ],
-                    color: ['#410ADF','#F42850','#F6A93B','#7ED321','#282828','#F9D858','#4CD0DD','#DF86F0','#F5A7C1']
+                    color: color
                 });
-            }
+            },
 
+            // 获取汇总数据
+            async getAnalysisHistory(){
+                let params = {
+                    start: parseInt(this.dateRange[0] / 1000),
+	                end: parseInt(this.dateRange[1] / 1000 + 86399)
+                };
+
+                try {
+                    const res = await analysisApi.getAnalysisHistory(params);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.summaryData = res.data;
+                        this.drawHistoryData();
+                        this.drawPieData();
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取数据失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
 	    },
 
         mounted() {
-            this.drawWeekData();
-            this.drawPieData();
+            this.getAnalysisHistory();
+
         },
     }
 </script>
@@ -416,14 +463,6 @@
 		color: #333;
 		padding-top: 10px;
 	}
-
-	.mei-components-data-overview__compare-wrap {
-		padding-top: 10px;
-		color: #555;
-		font-size: 12px;
-		line-height: 20px;
-	}
-
 	.active {
 		border: 1px solid #8558fa;
 		z-index: 1;
