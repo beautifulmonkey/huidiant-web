@@ -13,5 +13,11 @@ export default {
     async getOrderDetails(orderNo){
         const url = `${config.server.url}/order/${orderNo}`;
         return await request('get', url)
+    },
+
+    // 更改备注
+    async updateOrdersDescription(orderNo, description){
+        const url = `${config.server.url}/order/${orderNo}/description`;
+        return await request('patch', url, {description: description})
     }
 }

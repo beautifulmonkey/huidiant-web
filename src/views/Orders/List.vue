@@ -100,7 +100,7 @@
 
                     <div style="margin-right: 20px;">
                         <el-button type="text" @click="$router.push('/orders/details/' + order.order_number)">订单详情</el-button>
-                        <el-button type="text">备注</el-button>
+                        <el-button type="text" @click="updateDescription(order.order_number, order.description)">备注</el-button>
                     </div>
                 </div>
 
@@ -109,7 +109,7 @@
                         :show-header="false"
                         :data="order.goods"
                         :span-method="objectSpanMethod"
-                        style="margin-bottom: 20px;color: #333">
+                        style="color: #333">
                     <el-table-column
                             width="200"
                             prop="goods_name"
@@ -161,6 +161,13 @@
 
                 </el-table>
 
+                <div class="order-desc" v-if="order.description">
+                    <span style="margin-left: 20px;">订单备注: &nbsp;&nbsp;</span>
+                    <span style="color: #333">{{order.description}}</span>
+                </div>
+
+                <div style="margin-bottom: 20px;"></div>
+
             </div>
 
             <div class="pagination-container">
@@ -169,6 +176,26 @@
                 </el-pagination>
             </div>
         </div>
+
+
+        <el-dialog
+            title="修改备注"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+
+            <el-input
+                type="textarea"
+                :rows="3"
+                placeholder="请输入备注"
+                v-model="descriptionFrom.description">
+            </el-input>
+
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="descSubmit">确 定</el-button>
+            </span>
+        </el-dialog>
 
     </div>
 </template>
@@ -243,10 +270,51 @@
                         }
                     }]
                 },
+                dialogVisible: false,
+                descriptionFrom: {}
             }
         },
         methods:{
-            // 搜索
+            // 更改备注点击
+            updateDescription(order_number, desc){
+                this.descriptionFrom = {
+                    order_number: order_number,
+                    description: desc
+                };
+                this.dialogVisible = true
+            },
+            // 更改备注提交
+            descSubmit(){
+                this.updateOrdersDescription();
+                this.dialogVisible = false
+            },
+
+            // 更改备注
+            async updateOrdersDescription() {
+                try {
+                    const res = await orderApi.updateOrdersDescription(
+                        this.descriptionFrom.order_number,
+                        this.descriptionFrom.description
+                    );
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!',
+                            offset: 60
+                        })
+                        this.getOrderList();
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '修改备注失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+                // 搜索
             onSearchClick(){
                 console.log(this.filter)
                 this.getOrderList();
@@ -368,6 +436,19 @@
 
     .order-head span{
         margin-left: 20px;
+    }
+
+    .order-desc{
+        display: flex;
+        align-items:center;
+        color: #999;
+        width: 100%;
+        height: 30px;
+        /*background: #f7f8fa;*/
+        background: #fff7cc;
+        border: 1px solid #ebedf0;
+        margin-top: -1px;
+        font-size: 0.9rem;
     }
 
     .interval-input{
