@@ -2,8 +2,10 @@
 	<div class="menu-bar-container">
     <!-- logo -->
     <div class="logo" :style="{'background-color':themeColor}" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
-      @click="$router.push('/')">
-        <img v-if="collapse" src="@/assets/logo.png"/> <div>{{collapse?'':appName}}</div>
+      @click="$router.push('/')" style="display: flex;justify-content: center">
+        <img v-if="collapse" src="@/assets/logo.png"/>
+<!--	    <div>{{collapse?'':appName}}</div>-->
+	    <img style="width: 70%;margin: 10px 20px 10px 0" v-if="!collapse" src="@/assets/img/skyunx_logo_w.png"/>
     </div>
     <!-- 导航菜单 -->
     <el-menu ref="navmenu" :default-active="selectActive" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
