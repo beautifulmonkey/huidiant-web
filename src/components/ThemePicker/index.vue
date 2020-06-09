@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      chalk: '3', // content of theme-chalk css
+      chalk: '', // content of theme-chalk css
       theme: ORIGINAL_THEME,
       showSuccess: true, // 是否弹出换肤成功消息,
       predefineColors: [
@@ -72,15 +72,15 @@ export default {
         }
       }
 
-      // const chalkHandler = getHandler('chalk', 'chalk-style')
-      //
-      // if (!this.chalk) {
-      //   // todo: 稳定性差
-      //   const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
-      //   this.getCSSString(url, chalkHandler, 'chalk')
-      // } else {
-      //   chalkHandler()
-      // }
+      const chalkHandler = getHandler('chalk', 'chalk-style')
+
+      if (!this.chalk) {
+        // todo: 稳定性差
+        const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
+        this.getCSSString(url, chalkHandler, 'chalk')
+      } else {
+        chalkHandler()
+      }
 
       const styles = [].slice.call(document.querySelectorAll('style'))
         .filter(style => {
