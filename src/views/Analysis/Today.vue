@@ -361,7 +361,7 @@
             themeColor: {
                 immediate: true,
                 handler(val) {
-                    // this.drawLine();
+                    this.getAnalysisToday();
                 }
             }
         }
