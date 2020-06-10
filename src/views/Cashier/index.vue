@@ -39,11 +39,11 @@
 
         </div>
         <div class="main-box">
-            <div class="padding-10">
-                <el-input placeholder="请输入内容(搜索功能开发中)" size="small">
-                    <el-button slot="append" icon="el-icon-search"></el-button>
-                </el-input>
-            </div>
+<!--            <div class="padding-10">-->
+<!--                <el-input placeholder="请输入内容(搜索功能开发中)" size="small">-->
+<!--                    <el-button slot="append" icon="el-icon-search"></el-button>-->
+<!--                </el-input>-->
+<!--            </div>-->
             <div class="padding-20">
                 <!--消费组件-->
                 <consume-component
@@ -154,7 +154,7 @@
                                 <br>
 
                                 <span style="color: #fe2278">￥{{scope.row.discount_price}}</span>
-                                <s v-if="scope.row.discount_price !== scope.row.price">
+                                <s v-if="parseFloat(scope.row.discount_price) !== parseFloat(scope.row.price)">
                                     <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">￥{{scope.row.price}}</span>
                                 </s>
 
@@ -172,13 +172,17 @@
                             <template slot-scope="scope">
                                 <strong><span style="color: #fe2278">¥{{(scope.row.discount_price * scope.row.count).toFixed(2)}}</span></strong>
                                 <br>
-                                <span v-if="scope.row.shoppingType === 'consume'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    优惠 - ¥{{(scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count).toFixed(2)}}
-                                </span>
 
                                 <span v-if="scope.row.shoppingType === 'counting'" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    卡项权益抵扣{{scope.row.count}}次
+                                    次卡抵扣{{scope.row.count}}次
                                 </span>
+                                <span v-else-if="parseFloat(scope.row.origin_discount_price) !== parseFloat(scope.row.discount_price)" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    手动改价
+                                </span>
+                                <span v-else-if="scope.row.discount_price < scope.row.price" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    充值卡优惠 ¥{{((scope.row.price - scope.row.discount_price)*scope.row.count).toFixed(2)}}元
+                                </span>
+
 
                             </template>
                         </el-table-column>
@@ -292,8 +296,12 @@
                             <template slot-scope="scope">
                                 <strong><span style="color: #fe2278">¥{{(scope.row.discount_price * scope.row.count).toFixed(2)}}</span></strong>
                                 <br>
-                                <span style="font-size: 0.8rem;color: rgb(153, 153, 153)">
-                                    卡项优惠 - ¥{{(scope.row.price * scope.row.count - scope.row.discount_price * scope.row.count).toFixed(2)}}
+
+                                <span v-if="parseFloat(scope.row.origin_discount_price) !== parseFloat(scope.row.discount_price)" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    手动改价
+                                </span>
+                                <span v-else-if="scope.row.discount_price < scope.row.price" style="font-size: 0.8rem;color: rgb(153, 153, 153)">
+                                    充值卡优惠 ¥{{((scope.row.price - scope.row.discount_price)*scope.row.count).toFixed(2)}}元
                                 </span>
 
                             </template>
@@ -647,6 +655,7 @@
                     }
                 }
 
+                data.origin_discount_price = data.discount_price;
                 if (goodsItems.length){
                     // 如果该商品已经存在购物车, 则增加数量
                     goodsItems[0].count += 1
@@ -664,6 +673,7 @@
             // 消费清单添加 - 开卡
             addShoppingCartCreateCard(data){
                 this.createType = data.type;
+                data.origin_discount_price = data.discount_price;
                 if (data.type === 1){
                     this.shoppingCartCreatePrepaid = data;
                 }else{
@@ -720,14 +730,25 @@
                 };
 
                 this.shoppingCartConsumeList.forEach((item,index,array)=>{
+                    let reduce_text = '';
+                    if (item.shoppingType === "counting"){
+                        reduce_text = '次卡抵扣' + item.count + '次'
+                    } else if(item.origin_discount_price !== item.discount_price){
+                        reduce_text = '手动改价(改前单价:' + item.origin_discount_price.toString() + '元 改后:' + item.discount_price.toString() + '元)';
+                    } else if (item.discount_price < item.price){
+                        reduce_text = '充值卡优惠' + ((item.price - item.discount_price)*item.count).toString()  + '元'
+                    }
+
+                    console.log(reduce_text);
+
                     order.order_items.push({
                         item_type: item.goodsType,
                         item_id: item.id,
                         counting_card_id: item.counting_card_id,
                         item_name: item.name,
                         original_price: item.price,
-                        reduce_amount: item.discount_price,
-                        reduce_text: '',
+                        reduce_amount: (item.price - item.discount_price) * item.count,
+                        reduce_text: reduce_text,
                         count: item.count,
                         paid_amount: item.discount_price * item.count
                     })
@@ -762,13 +783,21 @@
                 }else if (this.createType === 2){
                     // 开次卡
                     this.shoppingCartCreateCountingList.forEach((item,index,array)=>{
+                        let reduce_text = '';
+                        if(item.origin_discount_price !== item.discount_price){
+                            reduce_text = '手动改价(改前单价:' + item.origin_discount_price.toString() + '元 改后:' + item.discount_price.toString() + '元)';
+                        } else if (item.discount_price < item.price){
+                            reduce_text = '充值卡优惠' + ((item.price - item.discount_price)*item.count).toFixed(2)  + '元'
+                        }
+                        console.log(reduce_text);
+
                         order.order_items.push({
                             item_type: 5,
                             item_id: item.id,
                             item_name: item.name,
                             original_price: item.price,
-                            reduce_amount: item.discount_price,
-                            reduce_text: '',
+                            reduce_amount: (item.price - item.discount_price) * item.count,
+                            reduce_text: reduce_text,
                             count: item.count,
                             paid_amount: item.discount_price * item.count
                         })

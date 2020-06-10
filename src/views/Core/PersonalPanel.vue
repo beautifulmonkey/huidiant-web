@@ -170,7 +170,7 @@ export default {
 .other-operation-item:hover {
   cursor: pointer;
   background: #9e94941e;
-  color: rgb(19, 138, 156);
+  /*color: rgb(19, 138, 156);*/
 }
 .personal-footer {
   margin-right: 1px;
@@ -184,7 +184,7 @@ export default {
 }
 .personal-footer:hover {
   cursor: pointer;
-  color: rgb(19, 138, 156);
+  /*color: rgb(19, 138, 156);*/
   background: #b1a6a61e;
 }
 </style>

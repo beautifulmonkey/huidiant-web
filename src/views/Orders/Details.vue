@@ -76,7 +76,8 @@
 
                     <el-table-column prop="reduce_amount" label="商品优惠">
                         <template slot-scope="scope">
-<!--                            <span>{{ scope.row.reduce_amount }}</span>-->
+                            <span>- ¥ {{ scope.row.reduce_amount }}</span><br>
+                            <span style="font-size: 12px;color: #999;">{{ scope.row.reduce_text }}</span>
                         </template>
                     </el-table-column>
 
