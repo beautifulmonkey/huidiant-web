@@ -198,6 +198,15 @@ export function findNavTree() {
             "icon": "el-icon-edit",
             "hidden": true,
             "children": []
+          },
+          {
+            "id": "/goods/card",
+            "name": "卡详情",
+            "url": "/goods/card/view/:id",
+            "component": "/goods/card/view",
+            "icon": "el-icon-info",
+            "hidden": true,
+            "children": []
           }
         ]
       },

@@ -80,7 +80,8 @@
                                 v-if="scope.row.type===2"
                                 @click="$router.push('/goods/card/counting/edit/' + scope.row.id)">编辑</el-button>
 
-                        <el-button size="mini" type="text">详情</el-button>
+                        <el-button size="mini" type="text"
+                                @click="$router.push('/goods/card/view/' + scope.row.id)">详情</el-button>
 
                         <el-button
                                 v-if="!scope.row.disable"

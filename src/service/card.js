@@ -13,6 +13,13 @@ export default {
         const url = `${config.server.url}/goods/card/${id}`;
         return await request('get', url)
     },
+
+    // 获取单个卡详情
+    async getCardDetails(id) {
+        const url = `${config.server.url}/goods/card/${id}/details`;
+        return await request('get', url)
+    },
+
     // 卡项上下架
     async updateCardStatus(id, disable) {
         const url = `${config.server.url}/goods/card/${id}/disable/${disable}`;

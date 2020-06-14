@@ -89,8 +89,6 @@ export default {
           // this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
           localStorage.access_token = access_token;
           this.getStoreInfo();
-          this.$router.push('/analysis/today')  // 登录成功，跳转到主页
-
         } else {
           this.$message({
             type: 'error',
@@ -109,6 +107,7 @@ export default {
         const res = await storeSettingApi.getStoreInfo();
         if (res.status >= 200 && res.status < 300) {
           localStorage.userInfo = JSON.stringify(res.data)
+          this.$router.push('/analysis/today')  // 登录成功，跳转到主页
         } else {
           this.$message({
             type: 'error',
