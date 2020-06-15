@@ -38,7 +38,7 @@
             <theme-picker v-show="false" class="theme-picker" :default="themeColor"></theme-picker>
 
         </div>
-        <div class="main-box">
+        <div class="main-box" id="main-box">
 <!--            <div class="padding-10">-->
 <!--                <el-input placeholder="请输入内容(搜索功能开发中)" size="small">-->
 <!--                    <el-button slot="append" icon="el-icon-search"></el-button>-->
