@@ -22,7 +22,7 @@
         </div>
 
         <!--商品卡片区域-->
-        <div class="box-card">
+        <div class="box-card" :style="calcHeight()">
             <el-card shadow="always" :body-style="{ padding: '5px' }"
                      @click.native="addGoods(item)"
                      v-for="item in goodsCardList">
@@ -61,6 +61,14 @@
             }
         },
         methods: {
+            calcHeight(){
+                const container = window.document.getElementById('main-box');
+                if(container){
+                    return "height: " +  (container.clientHeight - 150).toString() + "px"
+                }
+                return "height: 300px";
+            },
+
             // 获取标签
             async getTagList() {
                 try {
@@ -181,11 +189,14 @@
 
     .box-card{
         margin-top: 20px;
-        display: flex;
-        flex-wrap: wrap;
+        /*display: flex;*/
+        /*flex-wrap: wrap;*/
+        overflow: auto;
+        text-align: left;
     }
 
     .el-card {
+        display: inline-block;
         box-sizing: border-box;
         transition: all .3s;
         -webkit-transition: all .3s; /* Safari */

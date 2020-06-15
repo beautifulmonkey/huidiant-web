@@ -77,10 +77,10 @@
 
             </div>
         </div>
-        <div class="main-shopping">
+        <div class="main-shopping" id="main-shopping">
             <div class="align-justify-center shopping-title">消费清单</div>
             <!--客户选择区域-->
-            <div style="height: 100px;">
+            <div style="height: 100px;margin-top: 20px">
                 <!--未选择客户显示搜索组件-->
                 <div v-if="!isChooseCustomer" class="customer-search">
                     <el-autocomplete
@@ -145,7 +145,7 @@
                 <div v-if="shoppingCartConsumeList.length" style="margin-top: 30px;">
                     <el-table
                             :data="shoppingCartConsumeList"
-                            height="50vh"
+                            :max-height="calcHeight()"
                             style="width: 100%">
                         <el-table-column
                                 label="项目名称">
@@ -270,6 +270,7 @@
                 <div v-if="this.createType===2 && this.shoppingCartCreateCountingList.length">
                     <el-table
                             :data="shoppingCartCreateCountingList"
+                            :max-height="calcHeight()"
                             style="width: 100%">
                         <el-table-column
                                 label="次卡名称">
@@ -401,6 +402,27 @@
 
             <!--收款底栏-->
             <div>
+<!--                <div class="footer-info border-b">-->
+<!--                    <div style="display: flex;justify-content: space-between">-->
+<!--                        <span>订单信息</span>-->
+<!--                        <div style="margin-right: 100px;">-->
+<!--                            <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-up" @click="condition_details=true">展开</el-button>-->
+<!--                            <el-button type="text" v-if="condition_details" icon="el-icon-arrow-down" @click="condition_details=false">收起</el-button>-->
+<!--                        </div>-->
+
+<!--                        <el-drawer-->
+<!--                            title="我是标题"-->
+<!--                            append-to-body-->
+<!--                            :modal-append-to-body-->
+<!--                            :visible.sync="condition_details"-->
+<!--                            direction="btt">-->
+<!--                            <span>我来啦!</span>-->
+<!--                        </el-drawer>-->
+
+<!--                    </div>-->
+
+<!--                </div>-->
+
                 <div class="footer-amount border-b">
                     <span style="margin-right: 70px;font-size: 0.9rem">待收款金额：<strong>￥{{getAmountContext()}}</strong></span>
                 </div>
@@ -466,6 +488,7 @@
                 rechargeType: null,
                 prepaidCardList: [],
 
+                condition_details: false,
                 payAmount: 0, // 待支付金额
                 consumption: [
                     {name: "开单", id: "consume"},
@@ -486,6 +509,13 @@
             })
         },
         methods: {
+            calcHeight(){
+               const container = window.document.getElementById('main-shopping');
+               if(container){
+                   return  container.clientHeight - 350
+               }
+                return '300';
+            },
             ButtonClick(data){
                 this.menuActive = data
             },
@@ -906,16 +936,12 @@
         background-color: #ffffff;
     }
 
-    .customer-search {
-        margin-top: 20px;
-    }
     .customer-search /deep/ .el-input__inner{
         height: 70px;
     }
     .customer-info {
         background-color: #ffffff;
         display: flex;
-        margin-top: 20px;
         height: 70px;
         justify-content: space-between;
         align-items: center;
@@ -937,6 +963,13 @@
         /*height: 300px;*/
         width: 100%
     }
+
+    /*.footer-info{*/
+    /*    height: 40px;*/
+    /*    width: 50%;*/
+    /*    position: fixed;*/
+    /*    bottom: 120px;*/
+    /*}*/
 
     .footer-amount{
         height: 40px;
