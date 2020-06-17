@@ -113,7 +113,8 @@
                             <div class="consume-sum-item"><label>消费后卡余额：</label><span>￥{{orderData.total_balance_after}}</span></div>
                         </div>
 
-                        <el-button style="float: right;margin-top: 20px;margin-bottom: 50px;">打印小票</el-button>
+                        <el-button style="float: right;margin-top: 20px;margin-bottom: 50px;"
+                            @click="receiptsExport">打印小票</el-button>
                     </div>
                 </div>
             </div>
@@ -134,6 +135,9 @@
             }
         },
         methods: {
+            receiptsExport(){
+                window.open("/#/receipts")
+            },
             // 获取订单详情
             async getOrderDetails(){
                 try {
