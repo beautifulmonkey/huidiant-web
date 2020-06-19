@@ -12,7 +12,7 @@
         </div>
 
 <!--        卡列表-->
-        <div class="box-card-list">
+        <div class="box-card-list" :style="calcHeight()">
             <div class="card-item" :style="[item.type === 1 ? czk_bgi_style : ck_bgi_style]"
                  @click="addCard(item)"
                  v-for="item in cardList">
@@ -59,6 +59,14 @@
             }
         },
         methods: {
+            calcHeight(){
+                const container = window.document.getElementById('main-box');
+                if(container){
+                    return "height: " +  (container.clientHeight - 100).toString() + "px"
+                }
+                return "height: 300px";
+            },
+
             // 获取卡项列表  todo: 获取999条数据改成分页 包括其他页面
             async getCardList(){
                 try {
@@ -132,9 +140,11 @@
     }
 
     .box-card-list {
-        margin-top: 20px;
+        padding-top: 20px;
+        padding-left: 7px;
         display: flex;
         flex-wrap: wrap;
+        overflow: auto;
     }
 
     .card-item {
