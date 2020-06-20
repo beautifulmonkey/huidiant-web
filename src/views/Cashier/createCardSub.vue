@@ -13,9 +13,11 @@
 
 <!--        卡列表-->
         <div class="box-card-list" :style="calcHeight()">
-            <div class="card-item" :style="[item.type === 1 ? czk_bgi_style : ck_bgi_style]"
+            <div class="card-item-box"
                  @click="addCard(item)"
                  v-for="item in cardList">
+
+            <div class="card-item" :style="[item.type === 1 ? czk_bgi_style : ck_bgi_style]">
                 <div>{{item.name}}</div>
                 <div>
                     <div style="text-align: right">
@@ -28,6 +30,7 @@
 
                     <div style="text-align: right">{{item.validity}}</div>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -142,9 +145,14 @@
     .box-card-list {
         padding-top: 20px;
         padding-left: 7px;
-        display: flex;
-        flex-wrap: wrap;
+        /*display: flex;*/
+        /*flex-wrap: wrap;*/
+        text-align: left;
         overflow: auto;
+    }
+
+    .card-item-box {
+        display: inline-block;
     }
 
     .card-item {
