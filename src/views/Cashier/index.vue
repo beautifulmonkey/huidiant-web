@@ -428,6 +428,20 @@
                 </div>
 
                 <div class="footer-handle">
+<!--                    <el-button style="margin-right: 20px;">订单信息</el-button>-->
+                    <el-popover
+                        style="margin-right: 20px;"
+                        placement="top"
+                        trigger="click">
+                        <div style="text-align: left">
+<!--                            <span>备注:</span> -->
+                            <el-input clearable type="textarea" v-model="order_description"
+                                    style="width: 400px" placeholder="输入备注"></el-input>
+                        </div>
+                        <el-button v-if="!order_description" slot="reference">备注</el-button>
+                        <el-button v-if="order_description" slot="reference">修改备注</el-button>
+                    </el-popover>
+
                     <pay-component ref="payComponent"
                                    :payAmount="parseFloat(payAmount)"
                                    :cardBalance="chooseCustomerData.card_balance"
@@ -472,6 +486,7 @@
                 customerKeyWord: '',
                 isChooseCustomer: false,  // 当前是否选择了客户
                 chooseCustomerData: {},  // 当前选择客户的信息
+                order_description: null,
                 // 消费清单列表-消费
                 shoppingCartConsumeList: [],
                 discountChangeVal: null,
@@ -736,7 +751,7 @@
 
             // 结算
             createOrderDeal(orderPayInfo){
-                let orderData =  null;
+                let orderData =  {};
                 if(this.menuActive==='consume' || this.menuActive==='counting'){
                     orderData = this.createOrderGoods(orderPayInfo)
                 }else if (this.menuActive==='createCard'){
@@ -744,6 +759,7 @@
                 }else if(this.menuActive==='recharge'){
                     orderData = this.createOrderRecharge(orderPayInfo)
                 }
+                orderData.description = this.order_description;
                 console.log(orderData);
                 // 请求后端接口
                 this.cashierDeal(orderData)
