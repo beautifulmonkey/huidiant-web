@@ -83,6 +83,9 @@
                     <div :style="paySuccessStyle"></div>
                     <br>
                     <div style="width: 96px;color: #999;text-align: center">收款完成</div>
+                    <br><br>
+                    <receipts-component ref="ReceiptsComponent" :orderData="orderData"></receipts-component>
+
                 </div>
             </div>
             <div v-if="showPaySuccess" slot="footer" class="dialog-footer">
@@ -98,9 +101,14 @@
 <script>
 
     import storeSettingApi from '@/service/storeSetting.js'
+    import ReceiptsComponent from '@/components/Receipts/Receipts.vue'
+    import orderApi from '@/service/order.js'
 
     export default {
         name: "paySub",
+        components: {
+            ReceiptsComponent
+        },
         props: {
             payAmount: {
                 type: Number
@@ -212,6 +220,7 @@
                   width: '96px',
                   height: '96px'
               },
+              orderData: {}
           }
         },
         methods: {
@@ -346,7 +355,8 @@
             },
 
             // 支付成功页面显示
-            setPaySuccess() {
+            setPaySuccess(order_number) {
+                this.getOrderDetails(order_number);
                 const loading = this.$loading({
                     lock: true,
                     text: '正在保存订单信息...',
@@ -365,6 +375,23 @@
                     this.$router.go(0)
                 }else {
                     done();
+                }
+            },
+
+            // 获取订单详情
+            async getOrderDetails(order_number){
+                try {
+                    const res = await orderApi.getOrderDetails(order_number);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.orderData = res.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取订单失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
                 }
             }
         },

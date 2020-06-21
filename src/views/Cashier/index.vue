@@ -600,7 +600,7 @@
                 try {
                     const res = await cashierApi.cashierDeal(params);
                     if (res.status >= 200 && res.status < 300) {
-                        this.$refs.payComponent.setPaySuccess()
+                        this.$refs.payComponent.setPaySuccess(res.data)
                     } else {
                         this.$message({
                             type: 'error',

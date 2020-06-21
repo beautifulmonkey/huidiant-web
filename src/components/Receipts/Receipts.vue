@@ -15,7 +15,7 @@
 				<tr><td> &nbsp;</td><td> &nbsp;</td></tr>
 				<tr>
 					<td style="white-space: nowrap">订单编号:</td>
-					<td>{{this.$route.params.id}}</td>
+					<td>{{orderData.order_number}}</td>
 				</tr>
 				<tr>
 					<td style="white-space: nowrap">订单类型:</td>
