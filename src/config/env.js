@@ -3,7 +3,7 @@
  * */
 export default {
     server: {
-        url: 'http://localhost:2918'
+        url: 'http://192.168.1.6:2918'
     },
     // 用于控制开发阶段和发布阶段的一些调用控制，可以无缝接入
     setting: {
