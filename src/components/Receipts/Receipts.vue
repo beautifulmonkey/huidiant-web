@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<div id="printerError"></div>
 		<el-button style="float: right;margin-top: 20px;margin-bottom: 50px;"
 		           @click="receiptsExport">打印小票</el-button>
 

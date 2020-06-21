@@ -78,6 +78,7 @@ export function getLodop(oOBJECT,oEMBED){
     var strCLodopUpdate="<br><font color='#FF00FF'>CLodop云打印服务(localhost本地)需要更新版本!点击这里<a href='"+cdnPath+"/admin/js/lodop/CLodop_Setup_for_Win32NT_2.163.exe' target='_self'>执行安装</a>,安装后请刷新页面。</font>";
 
     var LODOP;
+    var printerErrorDiv = document.getElementById("printerError");
     try{
         var isIE = (navigator.userAgent.indexOf('MSIE')>=0) || (navigator.userAgent.indexOf('Trident')>=0);
         if (needCLodop()) {
@@ -88,12 +89,12 @@ export function getLodop(oOBJECT,oEMBED){
             };
             if (!LODOP) {
                 if (isIE) document.write(strCLodopInstall); else
-                    document.documentElement.innerHTML=strCLodopInstall+document.documentElement.innerHTML;
+                    printerErrorDiv.innerHTML=strCLodopInstall+printerErrorDiv.innerHTML;
                 return;
             } else {
                 if (CLODOP.CVERSION<"2.1.0.2") {
                     if (isIE) document.write(strCLodopUpdate); else
-                        document.documentElement.innerHTML=strCLodopUpdate+document.documentElement.innerHTML;
+                        printerErrorDiv.innerHTML=strCLodopUpdate+printerErrorDiv.innerHTML;
                 };
                 if (oEMBED && oEMBED.parentNode) oEMBED.parentNode.removeChild(oEMBED);
                 if (oOBJECT && oOBJECT.parentNode) oOBJECT.parentNode.removeChild(oOBJECT);
@@ -116,21 +117,21 @@ export function getLodop(oOBJECT,oEMBED){
             //=====Lodop插件未安装时提示下载地址:==========
             if ((LODOP==null)||(typeof(LODOP.VERSION)=="undefined")) {
                 if (navigator.userAgent.indexOf('Chrome')>=0)
-                    document.documentElement.innerHTML=strHtmChrome+document.documentElement.innerHTML;
+                    printerErrorDiv.innerHTML=strHtmChrome+printerErrorDiv.innerHTML;
                 if (navigator.userAgent.indexOf('Firefox')>=0)
-                    document.documentElement.innerHTML=strHtmFireFox+document.documentElement.innerHTML;
+                    printerErrorDiv.innerHTML=strHtmFireFox+printerErrorDiv.innerHTML;
                 if (is64IE) document.write(strHtm64_Install); else
                 if (isIE)   document.write(strHtmInstall);    else
-                    document.documentElement.innerHTML=strHtmInstall+document.documentElement.innerHTML;
+                    printerErrorDiv.innerHTML=strHtmInstall+printerErrorDiv.innerHTML;
                 return LODOP;
             };
         };
         if (LODOP.VERSION<"6.2.1.7") {
             if (needCLodop())
-                document.documentElement.innerHTML=strCLodopUpdate+document.documentElement.innerHTML; else
+                printerErrorDiv.innerHTML=strCLodopUpdate+printerErrorDiv.innerHTML; else
             if (is64IE) document.write(strHtm64_Update); else
             if (isIE) document.write(strHtmUpdate); else
-                document.documentElement.innerHTML=strHtmUpdate+document.documentElement.innerHTML;
+                printerErrorDiv.innerHTML=strHtmUpdate+printerErrorDiv.innerHTML;
             return LODOP;
         };
         //===如下空白位置适合调用统一功能(如注册语句、语言选择等):===
