@@ -94,7 +94,13 @@
                     >
 
                         <template slot-scope="{ item }">
-                            <div class="search-item">
+                            <div v-if="item.mode==='add'" style="display: flex;align-items: center;justify-content: center;height: 100px;" >
+                                <div>
+                                    <span style="color: #646566">暂无搜索结果，</span>
+                                    <el-button type="text">添加为客户</el-button>
+                                </div>
+                            </div>
+                            <div v-else class="search-item">
                                 <div>
                                     <span style="color: #222">{{ item.name }}</span><br>
                                     <span style="font-size: 80%">{{item.identity}}</span>
@@ -132,6 +138,8 @@
                     <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCustomer"></el-button>
                 </div>
             </div>
+                <!--添加客户-->
+                <up-sert-customer-component :BtnShow="false" ref="upSertCustomer"></up-sert-customer-component>
             </div>
 
 
@@ -464,6 +472,7 @@
     import countingComponent from '@/views/Cashier/countingSub.vue'
     import rechargeComponent from '@/views/Cashier/rechargeSub.vue'
     import payComponent from '@/views/Cashier/paySub.vue'
+    import upSertCustomerComponent from '@/views/Customer/upSertCustomer.vue'
 
     import customerApi from '@/service/customer.js'
     import cardApi from '@/service/card.js'
@@ -478,7 +487,8 @@
             createCardComponent,
             countingComponent,
             rechargeComponent,
-            ThemePicker
+            ThemePicker,
+            upSertCustomerComponent
         },
         data() {
             return {
@@ -573,14 +583,10 @@
                                 prepaid_card_price: item.prepaid_card_price
                             })
                         });
+                        if (!cb_data.length){
+                            cb_data.push({'mode': "add", "query": queryString})
+                        }
                         cb(cb_data);
-                        // if (!cb_data.length){
-                        //     this.$notify({
-                        //         title: '查询结果',
-                        //         message: '未匹配到任何客户!',
-                        //         type: 'warning'
-                        //     });
-                        // }
                     } else {
                         this.$message({
                             type: 'error',
@@ -637,6 +643,10 @@
 
             // 选择客户
             customerChoose(item){
+                if(item.mode==='add'){
+                    this.$refs.upSertCustomer.btnClick(item.query);
+                    return
+                }
                 this.clearShoppingCart();
                 this.isChooseCustomer = true;
                 this.chooseCustomerData = item

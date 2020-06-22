@@ -1,7 +1,9 @@
 <template>
     <div>
-        <el-button v-if="!this.$route.params.id" size="small" icon="el-icon-plus" type="primary" @click="btnClick">添加客户</el-button>
-        <el-button v-if="this.$route.params.id" type="text" @click="btnClick">编辑</el-button>
+        <div v-show="BtnShow">
+            <el-button v-if="!this.$route.params.id" size="small" icon="el-icon-plus" type="primary" @click="btnClick">添加客户</el-button>
+            <el-button v-if="this.$route.params.id" type="text" @click="btnClick">编辑</el-button>
+        </div>
 
         <el-dialog title="客户基本信息" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -15,7 +17,10 @@
                     </div>
                 </el-form-item>
                 <el-form-item label="手机号" prop="tel">
-                    <el-input v-model="ruleForm.tel" class="from-item-input" size="mini"></el-input>
+                    <el-input type="text" placeholder="请输入内容" v-model="ruleForm.tel" class="from-item-input" size="mini"
+                        maxlength="11" show-word-limit>
+                    </el-input>
+
                 </el-form-item>
 
                 <el-form-item label="客户来源" prop="source">
@@ -66,6 +71,12 @@
     import customerApi from '@/service/customer.js'
     export default {
         name: "upSertCustomer",
+        props: {
+            BtnShow: {
+                type: Boolean,
+                default: true
+            },
+        },
         data() {
             return {
                 dialogFormVisible: false,
@@ -111,10 +122,16 @@
             }
         },
         methods: {
-            btnClick() {
-                debugger
-                this.ruleForm.name = null;
-                this.ruleForm.tel = null;
+            btnClick(query=null) {
+                let tel = null;
+                let name = null;
+                if(parseInt(query)) {
+                    tel = parseInt(query)
+                }else {
+                    name = query
+                }
+                this.ruleForm.name = name;
+                this.ruleForm.tel = tel;
                 this.ruleForm.sex = 2;
                 this.ruleForm.birthday = null;
                 this.ruleForm.source = null;
