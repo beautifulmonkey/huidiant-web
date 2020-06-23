@@ -28,9 +28,9 @@ export default {
     },
 
     // 修改支付方式
-    async updateCustomPay(id, params) {
+    async updateCustomPay(id, name) {
         const url = `${config.server.url}/setting/pay/${id}`;
-        return await request('put', url, params)
+        return await request('put', url, {'name': name})
     },
 
     // 添加支付方式

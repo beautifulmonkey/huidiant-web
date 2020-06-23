@@ -21,19 +21,26 @@
 					width="400"
 					label="名称"
 				>
+					<template slot-scope="scope">
+						<span v-if="editId!==scope.row.id">{{scope.row.name}}</span>
+						<div v-else>
+							<el-input size="mini" style="width: 200px;" :value="scope.row.name"
+							          v-model="editName"></el-input><br>
+
+							<el-button size="small" type="text" @click="editNameSave">确定</el-button>
+							<el-divider direction="vertical"></el-divider>
+							<el-button size="small" type="text" @click="editId=null">取消</el-button>
+						</div>
+					</template>
 				</el-table-column>
 				<el-table-column
 					label="操作"
 				>
-					<template slot-scope="scope">
-						<!--todo: 改名没做,好像其他页面也有-->
-
-
-						<!--                    <el-button @click="handleClick(scope.row)" type="text" size="small">改名</el-button>-->
+					<template slot-scope="scope" v-if="editId!==scope.row.id">
+						<el-button @click="updateName(scope.row)" type="text" size="small">改名</el-button>
 						<el-popconfirm title="确定删除该数据吗？" @onConfirm="delData(scope.row.id)">
 							<el-button slot="reference" type="text" size="small">删除</el-button>
 						</el-popconfirm>
-
 					</template>
 				</el-table-column>
 			</el-table>
@@ -50,6 +57,8 @@
         name: "Pay",
         data(){
             return {
+                editId:null,
+                editName: '',
                 visible: false,
                 Form: {
                     name: ''
@@ -63,6 +72,42 @@
                 this.visible = false;
                 this.Form.name = ''
             },
+
+
+            updateName(row){
+                this.editId=row.id;
+                this.editName=row.name
+            },
+
+            // 修改保存
+            editNameSave(){
+                this.updateData();
+                this.editId=null
+            },
+
+
+            // 改名
+            async updateData(){
+                try {
+                    const res = await storeSettingApi.updateCustomPay(this.editId, this.editName);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                        });
+                        this.getCustomPayList();
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '修改失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+
+            },
+
 
             // 获取支付方式列表
             async getCustomPayList(){

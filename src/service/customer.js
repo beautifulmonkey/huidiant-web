@@ -35,9 +35,9 @@ export default {
     },
 
     // 修改客户来源
-    async updateCustomerSource(id, params) {
+    async updateCustomerSource(id, name) {
         const url = `${config.server.url}/customer/source/${id}`;
-        return await request('put', url, params)
+        return await request('put', url, {'name': name})
     },
 
     // 添加客户来源

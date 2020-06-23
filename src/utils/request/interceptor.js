@@ -31,7 +31,7 @@ const errorDetail = function(error) {
     let detail = ''
     switch (status) {
       case 400:
-        detail = '请求错误(400)!'
+        detail = '无效的操作!'
         break
       case 401:
         detail = '无效授权, 请重新登录(401)!'
@@ -90,7 +90,7 @@ const reponseInterceptorError = function(error) {
   console.error('数据请求报错了 ----> 出错了!', code)
 
   Notification({
-    title: '请求发生错误!',
+    title: '无效的操作!',
     message: detail,
     type: 'error'
   })

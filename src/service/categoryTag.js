@@ -37,4 +37,16 @@ export default {
         const url = `${config.server.url}/goods/category/${id}`;
         return await request('delete', url)
     },
+
+    // 修改标签
+    async updateTag(id, name) {
+        const url = `${config.server.url}/goods/tag/${id}`;
+        return await request('patch', url, {'name': name})
+    },
+
+    // 修改分类
+    async updateCategory(id, name) {
+        const url = `${config.server.url}/goods/category/${id}`;
+        return await request('patch', url, {'name': name})
+    },
 }

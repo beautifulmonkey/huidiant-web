@@ -104,12 +104,11 @@
                         <div>
                             <el-divider content-position="left">支付信息</el-divider>
                             <div class="consume-sum-item"><label>现金支付：</label><span>￥{{orderData.cash_pay_amount}}</span></div>
-                            <div class="consume-sum-item"><label>会员卡余额支付：</label><span>￥{{orderData.balance_pay_amount}}</span></div>
+                            <div v-if="orderData.customer_has_prepaid_card" class="consume-sum-item"><label>会员卡余额支付：</label><span>￥{{orderData.balance_pay_amount}}</span></div>
                             <div class="consume-sum-item"><label>自定义支付：</label><span>￥{{orderData.custom_pay_amount}}</span></div>
                         </div>
 
-                        <!--todo: 显示字段根据情况减少-->
-                        <div>
+                        <div v-if="orderData.customer_has_prepaid_card">
                             <el-divider content-position="left">余额信息</el-divider>
                             <div class="consume-sum-item"><label>消费前卡余额：</label><span>￥{{orderData.total_balance_before}}</span></div>
                             <div class="consume-sum-item"><label>消费后卡余额：</label><span>￥{{orderData.total_balance_after}}</span></div>
