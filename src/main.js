@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import api from './http'
+// import api from './http'
 import i18n from './i18n'
 import store from './store'
 import global from '@/utils/global'
@@ -15,7 +15,7 @@ Vue.prototype.$echarts = echarts
 
 
 Vue.use(ElementUI)
-Vue.use(api)
+// Vue.use(api)
 
 Vue.prototype.global = global
 

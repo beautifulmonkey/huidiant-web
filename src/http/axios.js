@@ -1,6 +1,5 @@
 import axios from 'axios';
 import config from './config';
-import Cookies from "js-cookie";
 import router from '@/router'
 
 // 使用vuex做全局loading时使用
