@@ -1,8 +1,8 @@
 <template>
     <div>
         <div v-show="BtnShow">
-            <el-button v-if="!this.$route.params.id" size="small" icon="el-icon-plus" type="primary" @click="btnClick">添加客户</el-button>
-            <el-button v-if="this.$route.params.id" type="text" @click="btnClick">编辑</el-button>
+            <el-button v-if="!this.$route.params.id" size="small" icon="el-icon-plus" type="primary" @click="btnClick(null)">添加客户</el-button>
+            <el-button v-if="this.$route.params.id" type="text" @click="btnClick(null)">编辑</el-button>
         </div>
 
         <el-dialog title="客户基本信息" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
@@ -122,7 +122,7 @@
             }
         },
         methods: {
-            btnClick(query=null) {
+            btnClick(query) {
                 let tel = null;
                 let name = null;
                 if(parseInt(query)) {

@@ -222,18 +222,18 @@ export function findNavTree() {
             "children": []
           },
           {
-            "id": "/customer/vip",
-            "name": "会员管理(开发中)",
-            "url": "/customer/vip",
-            "icon": "el-icon-s-opportunity",
-            "disabled": true,
-            "children": []
-          },
-          {
             "id": "/customer/analysis",
             "name": "客户分析(开发中)",
             "url": "/customer/analysis",
             "icon": "el-icon-data-analysis",
+            "disabled": true,
+            "children": []
+          },
+          {
+            "id": "/customer/sms",
+            "name": "短信发送(开发中)",
+            "url": "/customer/sms",
+            "icon": "el-icon-message",
             "disabled": true,
             "children": []
           },
