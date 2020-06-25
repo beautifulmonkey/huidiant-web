@@ -105,7 +105,7 @@
                             <el-divider content-position="left">支付信息</el-divider>
                             <div class="consume-sum-item"><label>现金支付：</label><span>￥{{orderData.cash_pay_amount}}</span></div>
                             <div v-if="orderData.customer_has_prepaid_card" class="consume-sum-item"><label>会员卡余额支付：</label><span>￥{{orderData.balance_pay_amount}}</span></div>
-                            <div class="consume-sum-item"><label>自定义支付：</label><span>￥{{orderData.custom_pay_amount}}</span></div>
+                            <div v-if="orderData.custom_pay_amount" class="consume-sum-item"><label>{{orderData.custom_pay_name}}：</label><span>￥{{orderData.custom_pay_amount}}</span></div>
                         </div>
 
                         <div v-if="orderData.customer_has_prepaid_card">

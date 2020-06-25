@@ -31,7 +31,13 @@
                 <div class="cond-column">
                     <span>付款方式:&nbsp;</span>
                     <el-select v-model="filter.pay_type" clearable placeholder="选择付款方式" size="mini" >
-                        <el-option :key=0 label="全部" :value=0></el-option>
+<!--                        <el-option :key=0 label="全部" :value=0></el-option>-->
+                        <el-option
+                            v-for="item in customPayList"
+                            :key="'custom_' + item.id"
+                            :label="item.name"
+                            :value="'custom_' + item.id">
+                        </el-option>
                         <el-option
                                 v-for="item in payTypeList"
                                 :key="item.key"
@@ -181,8 +187,7 @@
         <el-dialog
             title="修改备注"
             :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
+            width="30%">
 
             <el-input
                 type="textarea"
@@ -202,6 +207,7 @@
 
 <script>
     import orderApi from '@/service/order.js'
+    import storeSettingApi from '@/service/storeSetting.js'
     import {mapState} from "vuex";
 
     export default {
@@ -240,8 +246,8 @@
                     {"key": 1, "label": "现金"},
                     {"key": 2, "label": "会员余额"},
                     {"key": 3, "label": "组合"},
-                    {"key": 4, "label": "自定义"}  // todo: 不应该显示自定义,而是列出所有的自定义items
                 ],
+                customPayList: [],
                 orderData: [],
                 pageSizes: [5, 10, 20],
                 pickerOptions: {
@@ -388,9 +394,27 @@
                     console.log(error)
                 }
             },
+
+            // 获取支付方式列表
+            async getCustomPayList(){
+                try {
+                    const res = await storeSettingApi.getCustomPayList();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.customPayList = res.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取支付方式失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
         },
         mounted() {
             this.getOrderList();
+            this.getCustomPayList()
         }
     }
 </script>

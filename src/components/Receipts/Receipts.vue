@@ -67,7 +67,7 @@
 					<td style="padding-right:20px">(
 						<span v-if="orderData.cash_pay_amount">现金:{{orderData.cash_pay_amount}}&nbsp;</span>
 						<span v-if="orderData.balance_pay_amount">余额:{{orderData.balance_pay_amount}}&nbsp;</span>
-						<span v-if="orderData.custom_pay_amount">自定义支付:{{orderData.balance_pay_amount}}&nbsp;</span>
+						<span v-if="orderData.custom_pay_amount">{{orderData.custom_pay_name}}:{{orderData.custom_pay_amount}}&nbsp;</span>
 						)</td>
 				</tr>
 				<tr v-if="orderData.description">
