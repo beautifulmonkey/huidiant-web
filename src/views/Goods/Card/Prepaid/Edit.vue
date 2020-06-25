@@ -102,7 +102,6 @@
                         </el-tree>
                     </el-col>
                     <el-col :span="16">
-                        <!--                        todo: 表单未验证-->
                         <el-table
                                 height="50vh"
                                 empty-text="未定义任何权益"
@@ -114,6 +113,10 @@
                             <el-table-column
                                     prop="price"
                                     label="售价">
+                                <template slot-scope="scope">
+                                    <span v-if="scope.row.isgoods_item">￥{{scope.row.price}}</span>
+                                    <span v-else>-</span>
+                                </template>
                             </el-table-column>
                             <el-table-column
                                     prop="rule"
@@ -129,6 +132,7 @@
                                             </el-select>
                                         </template>
                                     </el-input>
+                                    <span v-if="errorCheck[scope.row.code]" class="rightsErr">{{errorCheck[scope.row.code]}}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -243,6 +247,7 @@
                 goodsTreeData: [],
                 rightsTableData: [],
                 rightsRealData: [],
+                errorCheck: {},
 
                 defaultProps: {
                     children: 'children',
@@ -259,8 +264,23 @@
 
             // 保存当前编辑权益
             rightsSubmit(){
-                this.rightsRealData = this.rightsTableData;
-                this.dialogVisible = false
+                this.errorCheck = {};
+                this.rightsTableData.forEach((right_item,index,array)=> {
+                    let r_value = parseFloat(right_item.value);
+                    if(!r_value){
+                        this.errorCheck[right_item.code] = "内容不能为空";
+                    }else if (right_item.mode==='discount' && r_value > 10){
+                        this.errorCheck[right_item.code] = "请输入正确的折扣，例如8.8";
+                    }else if (right_item.mode==='price' && r_value > right_item.price){
+                        this.errorCheck[right_item.code] = "指定价不能超过商品价格";
+                    }
+                });
+                if (Object.keys(this.errorCheck).length){
+                    this.$message.error('优惠设置不正确!');
+                }else{
+                    this.rightsRealData = this.rightsTableData;
+                    this.dialogVisible = false
+                }
             },
 
             // 添加权益
@@ -280,17 +300,15 @@
             handleCheckChange(data, checked, indeterminate) {
                 if (checked) {
                     // 添加权益
-                    let price = "-";
                     let isgoods_item = false;
                     if (data.price){
-                        price = "￥"+ data.price;
                         isgoods_item = true
                     }
                     this.rightsTableData = this.rightsTableData.filter(item => item.code !== data.code);
                     this.rightsTableData.unshift({
                         id: data.id,
                         code: data.code,
-                        price: price,
+                        price: data.price,
                         label: data.label,
                         type: data.type,
                         value: 10,
@@ -454,5 +472,9 @@
         display: flex;
         align-items: center;
         height: 40px;
+    }
+    .rightsErr{
+        color: #f55e5b;
+        font-size: 12px;
     }
 </style>
