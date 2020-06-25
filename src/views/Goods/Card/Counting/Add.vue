@@ -55,9 +55,11 @@
                 </el-form-item>
 
                 <el-form-item label="售价" prop="price">
-                    <el-input v-model="ruleForm.price" class="from-item-input" size="mini">
-                        <template slot="prepend">￥</template>
-                    </el-input>
+                    <div class="item-align-center">
+                        <el-input v-model="ruleForm.price" class="from-item-input" size="mini">
+                            <template slot="prepend">￥</template>
+                        </el-input>
+                    </div>
                 </el-form-item>
 
                 <el-form-item label="权益" prop="rule" style="width: 100vh;">
@@ -102,14 +104,15 @@
                 </el-form-item>
 
                 <el-form-item label="有效时间" prop="valid_days">
-                    <el-radio-group v-model="valid_days_type">
-                        <el-radio label="-1" >永久有效</el-radio>
-                        <el-radio label="1">
-                            <el-input v-model="ruleForm.valid_days" size="mini" :disabled="valid_days_type==='-1'">
-                                <template slot="append">天</template>
-                            </el-input>
-                        </el-radio>
-                    </el-radio-group>
+                    <div class="item-align-center" style="width: 300px">
+                        <el-radio-group v-model="valid_days_type" @change="ruleForm.valid_days=null">
+                            <el-radio label="-1" >永久有效</el-radio>
+                            <el-radio label="1">&nbsp;</el-radio>
+                        </el-radio-group>
+                        <el-input style="width: 150px;" v-model="ruleForm.valid_days" size="mini" :disabled="valid_days_type==='-1'">
+                            <template slot="append">天</template>
+                        </el-input>
+                    </div>
                 </el-form-item>
 
                 <el-form-item label="描述" prop="description">
@@ -373,5 +376,11 @@
     .input-tip {
         line-height: 32px;
         color: #9b9b9b;
+    }
+
+    .item-align-center {
+        display: flex;
+        align-items: center;
+        height: 40px;
     }
 </style>

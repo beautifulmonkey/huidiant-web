@@ -1,5 +1,10 @@
 <template>
-    <div class="m-wrap-from" style="width: 40%">
+    <div style="width: 40%">
+
+        <div class="m-wrap-8">
+            <el-page-header @back="$router.push('/goods/service')" content="编辑产品"></el-page-header>
+        </div>
+
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="名称" prop="name">
                 <el-input v-model="ruleForm.name" class="from-item-input" size="mini"></el-input>
@@ -195,5 +200,12 @@
     }
     .el-form-item {
         font-weight: 700
+    }
+    .m-wrap-8 {
+        margin: 8px;
+    }
+
+    .m-wrap-from {
+        margin: 40px;
     }
 </style>
