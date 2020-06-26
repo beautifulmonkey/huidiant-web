@@ -71,9 +71,9 @@ export default {
     },
 
     // 模糊搜索客户
-    async SearchCustomer(query) {
+    async SearchCustomer(query, uid) {
         const url = `${config.server.url}/customer/search`;
-        return await request('get', url, {query: query})
+        return await request('get', url, {query: query, uid: uid})
     },
 
     // 获取客户次卡次数和赠送服务

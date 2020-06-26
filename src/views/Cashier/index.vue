@@ -139,7 +139,7 @@
                 </div>
             </div>
                 <!--添加客户-->
-                <up-sert-customer-component :BtnShow="false" ref="upSertCustomer"></up-sert-customer-component>
+                <up-sert-customer-component @data-save="initCustomer" :BtnShow="false" ref="upSertCustomer"></up-sert-customer-component>
             </div>
 
 
@@ -566,27 +566,12 @@
                     return 999
                 }
             },
-            async customerQuery(queryString, cb) {
+
+            async customerQueryBE(queryString, uid) {
                 try {
-                    const res = await customerApi.SearchCustomer(queryString);
+                    const res = await customerApi.SearchCustomer(queryString, uid);
                     if (res.status >= 200 && res.status < 300) {
-                        let cb_data = [];
-                        res.data.forEach((item,index,array)=>{
-                            cb_data.push({
-                                id: item.id,
-                                name: item.name,
-                                tel: item.tel,
-                                sex: item.sex,
-                                identity: item.identity,
-                                prepaid_card: item.prepaid_card,
-                                card_balance: item.card_balance,
-                                prepaid_card_price: item.prepaid_card_price
-                            })
-                        });
-                        if (!cb_data.length){
-                            cb_data.push({'mode': "add", "query": queryString})
-                        }
-                        cb(cb_data);
+                        return res.data
                     } else {
                         this.$message({
                             type: 'error',
@@ -596,7 +581,27 @@
                 } catch (error) {
                     console.log(error)
                 }
+            },
+            async customerQuery(queryString, cb) {
+                let data = await this.customerQueryBE(queryString, null);
 
+                let cb_data = [];
+                data.forEach((item,index,array)=>{
+                    cb_data.push({
+                        id: item.id,
+                        name: item.name,
+                        tel: item.tel,
+                        sex: item.sex,
+                        identity: item.identity,
+                        prepaid_card: item.prepaid_card,
+                        card_balance: item.card_balance,
+                        prepaid_card_price: item.prepaid_card_price
+                    })
+                });
+                if (!cb_data.length){
+                    cb_data.push({'mode': "add", "query": queryString})
+                }
+                cb(cb_data);
             },
 
             // 获取充值卡列表
@@ -884,6 +889,20 @@
                 };
 
                 return order
+            },
+
+            // 如果当前路径有指定客户
+            async initCustomer(uid){
+                let data = await this.customerQueryBE("null", uid);
+                this.customerChoose(data[0])
+            }
+
+        },
+        mounted() {
+            // todo:  query参数为什么要从history里去
+            let uid = this.$router.history.current.query.uid;
+            if (uid){
+                this.initCustomer(uid)
             }
 
         }

@@ -372,7 +372,8 @@
             // 关闭弹框
             handleClose(done) {
                 if (this.showPaySuccess){
-                    this.$router.go(0)
+                    window.location.href = "/#/cashier";
+                    window.location.reload()
                 }else {
                     done();
                 }

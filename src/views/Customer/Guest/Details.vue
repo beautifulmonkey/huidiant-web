@@ -19,7 +19,7 @@
                     </div>
 
                     <div>
-                        <el-button size="mini" @click="$router.push('/cashier')">开单</el-button>
+                        <el-button size="mini" @click="$router.push({path: '/cashier', query: {uid: $route.params.id}})">开单</el-button>
                         <el-button size="mini" @click="$router.push('/cashier')">办卡</el-button>
                     </div>
                 </div>
@@ -155,7 +155,7 @@
             },
 
             // 重新加载页面
-            reloadData(){
+            reloadData(id){
                 this.getCustomerDetails();
             }
         },

@@ -60,7 +60,10 @@
             <br>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+
+
+                <el-button v-if="BtnShow" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                <el-button v-else type="primary" @click="submitForm('ruleForm')">保存并开单</el-button>
             </div>
         </el-dialog>
 
@@ -172,7 +175,7 @@
                             offset: 60
                         })
                         this.dialogFormVisible = false
-                        this.$emit('data-save');
+                        this.$emit('data-save', res.data);
                     } else {
                         this.$message({
                             type: 'error',
@@ -195,7 +198,7 @@
                             offset: 60
                         })
                         this.dialogFormVisible = false
-                        this.$emit('data-save');
+                        this.$emit('data-save', res.data);
                     } else {
                         this.$message({
                             type: 'error',
