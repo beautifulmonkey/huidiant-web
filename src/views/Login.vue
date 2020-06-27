@@ -5,8 +5,8 @@
     <el-form :model="loginForm" :rules="fieldRules" ref="loginForm" label-position="left" label-width="0px" class="login-container">
 
     <h2 class="title" style="text-align: center;font-weight: 100;font-size: 26px;" >云逍科技</h2>
-    <el-form-item prop="account">
-      <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
+    <el-form-item prop="username">
+      <el-input type="text" v-model="loginForm.username" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
@@ -35,12 +35,12 @@ export default {
     return {
       loading: false,
       loginForm: {
-        account: '',
+        username: '',
         password: '',
         src: ''
       },
       fieldRules: {
-        account: [
+        username: [
           { required: true, message: '请输入账号', trigger: 'blur' }
         ],
         password: [
@@ -54,7 +54,7 @@ export default {
   methods: {
     // login() {
     //   this.loading = true
-    //   let userInfo = {account:this.loginForm.account, password:this.loginForm.password, captcha:this.loginForm.captcha}
+    //   let userInfo = {username:this.loginForm.username, password:this.loginForm.password, captcha:this.loginForm.captcha}
     //   this.$api.login.login(userInfo).then((res) => {
     //       if(res.msg != null) {
     //         this.$message({
@@ -63,7 +63,7 @@ export default {
     //         })
     //       } else {
     //         Cookies.set('token', res.data.token) // 放置token到Cookie
-    //         sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
+    //         sessionStorage.setItem('user', userInfo.username) // 保存用户到本地会话
     //         this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
     //         this.$router.push('/')  // 登录成功，跳转到主页
     //       }
@@ -80,12 +80,12 @@ export default {
     async login(){
       this.loading = true;
       try {
-        const res = await customerApi.userLogin(this.loginForm.account, this.loginForm.password);
+        const res = await customerApi.userLogin(this.loginForm.username, this.loginForm.password);
         if (res.status >= 200 && res.status < 300) {
           const access_token = res.data.access_token;
 
           // Cookies.set('token', res.data.token) // 放置token到Cookie
-          // sessionStorage.setItem('user', this.loginForm.account) // 保存用户到本地会话
+          // sessionStorage.setItem('user', this.loginForm.username) // 保存用户到本地会话
           // this.$store.commit('menuRouteLoaded', false) // 要求重新加载导航菜单
           localStorage.access_token = access_token;
           this.getStoreInfo();

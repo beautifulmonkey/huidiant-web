@@ -22,10 +22,10 @@
 <!--    </div>-->
     <div class="main-operation">
         <span class="main-operation-item">
-          <el-button size="small" icon="fa fa-male"> 个人中心</el-button>
+          <el-button size="small" icon="fa fa-male" @click="$router.push('/settings/stores/info')"> 个人中心</el-button>
         </span>
         <span class="main-operation-item">
-          <el-button size="small" icon="fa fa-key"> 修改密码</el-button>
+          <el-button size="small" icon="fa fa-key" @click="$router.push('/settings/stores/pwd')"> 修改密码</el-button>
         </span>
     </div>
     <div class="other-operation">
@@ -40,7 +40,7 @@
         </div>
 
         <div  style="text-align: center">
-            <span style="font-size: 80%;color: #969799">版本: v1.0 (抢先版)</span>
+            <span style="font-size: 80%;color: #969799">版本: v1.0</span>
         </div>
 
     </div>
@@ -61,7 +61,7 @@
           <br>
           <div style="display: flex; align-items: center">
               <span>微信号:</span>
-              <el-input size="small" disabled value="o868688888888" style="width: 200px;margin-left: 20px;"></el-input>
+              <el-input size="small" disabled value="xxx" style="width: 200px;margin-left: 20px;"></el-input>
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -93,7 +93,9 @@ export default {
       .then(() => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('userInfo');
-        // sessionStorage.removeItem("user")
+        localStorage.removeItem('skin');
+
+          // sessionStorage.removeItem("user")
         // this.deleteCookie("token")
         this.$router.push("/login")
         // this.$api.login.logout().then((res) => {

@@ -300,7 +300,19 @@ export function findNavTree() {
                 "id": "/settings/stores/info",
                 "name": "店铺信息",
                 "url": "/settings/stores/info",
-                "icon": "el-icon-s-shop",
+                // "icon": "el-icon-s-shop",
+              },
+              {
+                "id": "/settings/stores/shops",
+                "name": "门店管理",
+                "url": "/settings/stores/shops",
+                // "icon": "el-icon-s-shop",
+              },
+              {
+                "id": "/settings/stores/pwd",
+                "name": "修改密码",
+                "url": "/settings/stores/pwd",
+                // "icon": "el-icon-s-shop",
               }
             ]
           },
@@ -314,14 +326,14 @@ export function findNavTree() {
                 "id": "/settings/trading/order",
                 "name": "开单设置(开发中)",
                 "url": "/settings/trading/order",
-                "icon": "el-icon-money",
+                // "icon": "el-icon-money",
                 "disabled": true,
               },
               {
                 "id": "/settings/trading/pay",
                 "name": "支付设置",
                 "url": "/settings/trading/pay",
-                "icon": "el-icon-money",
+                // "icon": "el-icon-money",
               },
             ]
           },
@@ -335,20 +347,20 @@ export function findNavTree() {
                 "id":"/settings/customer/vip",
                 "name": "自动入会",
                 "url": "/settings/customer/vip",
-                "icon": "el-icon-star-off",
+                // "icon": "el-icon-star-off",
               },
               {
                 "id": "/settings/customer/tag",
                 "name": "标签设置(开发中)",
                 "url": "/settings/customer/tag",
-                "icon": "el-icon-price-tag",
+                // "icon": "el-icon-price-tag",
                 "disabled": true,
               },
               {
                 "id": "/settings/customer/source",
                 "name": "来源管理",
                 "url": "/settings/customer/source",
-                "icon": "el-icon-s-custom",
+                // "icon": "el-icon-s-custom",
               },
             ]
           },
