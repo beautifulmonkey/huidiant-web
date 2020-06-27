@@ -718,16 +718,22 @@
                 data.origin_discount_price = data.discount_price;
                 if (goodsItems.length){
                     // 如果该商品已经存在购物车, 则增加数量
-                    goodsItems[0].count += 1
+                    goodsItems[0].count += 1;
+                    if (goodsItems[0].count === 2){
+                        this.$message({
+                            type: 'info',
+                            message: '温馨提示:该项目已经选择多次',
+                        })
+                    }
                 }else {
                     // 如果该商品不存在购物车, 则添加商品
                     this.shoppingCartConsumeList.unshift(data);
                 }
-                this.$message({
-                    type: 'success',
-                    message: '已经添加到清单列表',
-                    duration: 1000
-                })
+                // this.$message({
+                //     type: 'success',
+                //     message: '已经添加到清单列表',
+                //     duration: 1000
+                // })
             },
 
             // 消费清单添加 - 开卡
@@ -740,17 +746,23 @@
                     let countingItem = this.shoppingCartCreateCountingList.filter(item => item.id === data.id);
                     if (countingItem.length){
                         // 如果该次卡已经存在购物车, 则增加数量
-                        countingItem[0].count += 1
+                        countingItem[0].count += 1;
+                        if (countingItem[0].count === 2){
+                            this.$message({
+                                type: 'info',
+                                message: '温馨提示:该项目已经选择多次',
+                            })
+                        }
                     }else {
                         // 如果该次卡不存在购物车, 则添加商品
                         this.shoppingCartCreateCountingList.unshift(data);
                     }
                 }
-                this.$message({
-                    type: 'success',
-                    message: '已经添加到清单列表',
-                    duration: 1000
-                })
+                // this.$message({
+                //     type: 'success',
+                //     message: '已经添加到清单列表',
+                //     duration: 1000
+                // })
             },
 
             // 消费清单添加 - 充值
