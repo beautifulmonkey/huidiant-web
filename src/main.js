@@ -11,11 +11,14 @@ import 'font-awesome/css/font-awesome.min.css'
 import '@/assets/iconfont/iconfont.css'
 import '@/icons'
 import echarts from 'echarts'
+import BaiduMap from 'vue-baidu-map'
 Vue.prototype.$echarts = echarts
 
 
 Vue.use(ElementUI)
-// Vue.use(api)
+Vue.use(BaiduMap, {
+  ak: 'F5g7TtwB3sBzNS7AKWvtCQTtCqlxxtGw'
+});
 
 Vue.prototype.global = global
 
