@@ -21,6 +21,12 @@ export default {
         return await request('get', url)
     },
 
+    // 修改门店信息
+    async updateStoreInfo(params) {
+        const url = `${config.server.url}/setting/store_info`;
+        return await request('patch', url, params)
+    },
+
     // 获取支付方式列表
     async getCustomPayList() {
         const url = `${config.server.url}/setting/pay`;

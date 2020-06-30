@@ -22,7 +22,7 @@
 <!--    </div>-->
     <div class="main-operation">
         <span class="main-operation-item">
-          <el-button size="small" icon="fa fa-male" @click="$router.push('/settings/stores/info')"> 个人中心</el-button>
+          <el-button size="small" icon="fa fa-male" @click="$router.push('/settings/stores/info')"> 店铺信息</el-button>
         </span>
         <span class="main-operation-item">
           <el-button size="small" icon="fa fa-key" @click="$router.push('/settings/stores/pwd')"> 修改密码</el-button>

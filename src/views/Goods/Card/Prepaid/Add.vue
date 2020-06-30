@@ -184,7 +184,7 @@
 
                 rules: {
                     name: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' },
+                        { required: true, message: '请输入卡项名称', trigger: 'blur' },
                         { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
                     ],
                     price: [
