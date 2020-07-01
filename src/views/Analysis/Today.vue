@@ -2,7 +2,7 @@
     <div>
 
         <div class="justify-between">
-            <div style="width: 75%">
+            <div :class="{ 'width-100': isMobile(), 'width-75': !isMobile() }">
                 <el-card class="card-items" shadow="always">
 
                     <div class="g-start">
@@ -71,7 +71,8 @@
                 <el-card class="card-items" shadow="always">
 
                     <div class="g-start">
-                        <span style="font-size: 120%; font-weight: 500;">常用功能</span>
+                        <span style="font-size: 120%; font-weight: 500;">常用功能</span>&nbsp;
+                        <el-button type="text" @click="guidePage()" size="mini">新手引导<i class="el-icon-right"></i></el-button>
                     </div>
 
                     <div class="nav-box">
@@ -94,7 +95,7 @@
 
 
 
-            <div class="card-items" style="width: 25%;padding: 0px;">
+            <div v-if="!isMobile()" class="card-items" style="width: 25%;padding: 0px;">
                 <div style="display: flex; justify-content: center">
                     <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
                 </div>
@@ -231,6 +232,12 @@
             guidePage(){
                 this.$router.push("/guide")
             },
+
+            isMobile(){
+                let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+                return flag;
+            },
+
             drawTodayData(){
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
@@ -488,6 +495,14 @@
         height: 235px;
         margin: -30px 0 -30px 0;
         width: 100%;
+    }
+
+    .width-100{
+        width: 100%;
+    }
+
+    .width-75{
+        width: 75%;
     }
 
 </style>

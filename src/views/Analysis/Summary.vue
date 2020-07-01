@@ -32,7 +32,7 @@
 				<el-divider style="margin: 0"></el-divider>
 
 				<div class="mei-components-data-overview__row">
-					<div class="mei-components-data-overview__item" style="width: 25%;" v-for="item in indicators"
+					<div class="mei-components-data-overview__item" style="width: 25%;" v-for="item in indicators.slice(0,4)"
 					     @click="indicatorsChange(item.key)"
 					     :style="{'--color': themeColor}"
 					     v-bind:class="{ 'active': indicators_key_active===item.key}">
@@ -42,6 +42,38 @@
 
 								<div class="zent-popover-wrapper zent-pop-wrapper" style="display: inline-block;">
 <!--									<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />-->
+
+									<el-popover
+										placement="bottom"
+										trigger="hover">
+										<span class="sub-text" v-for="desc in item.description">{{desc}}<br></span>
+										<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />
+									</el-popover>
+								</div>
+							</div>
+							<div class="mei-components-data-overview__item-value">{{summaryData[item.key].sum}}</div>
+						</div>
+
+
+						<div v-if="indicators_key_active===item.key">
+							<svg-icon slot="reference" icon-class="check_mark" class="icon"
+							          :style="{'--color': themeColor}"/>
+						</div>
+
+					</div>
+				</div>
+
+				<div class="mei-components-data-overview__row">
+					<div class="mei-components-data-overview__item" style="width: 25%;" v-for="item in indicators.slice(4, 8)"
+					     @click="indicatorsChange(item.key)"
+					     :style="{'--color': themeColor}"
+					     v-bind:class="{ 'active': indicators_key_active===item.key}">
+						<div class="mei-components-data-overview__item-wrap">
+							<div class="mei-components-data-overview__item-title">
+								<span class="mei-components-data-overview__item-title">{{item.label}}({{item.unit}})</span>
+
+								<div class="zent-popover-wrapper zent-pop-wrapper" style="display: inline-block;">
+									<!--									<svg-icon slot="reference" icon-class="dashboard_question" width="20" height="20" />-->
 
 									<el-popover
 										placement="bottom"
