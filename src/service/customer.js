@@ -86,5 +86,11 @@ export default {
     async getCustomerCountingUseRecord(id) {
         const url = `${config.server.url}/customer/data/counting_use/${id}`;
         return await request('get', url)
+    },
+
+    // 客户绑定公众号
+    async CustomerPubBind(params) {
+        const url = `${config.server.url}/customer/customer_pub_bind`;
+        return await request('post', url, params)
     }
 }

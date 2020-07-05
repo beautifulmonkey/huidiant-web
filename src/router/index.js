@@ -5,6 +5,7 @@ import NotFound from '@/views/Error/404'
 import Home from '@/views/Home'
 import Receipts from '@/components/Receipts/Receipts'
 import Cashier from '@/views/Cashier'
+import BindPublic from '@/views/Customer/BindPublic'
 import Intro from '@/views/Intro/Intro'
 // import Generator from '@/views/Generator/Generator'
 import api from '@/http/api'
@@ -51,6 +52,11 @@ const router = new Router({
       path: '/receipts',
       name: '收据处理',
       component: Receipts
+    },
+    {
+      path: '/bind/:openId',
+      name: '客户绑定',
+      component: BindPublic
     }
   ]
 })
@@ -68,7 +74,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    if (!token) {
+    if (!token && to.path.slice(0,5) !== '/bind') {
       // 如果访问非登录界面，且户会话信息不存在，代表未登录，则跳转到登录界面
       next({ path: '/login' })
     } else {

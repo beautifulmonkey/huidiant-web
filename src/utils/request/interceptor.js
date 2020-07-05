@@ -31,7 +31,7 @@ const errorDetail = function(error) {
     let detail = ''
     switch (status) {
       case 400:
-        detail = '无效的操作!'
+        detail = ''
         break
       case 401:
         detail = '无效授权, 请重新登录(401)!'
@@ -76,7 +76,7 @@ const errorDetail = function(error) {
     }
     if (resData) {
       const resDetail = resData.detail
-      detail = `${detail}--${resDetail}`
+      detail = `${detail} ${resDetail}`
     }
     return { code: status, detail: detail }
   } else {
