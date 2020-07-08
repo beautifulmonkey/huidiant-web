@@ -10,10 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import '@/assets/iconfont/iconfont.css'
 import '@/icons'
-import echarts from 'echarts'
 import BaiduMap from 'vue-baidu-map'
-Vue.prototype.$echarts = echarts
-
 
 Vue.use(ElementUI)
 Vue.use(BaiduMap, {

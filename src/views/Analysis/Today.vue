@@ -134,6 +134,8 @@
 <script>
     import analysisApi from '@/service/analysis.js'
     import {mapState} from "vuex";
+    // echarts相关
+    let echarts = require('echarts');
 
     export default {
         name: "Today",
@@ -242,7 +244,7 @@
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
                 var bar_dv = this.$refs.chartToday;
-                let chartToday = this.$echarts.init(bar_dv);
+                let chartToday = echarts.init(bar_dv);
 
                 let chartData = [
                     this.summaryData.today.chart.cash_product_service,
@@ -300,7 +302,7 @@
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
                 var bar_dv = this.$refs.chartWeeK;
-                let chartWeeK = this.$echarts.init(bar_dv);
+                let chartWeeK = echarts.init(bar_dv);
 
                 var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
 

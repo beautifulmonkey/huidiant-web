@@ -156,6 +156,16 @@
 <script>
     import {mapState} from "vuex";
     import analysisApi from '@/service/analysis.js'
+    // echarts相关
+    let echarts = require('echarts');
+
+    // let echarts = require('echarts/lib/echarts');
+    // require('echarts/lib/chart/pie');
+    // require('echarts/lib/chart/line');
+    // require('echarts/lib/component/tooltip');
+    // require('echarts/lib/component/toolbox');
+    // require('echarts/lib/component/legend');
+    // require('echarts/lib/component/markLine');
 
     export default {
         name: "Summary",
@@ -256,7 +266,7 @@
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
                 var bar_dv = this.$refs.chartIndicators;
-                let chartIndicators = this.$echarts.init(bar_dv);
+                this.chartIndicators = echarts.init(bar_dv);
 
                 let label_name = this.indicators.filter(item => item.key === this.indicators_key_active)[0].label;
 
@@ -265,7 +275,7 @@
 
                 var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
                 // 绘制图表
-                chartIndicators.setOption({
+                this.chartIndicators.setOption({
 
                     tooltip: {
                         trigger: 'axis',
@@ -336,7 +346,7 @@
                 // 基于准备好的dom，初始化echarts实例
                 // let myChart = this.$echarts.init(document.getElementById('myChart'))
                 var bar_dv = this.$refs.chartPie;
-                let chartPie = this.$echarts.init(bar_dv);
+                this.chartPie = echarts.init(bar_dv);
 
                 let data = this.summaryData[this.tradingRadio];
 
@@ -353,7 +363,7 @@
                 });
 
                 // 绘制图表
-                chartPie.setOption({
+                this.chartPie.setOption({
                     title: {
                         zlevel: 0,
                         text: [

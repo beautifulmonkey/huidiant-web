@@ -109,13 +109,13 @@ const webpackConfig = merge(baseWebpackConfig, {
       minChunks: 3
     }),
 
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'echarts',
-      chunks: ['vendor', 'manifest', 'app'],
-      minChunks: function(module, count) {
-        return module.resource && /echarts/.test(module.resource)
-      }
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'echarts',
+    //   chunks: ['vendor', 'manifest', 'app'],
+    //   minChunks: function(module, count) {
+    //     return module.resource && /echarts/.test(module.resource)
+    //   }
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'elementui',
       chunks: ['vendor', 'manifest', 'app'],
