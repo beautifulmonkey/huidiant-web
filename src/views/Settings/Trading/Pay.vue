@@ -186,4 +186,8 @@
 		margin-right: 16px;
 		margin-top: 16px;
 	}
+
+	.el-divider {
+		height: 15px !important;
+	}
 </style>

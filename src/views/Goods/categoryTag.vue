@@ -287,5 +287,7 @@
 </script>
 
 <style scoped>
-
+    .el-divider {
+        height: 15px !important;
+    }
 </style>
