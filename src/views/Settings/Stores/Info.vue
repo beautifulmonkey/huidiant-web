@@ -17,7 +17,7 @@
 		<div class="title">地图定位</div>
 
 		<div style="width: 90%;height: 100px;margin: 30px;">
-			<baidu-map :center="center" :zoom="zoom" @ready="handler" style="height:500px;margin-bottom: 50px;" @click="getClickInfo" :scroll-wheel-zoom='true'></baidu-map>
+			<div style="height:500px;margin-bottom: 50px;" id="map"></div>
 		</div>
 
 		<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
@@ -61,6 +61,7 @@
 <script>
 
     import storeSettingApi from '@/service/storeSetting.js'
+    import BMap from 'BMap'
 
     export default {
         name: "Info",
@@ -69,8 +70,6 @@
             return {
                 info: {},
                 dialogFormVisible: false,
-                center: {lng: 109.45744048529967, lat: 36.49771311230842},
-                zoom: 13,
                 ruleForm: {},
                 rules: {
                     stores_name: [
@@ -149,24 +148,20 @@
             },
 
 
-            handler ({BMap, map}) {
-                var point = new BMap.Point(116.404, 39.915)
-                map.centerAndZoom(point, 13)
-                var marker = new BMap.Marker(point) // 创建标注
-                map.addOverlay(marker) // 将标注添加到地图中
-                var circle = new BMap.Circle(point, 6, { strokeColor: 'Red', strokeWeight: 6, strokeOpacity: 1, Color: 'Red', fillColor: '#f03' })
-                map.addOverlay(circle)
+            createBMap () {
+                var map = new BMap.Map('map');
+                var point = new BMap.Point(116.404, 39.915);
+                map.centerAndZoom(point, 13);
+                map.addControl(new BMap.MapTypeControl());
+                map.enableScrollWheelZoom(true);
+                map.enableDoubleClickZoom(true);
+                var marker = new BMap.Marker(point);
+                map.addOverlay(marker)
             },
-            getClickInfo (e) {
-                console.log(e.point.lng)
-                console.log(e.point.lat)
-                this.center.lng = e.point.lng
-                this.center.lat = e.point.lat
-            }
-
 	    },
         mounted() {
             this.getStoreInfo();
+            this.createBMap()
         }
     }
 </script>

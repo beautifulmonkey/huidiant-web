@@ -10,13 +10,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 import '@/assets/iconfont/iconfont.css'
 import '@/icons'
-import BaiduMap from 'vue-baidu-map'
 
 Vue.use(ElementUI)
-Vue.use(BaiduMap, {
-  ak: 'F5g7TtwB3sBzNS7AKWvtCQTtCqlxxtGw'
-});
-
 Vue.prototype.global = global
 
 new Vue({
