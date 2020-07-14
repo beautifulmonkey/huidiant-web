@@ -11,6 +11,7 @@
 <script>
 
 const version = require('element-ui/package.json').version // element-ui version from node_modules
+import eleindexStr from "./eleindex.js";
 const ORIGINAL_THEME = '#409EFF' // default color
 
 export default {
@@ -75,9 +76,8 @@ export default {
       const chalkHandler = getHandler('chalk', 'chalk-style')
 
       if (!this.chalk) {
-        // todo: 稳定性差
-        const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
-        this.getCSSString(url, chalkHandler, 'chalk')
+        // const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
+        this.getCSSString(chalkHandler, 'chalk')
       } else {
         chalkHandler()
       }
@@ -115,16 +115,19 @@ export default {
       return newStyle
     },
 
-    getCSSString(url, callback, variable) {
-      const xhr = new XMLHttpRequest()
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '')
-          callback()
-        }
-      }
-      xhr.open('GET', url)
-      xhr.send()
+    getCSSString(callback, variable) {
+      this[variable] = eleindexStr.replace(/@font-face{[^}]+}/, '');
+      callback()
+      // const url = `https://unpkg.com/element-ui@${version}/lib/theme-chalk/index.css`
+      // const xhr = new XMLHttpRequest()
+      // xhr.onreadystatechange = () => {
+      //   if (xhr.readyState === 4 && xhr.status === 200) {
+      //     this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '')
+      //     callback()
+      //   }
+      // }
+      // xhr.open('GET', url)
+      // xhr.send()
     },
 
     getThemeCluster(theme) {
