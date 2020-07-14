@@ -16,8 +16,12 @@
 
 		<div class="title">地图定位</div>
 
-		<div style="width: 90%;height: 100px;margin: 30px;">
-			<div style="height:500px;margin-bottom: 50px;" id="map"></div>
+		<div style="width: 90%;margin: 30px;">
+			<el-input v-model="addressKeyword" style="width: 400px;margin-bottom: 20px;" size="small" placeholder="请输入地址来直接查找相关位置"></el-input>
+			<baidu-map class="bmView" :scroll-wheel-zoom="true" :center="location" :zoom="zoom" @click="getLocationPoint" ak="F5g7TtwB3sBzNS7AKWvtCQTtCqlxxtGw">
+				<bm-view style="width: 100%; height:500px; flex: 1;margin-bottom: 50px;"></bm-view>
+				<bm-local-search :keyword="addressKeyword" :auto-viewport="true" style="display: none"></bm-local-search>
+			</baidu-map>
 		</div>
 
 		<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
@@ -61,11 +65,18 @@
 <script>
 
     import storeSettingApi from '@/service/storeSetting.js'
-    import BMap from 'BMap'
+
+    import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
+    import BmView from 'vue-baidu-map/components/map/MapView.vue'
+    import BmLocalSearch from 'vue-baidu-map/components/search/LocalSearch.vue'
 
     export default {
         name: "Info",
-
+        components: {
+            BaiduMap,
+            BmView,
+            BmLocalSearch
+        },
         data () {
             return {
                 info: {},
@@ -76,7 +87,13 @@
                         { required: true, message: '请输入门店名称', trigger: 'blur' },
                         { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
                     ],
-                }
+                },
+                location: {
+                    lng: 116.404,
+                    lat: 39.915
+                },
+                zoom: 13,
+                addressKeyword: "",
             }
         },
 
@@ -147,21 +164,24 @@
                 }
             },
 
-
-            createBMap () {
-                var map = new BMap.Map('map');
-                var point = new BMap.Point(116.404, 39.915);
-                map.centerAndZoom(point, 13);
-                map.addControl(new BMap.MapTypeControl());
-                map.enableScrollWheelZoom(true);
-                map.enableDoubleClickZoom(true);
-                var marker = new BMap.Marker(point);
-                map.addOverlay(marker)
-            },
+            getLocationPoint(e) {
+                this.lng = e.point.lng;
+                this.lat = e.point.lat;
+                /* 创建地址解析器的实例 */
+                let geoCoder = new BMap.Geocoder();
+                /* 获取位置对应的坐标 */
+                geoCoder.getPoint(this.addressKeyword, point => {
+                    this.selectedLng = point.lng;
+                    this.selectedLat = point.lat;
+                });
+                /* 利用坐标获取地址的详细信息 */
+                geocoder.getLocation(e.point, res => {
+                    console.log(res);
+                })
+            }
 	    },
         mounted() {
             this.getStoreInfo();
-            this.createBMap()
         }
     }
 </script>
