@@ -1,15 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/views/Login'
-import NotFound from '@/views/Error/404'
-import Home from '@/views/Home'
-import Receipts from '@/components/Receipts/Receipts'
-import Cashier from '@/views/Cashier'
-import BindPublic from '@/views/Customer/BindPublic'
-import Intro from '@/views/Intro/Intro'
-// import Generator from '@/views/Generator/Generator'
 import api from '@/http/api'
 import store from '@/store'
+import Home from '@/views/Home'
 import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
 import de from "element-ui/src/locale/lang/de";
 
@@ -20,12 +13,13 @@ const router = new Router({
     {
       path: '/',
       name: '首页',
+      // component: resolve => require([`@/views/Home`], resolve),
       component: Home,
       children: [
         {
           path: '/guide',
           name: '系统导航',
-          component: Intro,
+          component: resolve => require([`@/views/Intro/Intro`], resolve),
           meta: {
             icon: 'el-icon-question',
             index: 0
@@ -36,27 +30,27 @@ const router = new Router({
     {
       path: '/login',
       name: '登录',
-      component: Login
+      component: resolve => require([`@/views/Login`], resolve)
     },
     {
       path: '/cashier',
       name: '收银',
-      component: Cashier
+      component: resolve => require([`@/views/Cashier`], resolve)
     },
     {
       path: '/404',
       name: 'notFound',
-      component: NotFound
+      component: resolve => require([`@/views/Error/404`], resolve)
     },
     {
       path: '/receipts',
       name: '收据处理',
-      component: Receipts
+      component: resolve => require([`@/components/Receipts/Receipts`], resolve)
     },
     {
       path: '/bind/:openId',
       name: '客户绑定',
-      component: BindPublic
+      component: resolve => require([`@/views/Customer/BindPublic`], resolve)
     }
   ]
 })
