@@ -295,14 +295,14 @@
                 try {
                     const res = await cardApi.getCardOne(this.$route.params.id);
                     if (res.status >= 200 && res.status < 300) {
+                        this.ruleForm = res.data;
+                        this.ruleForm.counting_card_type = this.ruleForm.counting_card_type.toString()
+                        this.$refs.serviceComponent.initRight(this.ruleForm.rule.service)
                         if(res.data.valid_days!==-1){
                             this.valid_days_type = "1";
                         }else{
                             this.ruleForm.valid_days = null;
                         }
-                        this.ruleForm = res.data;
-                        this.ruleForm.counting_card_type = this.ruleForm.counting_card_type.toString()
-                        this.$refs.serviceComponent.initRight(this.ruleForm.rule.service)
                     } else {
                         this.$message({
                             type: 'error',
