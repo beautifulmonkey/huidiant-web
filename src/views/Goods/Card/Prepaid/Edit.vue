@@ -390,7 +390,7 @@
                     }
                     let price = "-";
                     if (item.price) {
-                        price = "￥" + item.price;
+                        price = item.price;
                     }
                     this.codeMap[item.code] = {
                         'label': item.label || '-',

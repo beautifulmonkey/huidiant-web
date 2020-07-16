@@ -304,7 +304,7 @@
                 var bar_dv = this.$refs.chartWeeK;
                 let chartWeeK = echarts.init(bar_dv);
 
-                var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
+                var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1E90FF"></span>'
 
                 // 绘制图表
                 chartWeeK.setOption({
@@ -345,15 +345,15 @@
                         type: 'line',
                         smooth: true,
                         lineStyle: {
-                            color: this.themeColor,
+                            color: "#1E90FF",
                             width: 5
                         },
                         areaStyle: {
-                            color: this.themeColor,
+                            color: "#1E90FF",
                             opacity: 0.2
                         },
                         itemStyle: {
-                            color: this.themeColor,
+                            color: "#1E90FF",
                         }
 
                     }]
@@ -363,9 +363,9 @@
 
 
         },
-        mounted() {
-            this.getAnalysisToday();
-        },
+        // mounted() {
+        //     this.getAnalysisToday();
+        // },
         watch: {
             themeColor: {
                 immediate: true,

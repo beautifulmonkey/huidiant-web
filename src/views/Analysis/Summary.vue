@@ -273,7 +273,7 @@
                 let x = this.summaryData.x;
                 let y = this.summaryData[this.indicators_key_active].y;
 
-                var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1197b8"></span>'
+                var dotHtml = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:#1E90FF"></span>'
                 // 绘制图表
                 this.chartIndicators.setOption({
 
@@ -327,15 +327,15 @@
 
                         smooth: true,
                         lineStyle: {
-                            color: this.themeColor,
+                            color: "#1E90FF",
                             width: 4
                         },
                         areaStyle: {
-                            color: this.themeColor,
+                            color: "#1E90FF",
                             opacity: 0.2
                         },
                         itemStyle: {
-                            color: this.themeColor,
+                            color: "#1E90FF",
                         }
 
                     }]
