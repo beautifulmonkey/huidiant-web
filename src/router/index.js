@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import api from '@/http/api'
 import store from '@/store'
 import Home from '@/views/Home'
 import { getIFramePath, getIFrameUrl } from '@/utils/iframe'
 import de from "element-ui/src/locale/lang/de";
+import menu_list from "./menu_map.js";
 
 Vue.use(Router)
 
@@ -108,30 +108,29 @@ function addDynamicMenuAndRoutes(userName, to, from) {
   // 处理IFrame嵌套页面
   handleIFrameUrl(to.path)
   if(store.state.app.menuRouteLoaded) {
-    // console.log('动态菜单和路由已经存在.');
     store.commit('switchNavTree', menuIndex);
     return
   }
-  api.menu.findNavTree({'userName':userName})
-  .then(res => {
-    // 添加动态路由
-    let dynamicRoutes = addDynamicRoutes(res.data);
-    // 处理静态组件绑定路由
-    handleStaticComponent(router, dynamicRoutes);
-    router.addRoutes(router.options.routes);
+  let dynamicRoutes = addDynamicRoutes(menu_list);
+  // 处理静态组件绑定路由
+  handleStaticComponent(router, dynamicRoutes);
+
+  // api.menu.findNavTree()
+  // .then(res => {
+  //   router.addRoutes(router.options.routes);
+  // })
+  //
+
+    setTimeout(() => {
+      // todo: 待优化: 加定时器是为了防止异步导致router还没加载完成
+      router.addRoutes(router.options.routes);
+    }, 10);
+
     // 保存加载状态
     store.commit('menuRouteLoaded', true);
     // 保存菜单树
-    store.commit('setBaseNavTree', baseNavTree(res.data));
+    store.commit('setBaseNavTree', baseNavTree(menu_list));
     store.commit('switchNavTree', menuIndex);
-  }).then(res => {
-    api.user.findPermissions({'name':userName}).then(res => {
-      // 保存用户权限标识集合
-      store.commit('setPerms', res.data)
-    })
-  })
-  .catch(function(res) {
-  })
 }
 
 /**

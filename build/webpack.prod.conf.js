@@ -131,13 +131,13 @@ const webpackConfig = merge(baseWebpackConfig, {
     //     return module.resource && /vue-baidu-map/.test(module.resource)
     //   }
     // }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'mockjs',
-      chunks: ['vendor', 'manifest', 'app'],
-      minChunks: function(module, count) {
-        return module.resource && /mockjs/.test(module.resource)
-      }
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'mockjs',
+    //   chunks: ['vendor', 'manifest', 'app'],
+    //   minChunks: function(module, count) {
+    //     return module.resource && /mockjs/.test(module.resource)
+    //   }
+    // }),
     // copy custom static assets
     new CopyWebpackPlugin([
       {

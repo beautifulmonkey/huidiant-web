@@ -66,7 +66,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import mock from "@/mock/index"
 import Hamburger from "@/components/Hamburger"
 import ThemePicker from "@/components/ThemePicker"
 import LangSelector from "@/components/LangSelector"
@@ -74,7 +73,6 @@ import Action from "@/components/Toolbar/Action"
 import NoticePanel from "@/views/Core/NoticePanel"
 import MessagePanel from "@/views/Core/MessagePanel"
 import PersonalPanel from "@/views/Core/PersonalPanel"
-// import Screenfull from '@/views/HeadBar/Screenfull'
 import Screenfull from '@/components/ScreenFull/Screenfull'
 
 export default {
