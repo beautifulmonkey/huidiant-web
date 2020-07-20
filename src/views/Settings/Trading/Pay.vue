@@ -5,7 +5,7 @@
 				placement="right"
 				trigger="click"
 				v-model="visible">
-				<el-input size="mini" v-model="Form.name" placeholder="请输入来源名称"></el-input>
+				<el-input size="mini" v-model="Form.name" placeholder="请输入支付名称"></el-input>
 				<div style="text-align: right; margin: 5px;">
 					<el-button size="mini" type="text" @click="clearBindData()">取消</el-button>
 					<el-button type="primary" size="mini" @click="addData()">确定</el-button>

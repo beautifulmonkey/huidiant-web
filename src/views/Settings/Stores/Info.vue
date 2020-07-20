@@ -24,7 +24,7 @@
 			</baidu-map>
 		</div>
 
-		<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+		<el-dialog title="店铺信息" :visible.sync="dialogFormVisible">
 
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="门店名称" prop="stores_name">

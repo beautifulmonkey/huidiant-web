@@ -196,22 +196,22 @@ var menu_list = [
                 "hidden": true,
                 "children": []
             },
-            {
-                "id": "/orders/refund",
-                "name": "退款列表(开发中)",
-                "url": "/orders/refund",
-                "icon": "el-icon-s-finance",
-                "disabled": true,
-                "children": []
-            },
-            {
-                "id": "/orders/debt",
-                "name": "欠款列表(开发中)",
-                "url": "/orders/debt",
-                "icon": "el-icon-s-claim",
-                "disabled": true,
-                "children": []
-            }
+            // {
+            //     "id": "/orders/refund",
+            //     "name": "退款列表(开发中)",
+            //     "url": "/orders/refund",
+            //     "icon": "el-icon-s-finance",
+            //     "disabled": true,
+            //     "children": []
+            // },
+            // {
+            //     "id": "/orders/debt",
+            //     "name": "欠款列表(开发中)",
+            //     "url": "/orders/debt",
+            //     "icon": "el-icon-s-claim",
+            //     "disabled": true,
+            //     "children": []
+            // }
         ]
     },
     {
@@ -229,6 +229,11 @@ var menu_list = [
                         "name": "店铺信息",
                         "url": "/settings/stores/info",
                         // "icon": "el-icon-s-shop",
+                    },
+                    {
+                        "id": "/settings/stores/employees",
+                        "name": "员工管理",
+                        "url": "/settings/stores/employees",
                     },
                     {
                         "id": "/settings/stores/shops",
