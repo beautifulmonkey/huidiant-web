@@ -908,6 +908,10 @@
         mounted() {
             // todo:  query参数为什么要从history里去
             let uid = this.$router.history.current.query.uid;
+            let cType = this.$router.history.current.query.cType;
+            if (cType) {
+                this.menuActive = cType
+            }
             if (uid){
                 this.initCustomer(uid)
             }

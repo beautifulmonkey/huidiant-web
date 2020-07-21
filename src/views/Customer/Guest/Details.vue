@@ -20,7 +20,8 @@
 
                     <div>
                         <el-button size="mini" @click="$router.push({path: '/cashier', query: {uid: $route.params.id}})">开单</el-button>
-                        <el-button size="mini" @click="$router.push('/cashier')">办卡</el-button>
+                        <el-button size="mini" @click="$router.push(
+                            {path: '/cashier', query: {uid: $route.params.id, cType: 'createCard'}})">办卡</el-button>
                     </div>
                 </div>
 
