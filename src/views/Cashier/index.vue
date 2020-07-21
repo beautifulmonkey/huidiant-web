@@ -39,11 +39,7 @@
 
         </div>
         <div class="main-box" id="main-box">
-<!--            <div class="padding-10">-->
-<!--                <el-input placeholder="请输入内容(搜索功能开发中)" size="small">-->
-<!--                    <el-button slot="append" icon="el-icon-search"></el-button>-->
-<!--                </el-input>-->
-<!--            </div>-->
+
             <div class="padding-20">
                 <!--消费组件-->
                 <consume-component
@@ -78,6 +74,8 @@
             </div>
         </div>
         <div class="main-shopping" id="main-shopping">
+            <!--订单信息遮罩层-->
+            <div v-if="condition_details" class="cover-shopping" :style="coverShoppingCss()"></div>
             <div class="align-justify-center shopping-title">消费清单</div>
             <!--客户选择区域-->
             <div style="height: 100px;margin-top: 20px">
@@ -85,7 +83,7 @@
                 <div v-if="!isChooseCustomer" class="customer-search">
                     <el-autocomplete
                             v-model="customerKeyWord"
-                            placeholder="客户名、手机号  (不选择客户则为现金模式)"
+                            placeholder="客户名、手机号（默认散客）"
                             :trigger-on-focus="false"
                             :fetch-suggestions="customerQuery"
                             value-key="label"
@@ -405,50 +403,38 @@
                 </div>
             </div>
 
-            <!--todo: 订单备注功能-->
             <!--todo: 赠送服务功能-->
 
             <!--收款底栏-->
             <div>
-<!--                <div class="footer-info border-b">-->
-<!--                    <div style="display: flex;justify-content: space-between">-->
-<!--                        <span>订单信息</span>-->
-<!--                        <div style="margin-right: 100px;">-->
-<!--                            <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-up" @click="condition_details=true">展开</el-button>-->
-<!--                            <el-button type="text" v-if="condition_details" icon="el-icon-arrow-down" @click="condition_details=false">收起</el-button>-->
-<!--                        </div>-->
+                <div class="border-b footer-info" :class="{ 'footer-info-status': !condition_details, 'footer-info-view': condition_details }">
+                    <div class="footer-info-status-box">
+                        <span style="font-size: 14px">订单信息
+                            <span class="collapse-tip" v-if="!condition_details">(已折叠)</span>
+                        </span>
+                        <div style="margin-right: 100px;">
+                            <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-up" @click="condition_details=true">展开</el-button>
+                            <el-button type="text" v-if="condition_details" icon="el-icon-arrow-down" @click="condition_details=false">收起</el-button>
+                        </div>
+                    </div>
 
-<!--                        <el-drawer-->
-<!--                            title="我是标题"-->
-<!--                            append-to-body-->
-<!--                            :modal-append-to-body-->
-<!--                            :visible.sync="condition_details"-->
-<!--                            direction="btt">-->
-<!--                            <span>我来啦!</span>-->
-<!--                        </el-drawer>-->
-
-<!--                    </div>-->
-
-<!--                </div>-->
-
-                <div class="footer-amount border-b">
-                    <span style="margin-right: 70px;font-size: 0.9rem">待收款金额：<strong>￥{{getAmountContext()}}</strong></span>
+                    <div v-if="condition_details" style="background: #f7f8fa;padding: 15px;">
+                        <div class="displayFlex">
+                            <span>员工:</span>
+                            <div class="_2ITU5c_dEAnyE5mRDOpKy8"><i class="el-icon-plus"></i>&nbsp;手艺人/员工</div>
+                        </div>
+                        <div class="displayFlex" style="align-items: flex-start">
+                            <span>备注:</span>
+                            <el-input clearable type="textarea" rows="3" resize="none" v-model="order_description" style="width: 80%" placeholder="输入备注"></el-input>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="footer-handle">
-<!--                    <el-button style="margin-right: 20px;">订单信息</el-button>-->
-                    <el-popover
-                        style="margin-right: 20px;"
-                        placement="top"
-                        trigger="click">
-                        <div style="text-align: left">
-<!--                            <span>备注:</span> -->
-                            <el-input clearable type="textarea" v-model="order_description"
-                                    style="width: 400px" placeholder="输入备注"></el-input>
-                        </div>
-                        <el-button v-if="!order_description" slot="reference">备注</el-button>
-                        <el-button v-if="order_description" slot="reference">修改备注</el-button>
-                    </el-popover>
+                    <div style="display: flex;align-items: center;margin-left: 15px;">
+                        <span style="font-weight: 500;font-size: 15px;">待收款：</span>
+                        <span class="footer-pay-amount">¥{{getAmountContext()}}</span>
+                    </div>
 
                     <pay-component ref="payComponent"
                                    :payAmount="parseFloat(payAmount)"
@@ -541,6 +527,15 @@
                }
                 return '300';
             },
+
+            coverShoppingCss(){
+                const container = window.document.getElementById('main-shopping');
+                if(container){
+                    return  'height: ' + (container.clientHeight - 310) + 'px;' + 'width: ' + container.clientWidth  + 'px;'
+                }
+                return 'height: 300px;width: 300px;';
+            },
+
             ButtonClick(data){
                 this.menuActive = data
             },
@@ -971,12 +966,6 @@
         padding-top: 20px;
     }
 
-    .padding-10{
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-top: 10px;
-    }
-
     .align-justify-center{
         display: flex;
         align-items:center;
@@ -1021,23 +1010,21 @@
         width: 100%
     }
 
-    /*.footer-info{*/
-    /*    height: 40px;*/
-    /*    width: 50%;*/
-    /*    position: fixed;*/
-    /*    bottom: 120px;*/
-    /*}*/
-
-    .footer-amount{
-        height: 40px;
-        width: 50%;
-        background-color: white;
+    .footer-info {
+        z-index: 3;
         position: fixed;
         bottom: 80px;
-        color: #d40000;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
+        width: 50%;
+        background: #fff;
+        padding: 0 15px;
+    }
+    .footer-info-status{
+        height: 40px;
+    }
+
+    .footer-info-view{
+        height: 230px;
+        text-align: left;
     }
     .footer-handle{
         height: 80px;
@@ -1047,7 +1034,7 @@
         bottom: 0;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: space-between;
     }
     .search-item {
         display: flex;
@@ -1071,5 +1058,61 @@
     .change-price-item /deep/ .el-input-group__append {
         padding: 0 9px !important;
     }
+    .cover-shopping{
+        position: absolute;
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*top: 0;*/
+        /*left: 0;*/
+        z-index: 999;
+        background-color: rgba(50,50,51,.3);
+    }
+    .collapse-tip {
+        color: #969799;
+        font-size: 12px;
+    }
 
+    .footer-info-status-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center
+    }
+
+    .displayFlex{
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .displayFlex span{
+        margin-right: 10px;
+    }
+
+    ._2ITU5c_dEAnyE5mRDOpKy8 {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        height: 30px;
+        min-width: 30px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        border-radius: 4px;
+        border: 1px dashed #c8c9cc;
+        padding: 0 10px;
+        cursor: pointer;
+    }
+
+
+    .footer-pay-amount{
+        color: #fe2278;
+        font-size: 26px;
+        font-weight: 600;
+    }
 </style>
