@@ -9,6 +9,12 @@ export default {
         return await request('get', url)
     },
 
+    // 获取员工结构
+    async getEMMap() {
+        const url = `${config.server.url}/setting/employees/em_map`;
+        return await request('get', url)
+    },
+
     // 获取单个员工
     async getEMOne(id) {
         const url = `${config.server.url}/setting/employees/em/${id}`;

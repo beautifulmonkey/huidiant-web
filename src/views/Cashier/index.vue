@@ -421,7 +421,14 @@
                     <div v-if="condition_details" style="background: #f7f8fa;padding: 15px;">
                         <div class="displayFlex">
                             <span>员工:</span>
-                            <div class="_2ITU5c_dEAnyE5mRDOpKy8"><i class="el-icon-plus"></i>&nbsp;手艺人/员工</div>
+                            <div v-if="checkboxEMList.length" style="margin-right: 10px;">
+                                {{getCheckEMList("str")}}
+                            </div>
+
+                            <div @click="getEMMap" class="_2ITU5c_dEAnyE5mRDOpKy8">
+                                <div v-if="!checkboxEMList.length"><i class="el-icon-plus"></i>&nbsp;手艺人/员工</div>
+                                <div v-else><i class="el-icon-edit-outline"></i>&nbsp;编辑</div>
+                            </div>
                         </div>
                         <div class="displayFlex" style="align-items: flex-start">
                             <span>备注:</span>
@@ -445,6 +452,25 @@
                 </div>
             </div>
 
+
+            <el-dialog title="订单 手艺人/员工" :visible.sync="dialogVisibleEM" style="text-align: left">
+                <div>
+                    <div class="pt-box" v-for="ptitem in emList">
+                        <span style="width: 100px">{{ptitem.pt_name}}:</span>
+                        <div>
+                            <el-checkbox-group v-model="checkboxEMList" size="mini">
+                                <div v-for="emitem in ptitem.em_list" style="display: inline-block">
+                                    <el-checkbox style="margin-bottom: 5px;margin-right: 5px;"  size="mini" :label="emitem.id" border>{{emitem.name}}</el-checkbox>
+                                </div>
+                            </el-checkbox-group>
+                        </div>
+                    </div>
+                </div>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleEM = false">确 定</el-button>
+                </span>
+            </el-dialog>
         </div>
     </div>
 
@@ -463,6 +489,7 @@
     import customerApi from '@/service/customer.js'
     import cardApi from '@/service/card.js'
     import cashierApi from '@/service/cashier.js'
+    import storeSettingEmApi from '@/service/storeSettingEm.js'
     import ThemePicker from "@/components/ThemePicker"
 
     export default {
@@ -478,11 +505,16 @@
         },
         data() {
             return {
+                checkboxEMList: [],
                 menuActive: 'consume',
                 customerKeyWord: '',
                 isChooseCustomer: false,  // 当前是否选择了客户
                 chooseCustomerData: {},  // 当前选择客户的信息
                 order_description: null,
+                order_employees: [],
+                emList: [],  // 员工列表
+                emMap: {},
+                dialogVisibleEM: false,
                 // 消费清单列表-消费
                 shoppingCartConsumeList: [],
                 discountChangeVal: null,
@@ -559,6 +591,51 @@
                     return counting
                 }else {
                     return 999
+                }
+            },
+
+            // 指定员工-获取员工列表
+            async getEMMap(){
+                this.dialogVisibleEM = true;
+                if (this.emList.length){
+                    return
+                }
+                try {
+                    const res = await storeSettingEmApi.getEMMap();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.emList = res.data;
+                        let em_map = {};
+                        this.emList.forEach((ptitem,index,array)=>{
+                            ptitem.em_list.forEach((emitem,index,array)=>{
+                                em_map[emitem.id] = emitem.name
+                            });
+                        });
+                        this.emMap = em_map
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取员工列表失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 获取选中的员工名字列表
+            getCheckEMList(type){
+                if (type === 'str'){
+                    let res = [];
+                    this.checkboxEMList.forEach((item_id,index,array)=>{
+                        res.push(this.emMap[item_id]);
+                    });
+                    return res.join("、")
+                }else if(type === 'list'){
+                    let employees_list = [];
+                    this.checkboxEMList.forEach((item_id,index,array)=>{
+                        employees_list.push({id: item_id, name: this.emMap[item_id]});
+                    });
+                    return employees_list
                 }
             },
 
@@ -782,6 +859,7 @@
                     orderData = this.createOrderRecharge(orderPayInfo)
                 }
                 orderData.description = this.order_description;
+                orderData.employees = this.getCheckEMList("list");
                 console.log(orderData);
                 // 请求后端接口
                 this.cashierDeal(orderData)
@@ -1118,5 +1196,13 @@
         color: #fe2278;
         font-size: 26px;
         font-weight: 600;
+    }
+
+    .pt-box{
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px dashed #c8c9cc;
+        margin-bottom: 10px;
     }
 </style>
