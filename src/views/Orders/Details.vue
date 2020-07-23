@@ -14,6 +14,11 @@
                         <span class="label" >收款时间：</span>
                         <span class="text" >{{orderData.created_at}}</span>
                     </div>
+
+                    <div style="width: 350px">
+                        <span class="label" >手艺人/员工：</span>
+                        <span class="text" >{{orderData.employees || '-'}}</span>
+                    </div>
                 </div>
 
                 <div class="order-remark" v-if="orderData.description">
