@@ -75,21 +75,17 @@
                         <el-button type="text" @click="guidePage()" size="mini">新手引导<i class="el-icon-right"></i></el-button>
                     </div>
 
-                    <div class="nav-box">
-
-                        <el-card shadow="hover" @click.native="$router.push('/cashier')">
-                            <div class="data-center"><span>开单收银</span></div>
-                        </el-card>
-
-                        <el-card shadow="hover" @click.native="$router.push('/customer/guest')">
-                            <div class="data-center"><span>添加客户</span></div>
-                        </el-card>
-
-                        <el-card shadow="hover" @click.native="$router.push('/orders/list')">
-                            <div class="data-center"><span>订单列表</span></div>
-                        </el-card>
-
+                    <div class="row-7 shortcut-wrap card-content">
+                        <div class="col" v-for="item in functionGuide">
+                            <a class="shortcut-item" @click="$router.push(item.router)">
+                                <span class="icon el-avatar el-avatar--square" :class="item.className">
+                                    <img :src="item.imgSrc" class="shortcut-icon">
+                                </span>
+                                <span class="text">{{item.funcName}}</span>
+                            </a>
+                        </div>
                     </div>
+
                 </el-card>
             </div>
 
@@ -179,6 +175,16 @@
                         description: [
                             "1.指售充值卡, 次卡的总张数"
                         ]}
+                ],
+
+                functionGuide: [
+                    {funcName: "开单收银", imgSrc: require("@/assets/img/today_kaidan.png"), className: "icon1", router:"/cashier"},
+                    {funcName: "订单列表", imgSrc: require("@/assets/img/today_dingdan.png"), className: "icon2", router: "/orders/list"},
+                    {funcName: "客户查询", imgSrc: require("@/assets/img/today_kehu.png"), className: "icon3", router: "/customer/guest"},
+                    {funcName: "快捷开卡", imgSrc: require("@/assets/img/today_kaika.png"), className: "icon4", router: {path: '/cashier', query: {cType: 'createCard'}}},
+                    {funcName: "快捷划卡", imgSrc: require("@/assets/img/today_huaka.png"), className: "icon5", router: {path: '/cashier', query: {cType: 'counting'}}},
+                    {funcName: "余额充值", imgSrc: require("@/assets/img/today_chongzhi.png"), className: "icon6", router: {path: '/cashier', query: {cType: 'recharge'}}},
+                    {funcName: "余额消费", imgSrc: require("@/assets/img/today_xiaofei.png"), className: "icon7", router: "/cashier"},
                 ],
 
                 summaryData: {
@@ -383,21 +389,6 @@
         justify-content: space-between
     }
 
-    .data-center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .nav-box{
-        padding: 20px;
-        display: flex;
-    }
-
-    .nav-box .el-card{
-        margin-right: 20px;
-    }
-
     .card-items {
         margin: 20px;
         text-align: left;
@@ -507,4 +498,139 @@
         width: 75%;
     }
 
+    .card-content {
+        text-align: center;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .row-7 {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    .col {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        height: 140px;
+        width: 20%;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .shortcut-item {
+        display: block;
+        margin: auto;
+        cursor: pointer;
+    }
+
+    .shortcut-item .icon.icon1 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(203, 101, 237, .5);
+        box-shadow: 0 2px 8px 0 rgba(203, 101, 237, .5);
+    }
+    .shortcut-item:hover .icon.icon1 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(203,101,237,.5);
+        box-shadow: 0 6px 15px 0 rgba(203,101,237,.5);
+    }
+
+
+    .shortcut-item .icon.icon2 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(161,105,255,.5);
+        box-shadow: 0 2px 8px 0 rgba(161,105,255,.5);
+    }
+    .shortcut-item:hover .icon.icon2 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(161,105,255,.5);
+        box-shadow: 0 6px 15px 0 rgba(161,105,255,.5);
+    }
+
+
+    .shortcut-item .icon.icon3 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(161,105,255,.5);
+        box-shadow: 0 2px 8px 0 rgba(161,105,255,.5);
+    }
+    .shortcut-item:hover .icon.icon3 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(161,105,255,.5);
+        box-shadow: 0 6px 15px 0 rgba(161,105,255,.5);
+    }
+
+
+    .shortcut-item .icon.icon4 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(35,190,177,.5);
+        box-shadow: 0 2px 8px 0 rgba(35,190,177,.5);
+    }
+    .shortcut-item:hover .icon.icon4 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(35,190,177,.5);
+        box-shadow: 0 6px 15px 0 rgba(35,190,177,.5);
+    }
+
+
+    .shortcut-item .icon.icon5 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(50,200,228,.5);
+        box-shadow: 0 2px 8px 0 rgba(50,200,228,.5);
+    }
+    .shortcut-item:hover .icon.icon5 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(50,200,228,.5);
+        box-shadow: 0 6px 15px 0 rgba(50,200,228,.5);
+    }
+
+
+    .shortcut-item .icon.icon6 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(255,180,63,.5);
+        box-shadow: 0 2px 8px 0 rgba(255,180,63,.5);
+    }
+    .shortcut-item:hover .icon.icon6 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(255,180,63,.5);
+        box-shadow: 0 6px 15px 0 rgba(255,180,63,.5);
+    }
+
+
+    .shortcut-item .icon.icon7 {
+        -webkit-box-shadow: 0 2px 8px 0 rgba(255,180,63,.5);
+        box-shadow: 0 2px 8px 0 rgba(255,180,63,.5);
+    }
+    .shortcut-item:hover .icon.icon7 {
+        -webkit-box-shadow: 0 6px 15px 0 rgba(255,180,63,.5);
+        box-shadow: 0 6px 15px 0 rgba(255,180,63,.5);
+    }
+
+    .shortcut-item:hover .el-avatar{
+        transform:translateY(-5px);
+    }
+
+    .shortcut-wrap .icon {
+        -webkit-transition: transform .3s cubic-bezier(.075,.82,.165,1);
+        transition: transform .3s cubic-bezier(.075,.82,.165,1);
+    }
+    .shortcut-wrap .el-avatar--square {
+        border-radius: 8px;
+    }
+
+    .shortcut-wrap .el-avatar {
+        width: 56px;
+        height: 56px;
+        line-height: 56px;
+    }
+    .el-avatar {
+        display: inline-block;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        text-align: center;
+        overflow: hidden;
+        color: #fff;
+        background: #c0c4cc;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+    }
+
+    .text {
+        display: block;
+        color: #505050;
+        font-size: 15px;
+    }
 </style>

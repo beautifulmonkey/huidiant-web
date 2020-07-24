@@ -71,7 +71,7 @@ import ThemePicker from "@/components/ThemePicker"
 import LangSelector from "@/components/LangSelector"
 import Action from "@/components/Toolbar/Action"
 import NoticePanel from "@/views/Core/NoticePanel"
-import MessagePanel from "@/views/Core/MessagePanel"
+// import MessagePanel from "@/views/Core/MessagePanel"
 import PersonalPanel from "@/views/Core/PersonalPanel"
 import Screenfull from '@/components/ScreenFull/Screenfull'
 
@@ -82,7 +82,6 @@ export default {
         LangSelector,
         Action,
         NoticePanel,
-        MessagePanel,
         PersonalPanel,
         Screenfull
   },
