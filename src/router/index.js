@@ -79,22 +79,21 @@ router.beforeEach((to, from, next) => {
 
       // 加载动态菜单和路由
       addDynamicMenuAndRoutes(userName, to, from);
-      // todo: 艹 OBServer如何获取数据????????
-      const menuindex = ["/goods", "/customer", "/orders", "/analysis", "/settings"];
-      const hidden_map = {
-        "/goods/service/add": "/goods/service",
-        "/goods/product/add": "/goods/product",
-        "/goods/card/add/numbers": "/goods/card",
-        "/goods/card/add/prepaid": "/goods/card",
-      };
+
+      // 获取有重定向的一级菜单列表
+      const menuindex = menu_list.map(function(i){if(i.redirect){return i.menuIndex;}}).filter(item => item);
+
       if (menuindex.indexOf(to.path) === -1 ){
-        if (hidden_map[to.path]){
-          store.commit('setSelectActive', hidden_map[to.path]);  // todo: 不管用
-        }else {
-          store.commit('setSelectActive', to.path);
-        }
+        store.commit('setSelectActive', to.path);
         next()
       }
+
+      // 请求一级菜单时跳转到重定向页面
+      let toMenu = menu_list.filter(item => item.menuIndex === to.path)
+      if (toMenu.length && toMenu[0].redirect){
+        next({ path: toMenu[0].redirect })
+      }
+
     }
   }
 })

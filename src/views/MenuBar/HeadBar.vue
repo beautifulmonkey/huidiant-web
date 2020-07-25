@@ -1,5 +1,5 @@
 <template>
-  <div class="headbar position-left">
+  <div class="headbar" :class="navTree.length?'position-left':'position-collapse-left'">
     <!-- 工具栏 -->
     <span class="toolbar">
       <el-menu class="el-menu-demo" :background-color="'#fff'" mode="horizontal">
@@ -104,7 +104,8 @@ export default {
       themeColor: state=>state.app.themeColor,
       collapse: state=>state.app.collapse,
       activeIndex: state=>state.menu.menuIndex,
-      headMenu:state=>state.menu.headMenu
+      headMenu:state=>state.menu.headMenu,
+      navTree: state=>state.menu.navTree,
     })
   }
 }
@@ -119,6 +120,7 @@ export default {
   z-index: 1030;
   height: 60px;
   line-height: 60px;
+  background-color: #fff;
   border-color: #e6e6e6;;
   border-left-width: 1px;
   border-left-style: solid;
@@ -150,5 +152,13 @@ export default {
 }
 .is-active{
     border: none !important;
+}
+
+.position-left {
+    left: 250px;
+}
+
+.position-collapse-left {
+    left: 100px;
 }
 </style>

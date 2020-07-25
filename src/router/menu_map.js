@@ -1,9 +1,13 @@
+/**
+    1.
+    2.
+ */
+
 var menu_list = [
     {
         "name": "收银",
         "fullname": "收银",
         "menuIndex": "/cashier",
-        "svg": "cashier",
         "icon": "el-icon-monitor",
     },
     {
@@ -19,6 +23,7 @@ var menu_list = [
         "fullname": "数据分析",
         "menuIndex": "/analysis",
         "icon": "el-icon-s-data",
+        "redirect": "/analysis/summary",
         "children": [
 
             {
@@ -34,6 +39,7 @@ var menu_list = [
         "fullname": "商品管理",
         "menuIndex": "/goods",
         "icon": "el-icon-shopping-bag-2",
+        "redirect": "/goods/service",
         "children": [
 
             // 服务
@@ -136,6 +142,7 @@ var menu_list = [
         "fullname": "客户管理",
         "menuIndex": "/customer",
         "icon": "el-icon-user",
+        "redirect": "/customer/guest",
         "children": [
             {
                 "id": "/customer/guest",
@@ -172,6 +179,7 @@ var menu_list = [
         "fullname": "订单管理",
         "menuIndex": "/orders",
         "icon": "el-icon-s-order",
+        "redirect": "/orders/list",
         "children": [
             {
                 "id": "/orders/list",
@@ -210,6 +218,7 @@ var menu_list = [
         "fullname": "设置中心",
         "menuIndex": "/settings",
         "icon": "el-icon-setting",
+        "redirect": "/settings/stores/info",
         "children": [
             {
                 "id": "/settings/stores",

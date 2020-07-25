@@ -1,5 +1,5 @@
 <template>
-  <div id="main-container" class="main-container position-left">
+  <div id="main-container" class="main-container" :class="navTree.length?'position-left':'position-collapse-left'">
     <!-- 主内容区域 -->
     <div class="main-content">
       <keep-alive>
@@ -12,11 +12,18 @@
 </template>
 
 <script>
-export default {
+  import { mapState } from 'vuex'
+
+  export default {
   data () {
     return {
     }
   },
+    computed: {
+      ...mapState({
+        navTree: state=>state.menu.navTree,
+      }),
+    },
 }
 </script>
 
@@ -78,5 +85,9 @@ export default {
 }
 .position-left {
   left: 250px;
+}
+
+.position-collapse-left {
+  left: 100px;
 }
 </style>

@@ -13,14 +13,14 @@
 
 				<el-menu-item :index=item.menuIndex v-for="item in headMenu"
 				              :style="{'--color': themeColor}"
-				              @click="$router.push(item.menuIndex)">
+				              @click="menuRouterPush(item.menuIndex)">
 					<i :class="item.icon"></i>
 					<span slot="title">{{item.name}}</span>
 				</el-menu-item>
 			</el-menu>
 		</div>
 
-		<div class="right-bar">
+		<div class="right-bar" v-if="navTree.length">
 			<!-- 导航菜单 -->
 			<el-menu :default-active="selectActive"  style="width: 150px;">
 
@@ -39,6 +39,9 @@
 import { mapState } from 'vuex'
 import MenuTree from "@/components/MenuTree"
 export default {
+    data(){
+        return{}
+    },
   components:{
         MenuTree
   },
@@ -54,6 +57,9 @@ export default {
   },
 
   methods: {
+      menuRouterPush(menuIndex){
+          this.$router.push(menuIndex)
+      }
   }
 }
 </script>
@@ -112,6 +118,11 @@ export default {
 		h4{
 			margin-left: 20px;
 		}
+	}
+
+	/deep/ .right-bar .el-menu-item {
+		min-width: 150px !important;
+		/*overflow: hidden !important;*/
 	}
 }
 
