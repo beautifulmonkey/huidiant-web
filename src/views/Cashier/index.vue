@@ -2,7 +2,7 @@
     <div id="app" style="display: flex">
         <div class="menu-box">
             <div style="margin-top: 10px;margin-bottom: 30px;">
-                <el-button type="info" round icon="el-icon-back" size="mini" @click="$router.push('/analysis/today')">后台</el-button>
+                <el-button type="info" round icon="el-icon-back" size="mini" @click="$router.push('/today')">后台</el-button>
             </div>
 
             <el-button

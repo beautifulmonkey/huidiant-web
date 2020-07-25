@@ -73,8 +73,8 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login' })
     } else {
       if(to.path === "/"){
-        next({ path: '/analysis/today' });
-        to.path = '/analysis/today'
+        next({ path: '/today' });
+        to.path = '/today'
       }
 
       // 加载动态菜单和路由
@@ -193,7 +193,13 @@ function addDynamicRoutes (menuList = [], routes = []) {
  for (var i = 0; i < menuList.length; i++) {
    if (menuList[i].children && menuList[i].children.length >= 1) {
      temp = temp.concat(menuList[i].children)
-   } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
+   }else if(menuList[i].linkSelf){
+     temp = temp.concat([{
+       id: menuList[i].menuIndex,
+       name: menuList[i].name,
+       url: menuList[i].menuIndex
+     }])
+   }else if (menuList[i].url && /\S/.test(menuList[i].url)) {
       menuList[i].url = menuList[i].url.replace(/^\//, '')
       // 创建路由配置
       var route = {

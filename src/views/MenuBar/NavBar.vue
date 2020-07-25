@@ -1,19 +1,37 @@
 <template>
 	<div class="menu-bar-container">
-    <!-- logo -->
-    <div class="logo" :style="{'background-color':themeColor}" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
-      @click="$router.push('/')" style="display: flex;justify-content: center">
-        <img v-if="collapse" src="@/assets/logo.png"/>
-<!--	    <div>{{collapse?'':appName}}</div>-->
-	    <img style="width: 70%;margin: 10px 20px 10px 0" v-if="!collapse" src="@/assets/img/skyunx_logo_w.png"/>
-    </div>
-    <!-- 导航菜单 -->
-    <el-menu ref="navmenu" :default-active="selectActive" :class="collapse?'menu-bar-collapse-width':'menu-bar-width'"
-      :collapse="collapse" :collapse-transition="false" :unique-opened="true  "
-      @open="handleopen" @close="handleclose" @select="handleselect">
-      <!-- 导航菜单树组件，动态加载菜单 -->
-      <menu-tree v-for="item in navTree" :key="item.id" :menu="item"></menu-tree>
-    </el-menu>
+		<div class="left-bar">
+			<el-menu
+			:default-active="activeIndex"
+			style="width: 100px;"
+			background-color="#001529"
+			text-color="#818a9c"
+			active-text-color="#fff">
+				<div class="store-logo">
+					<img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+				</div>
+
+				<el-menu-item :index=item.menuIndex v-for="item in headMenu"
+				              :style="{'--color': themeColor}"
+				              @click="$router.push(item.menuIndex)">
+					<i :class="item.icon"></i>
+					<span slot="title">{{item.name}}</span>
+				</el-menu-item>
+			</el-menu>
+		</div>
+
+		<div class="right-bar">
+			<!-- 导航菜单 -->
+			<el-menu :default-active="selectActive"  style="width: 150px;">
+
+				<div class="right-bar-title">
+					<h4>{{activeIndexTitle}}</h4>
+				</div>
+				<!-- 导航菜单树组件，动态加载菜单 -->
+				<menu-tree v-for="item in navTree" :key="item.id" :menu="item"></menu-tree>
+			</el-menu>
+		</div>
+
 	</div>
 </template>
 
@@ -26,60 +44,16 @@ export default {
   },
   computed: {
     ...mapState({
-      appName: state=>state.app.appName,
       themeColor: state=>state.app.themeColor,
-      collapse: state=>state.app.collapse,
       navTree: state=>state.menu.navTree,
+	  headMenu: state=>state.menu.headMenu,
+      activeIndex: state=>state.menu.menuIndex,
+      activeIndexTitle: state=>state.menu.menuIndexTitle,
       selectActive: state=>state.menu.selectActive
     }),
-    mainTabs: {
-      get () { return this.$store.state.tab.mainTabs },
-      set (val) { this.$store.commit('updateMainTabs', val) }
-    },
-    mainTabsActiveName: {
-      get () { return this.$store.state.tab.mainTabsActiveName },
-      set (val) { this.$store.commit('updateMainTabsActiveName', val) }
-    }
   },
-  watch: {
-    $route: 'handleRoute'
-  },
-  created () {
-    this.handleRoute(this.$route)
-  },
+
   methods: {
-    handleopen() {
-      // console.log('handleopen')
-    },
-    handleclose() {
-      // console.log('handleclose')
-    },
-    handleselect(a, b) {
-      // console.log('handleselect')
-    },
-    // 路由操作处理
-    handleRoute (route) {
-      // tab标签页选中, 如果不存在则先添加
-      var tab = this.mainTabs.filter(item => item.name === route.name)[0]
-      if (!tab) {
-        tab = {
-          name: route.name,
-          title: route.name,
-          icon: route.meta.icon,
-          path: route.path
-        };
-        this.mainTabs = this.mainTabs.concat(tab)
-      }else {
-          // 动态参数需要更换
-          tab.path = route.path;
-      }
-      this.mainTabsActiveName = tab.name
-      // 切换标签页时同步更新高亮菜单
-      if(this.$refs.navmenu != null) {
-        this.$refs.navmenu.activeIndex = '' + route.meta.index
-        this.$refs.navmenu.initOpenedMenu()
-      }
-    }
   }
 }
 </script>
@@ -91,40 +65,54 @@ export default {
   left: 0;
   bottom: 0;
   z-index: 1020;
-  .el-menu {
-    position:absolute;
-    top: 60px;
-    bottom: 0px;
-    text-align: left;
-    // background-color: #2968a30c;
-  }
-  .logo {
-    position:absolute;
-    top: 0px;
-    height: 60px;
-    line-height: 60px;
-    background: #545c64;
-    cursor:pointer;
-    img {
-        width: 40px;
-        height: 40px;
-        border-radius: 0px;
-        margin: 10px 10px 10px 10px;
-        float: left;
+	.el-menu{
+		position:absolute;
+		top: 0px;
+		bottom: 0px;
+		text-align: left;
+	}
+	.left-bar .el-menu {
+		left: 0
+	}
+	.right-bar .el-menu {
+		left: 100px;
+	}
+	.left-bar .is-active{
+	  background-color: var(--color) !important;
     }
-    div {
-      font-size: 25px;
-      color: white;
-      text-align: left;
-      padding-left: 20px;
-    }
-  }
-  .menu-bar-width {
-    width: 200px;
-  }
-  .menu-bar-collapse-width {
-    width: 65px;
-  }
+	.left-bar .el-menu-item:hover span{
+		color: #fff;
+	}
+	.left-bar .el-menu-item:hover i{
+		color: #fff;
+	}
+
+	.store-logo{
+		height: 60px;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		img {
+			width: 37px;
+			height: 37px;
+			border-radius: 10px;
+			margin-top: 15px;
+			float: right;
+		}
+	}
+	.right-bar-title{
+		height: 60px;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		border-color: #e6e6e6;;
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
+		h4{
+			margin-left: 20px;
+		}
+	}
 }
 
 </style>

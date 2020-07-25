@@ -107,7 +107,7 @@ export default {
         const res = await storeSettingApi.getStoreInfo();
         if (res.status >= 200 && res.status < 300) {
           localStorage.userInfo = JSON.stringify(res.data)
-          this.$router.push('/analysis/today')  // 登录成功，跳转到主页
+          this.$router.push('/today')  // 登录成功，跳转到主页
         } else {
           this.$message({
             type: 'error',

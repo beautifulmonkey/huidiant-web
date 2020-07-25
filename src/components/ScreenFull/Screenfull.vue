@@ -60,6 +60,7 @@
 
     .svg-icon{
         font-size: 20px;
-        color: white;
+        color: #959595;
+        margin-top: 20px;;
     }
 </style>

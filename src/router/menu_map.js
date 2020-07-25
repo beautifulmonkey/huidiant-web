@@ -1,34 +1,39 @@
 var menu_list = [
     {
         "name": "收银",
+        "fullname": "收银",
         "menuIndex": "/cashier",
-        "svg": "cashier"
+        "svg": "cashier",
+        "icon": "el-icon-monitor",
     },
-
+    {
+        "name": "概况",
+        "fullname": "概况",
+        "menuIndex": "/today",
+        "icon": "el-icon-data-line",
+        "children": [],
+        "linkSelf": true
+    },
     {
         "name": "数据",
+        "fullname": "数据分析",
         "menuIndex": "/analysis",
+        "icon": "el-icon-s-data",
         "children": [
-            {
-                "id": "/analysis/today",
-                "name": "概览",
-                "url": "/analysis/today",
-                "icon": "el-icon-data-line",
-                "children": []
-            },
 
             {
                 "id": "/analysis/summary",
                 "name": " 营业汇总",
                 "url": "/analysis/summary",
-                "icon": "el-icon-s-data",
                 "children": []
             }
         ]
     },
     {
         "name": "商品",
+        "fullname": "商品管理",
         "menuIndex": "/goods",
+        "icon": "el-icon-shopping-bag-2",
         "children": [
 
             // 服务
@@ -36,14 +41,12 @@ var menu_list = [
                 "id": "/goods/service",
                 "name": "服务管理",
                 "url": "/goods/service",
-                "icon": "el-icon-thumb",
                 "children": []
             },
             {
                 "id": "/goods/service",
                 "name": "添加服务",
                 "url": "/goods/service/add",
-                "icon": "el-icon-plus",
                 "hidden": true,
                 "children": [
                 ]
@@ -53,7 +56,6 @@ var menu_list = [
                 "name": "编辑服务",
                 "url": "/goods/service/edit/:id",
                 "component": "/goods/service/edit",
-                "icon": "el-icon-edit",
                 "hidden": true,
                 "children": [
                 ]
@@ -64,14 +66,12 @@ var menu_list = [
                 "id": "/goods/product",
                 "name": "产品管理",
                 "url": "/goods/product",
-                "icon": "el-icon-shopping-bag-2",
                 "children": []
             },
             {
                 "id": "/goods/product",
                 "name": "添加产品",
                 "url": "/goods/product/add",
-                "icon": "el-icon-plus",
                 "hidden": true,
                 "children": []
             },
@@ -80,7 +80,6 @@ var menu_list = [
                 "name": "编辑产品",
                 "url": "/goods/product/edit/:id",
                 "component": "/goods/product/edit",
-                "icon": "el-icon-edit",
                 "hidden": true,
                 "children": []
             },
@@ -90,14 +89,12 @@ var menu_list = [
                 "id": "/goods/card",
                 "name": "卡项管理",
                 "url": "/goods/card",
-                "icon": "el-icon-bank-card",
                 "children": []
             },
             {
                 "id": "/goods/card",
                 "name": "添加次卡",
                 "url": "/goods/card/counting/add",
-                "icon": "el-icon-plus",
                 "hidden": true,
                 "children": []
             },
@@ -106,7 +103,6 @@ var menu_list = [
                 "name": "编辑次卡",
                 "url": "/goods/card/counting/edit/:id",
                 "component": "/goods/card/counting/edit",
-                "icon": "el-icon-edit",
                 "hidden": true,
                 "children": []
             },
@@ -114,7 +110,6 @@ var menu_list = [
                 "id": "/goods/card",
                 "name": "添加充值卡",
                 "url": "/goods/card/prepaid/add",
-                "icon": "el-icon-plus",
                 "hidden": true,
                 "children": []
             },
@@ -123,7 +118,6 @@ var menu_list = [
                 "name": "编辑充值卡",
                 "url": "/goods/card/prepaid/edit/:id",
                 "component": "/goods/card/prepaid/edit",
-                "icon": "el-icon-edit",
                 "hidden": true,
                 "children": []
             },
@@ -132,7 +126,6 @@ var menu_list = [
                 "name": "卡详情",
                 "url": "/goods/card/view/:id",
                 "component": "/goods/card/view",
-                "icon": "el-icon-info",
                 "hidden": true,
                 "children": []
             }
@@ -140,28 +133,27 @@ var menu_list = [
     },
     {
         "name": "客户",
+        "fullname": "客户管理",
         "menuIndex": "/customer",
+        "icon": "el-icon-user",
         "children": [
             {
                 "id": "/customer/guest",
                 "name": "客户管理",
                 "url": "/customer/guest",
-                "icon": "el-icon-user",
                 "children": []
             },
             {
                 "id": "/customer/analysis",
-                "name": "客户分析(开发中)",
+                "name": "客户分析",
                 "url": "/customer/analysis",
-                "icon": "el-icon-data-analysis",
                 "disabled": true,
                 "children": []
             },
             {
                 "id": "/customer/sms",
-                "name": "短信发送(开发中)",
+                "name": "短信发送",
                 "url": "/customer/sms",
-                "icon": "el-icon-message",
                 "disabled": true,
                 "children": []
             },
@@ -170,7 +162,6 @@ var menu_list = [
                 "name": "客户详情",
                 "url": "/customer/guest/details/:id",
                 "component": "/customer/guest/details",
-                "icon": "el-icon-info",
                 "hidden": true,
                 "children": []
             }
@@ -178,13 +169,14 @@ var menu_list = [
     },
     {
         "name": "订单",
+        "fullname": "订单管理",
         "menuIndex": "/orders",
+        "icon": "el-icon-s-order",
         "children": [
             {
                 "id": "/orders/list",
                 "name": "订单列表",
                 "url": "/orders/list",
-                "icon": "el-icon-s-order",
                 "children": []
             },
             {
@@ -192,7 +184,6 @@ var menu_list = [
                 "name": "订单详情",
                 "url": "/orders/details/:id",
                 "component": "/orders/details",
-                "icon": "el-icon-info",
                 "hidden": true,
                 "children": []
             },
@@ -216,13 +207,14 @@ var menu_list = [
     },
     {
         "name": "设置",
+        "fullname": "设置中心",
         "menuIndex": "/settings",
+        "icon": "el-icon-setting",
         "children": [
             {
                 "id": "/settings/stores",
                 "name": "店铺设置",
                 "url": "/settings/stores",
-                "icon": "el-icon-s-shop",
                 "children": [
                     {
                         "id": "/settings/stores/info",
@@ -253,11 +245,10 @@ var menu_list = [
                 "id": "/settings/trading",
                 "name": "交易设置",
                 "url": "/settings/trading",
-                "icon": "el-icon-money",
                 "children": [
                     {
                         "id": "/settings/trading/order",
-                        "name": "开单设置(开发中)",
+                        "name": "开单设置",
                         "url": "/settings/trading/order",
                         // "icon": "el-icon-money",
                         "disabled": true,
@@ -274,7 +265,6 @@ var menu_list = [
                 "id": "/settings/customer",
                 "name": "客户设置",
                 "url": "/settings/customer",
-                "icon": "el-icon-s-custom",
                 "children": [
                     {
                         "id":"/settings/customer/vip",
@@ -284,7 +274,7 @@ var menu_list = [
                     },
                     {
                         "id": "/settings/customer/tag",
-                        "name": "标签设置(开发中)",
+                        "name": "标签设置",
                         "url": "/settings/customer/tag",
                         // "icon": "el-icon-price-tag",
                         "disabled": true,

@@ -5,8 +5,10 @@ export default {
         // 左侧树相关
         navTree: [],  // 当前树
         baseNavTree: [],  // 总树
-        menuIndex: null,  // 总树
+        menuIndex: null,  // 当前选中一级菜单id
+        menuIndexTitle: null,  // 当前选中一级菜单id
         selectActive: null,  // 当前选中的select, 通常为url
+        selectActiveTitle: null,  // 当前选中的select, 通常为url
 
         // 上侧head相关
         headMenu: []  // 最上方的head菜单,结构数据的第一级
@@ -23,6 +25,7 @@ export default {
                     state.headMenu.push({
                         "menuIndex": item.menuIndex,
                         "name": item.name,
+                        "icon": item.icon,
                         "svg": item.svg
                     })
                 });
@@ -40,7 +43,8 @@ export default {
             state.menuIndex = menuIndex;
             state.baseNavTree.forEach((item,index,array)=>{
                 if (item.menuIndex === menuIndex){
-                    state.navTree = item.children
+                    state.navTree = item.children;
+                    state.menuIndexTitle = item.fullname
                 }
             })
         },
