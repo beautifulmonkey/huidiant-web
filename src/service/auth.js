@@ -10,4 +10,10 @@ export default {
         return await request('patch', url, params)
     },
 
+    // 发送验证码
+    async sendVerificationCode(tel, mode) {
+        const url = `${config.server.url}/sms/verification_code/send`;
+        return await request('post', url, {tel: tel, mode: mode})
+    },
+
 }

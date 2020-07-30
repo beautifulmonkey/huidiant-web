@@ -29,7 +29,7 @@
 
         <el-menu-item index="4" v-popover:popover-notice>
           <!-- 系统通知 -->
-          <el-badge :value="0" :max="99" class="badge" type="success">
+          <el-badge :value="1" :max="99" class="badge" type="success">
             <li style="color: #555555;" class="fa fa-bell-o fa-lg"></li>
           </el-badge>
           <el-popover ref="popover-notice" placement="bottom-end" trigger="click">
