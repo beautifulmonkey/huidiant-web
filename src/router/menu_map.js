@@ -151,16 +151,15 @@ var menu_list = [
                 "children": []
             },
             {
-                "id": "/customer/analysis",
-                "name": "客户分析",
-                "url": "/customer/analysis",
-                "disabled": true,
-                "children": []
-            },
-            {
                 "id": "/customer/sms",
                 "name": "短信发送",
                 "url": "/customer/sms",
+                "children": []
+            },
+            {
+                "id": "/customer/analysis",
+                "name": "客户分析",
+                "url": "/customer/analysis",
                 "disabled": true,
                 "children": []
             },
