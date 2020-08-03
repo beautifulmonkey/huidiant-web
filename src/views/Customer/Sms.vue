@@ -144,18 +144,82 @@
 					</div>
 				</div>
 			</el-form>
+
+			<el-card style="margin: 50px 0;">
+
+				<el-button size="mini" type="primary" style="margin: 10px;" @click="getTempList">刷新</el-button>
+				<el-table
+					:data="tempList"
+					v-loading="loadingTemp"
+					style="width: 100%;min-height: 500px;">
+
+					<el-table-column
+						prop="created_at"
+						label="申请时间" width="180px;">
+					</el-table-column>
+					<el-table-column
+						prop="temp_id"
+						label="模板ID" width="120px;">
+					</el-table-column>
+					<el-table-column
+						prop="temp_name"
+						label="模板名称" width="150px;">
+					</el-table-column>
+					<el-table-column
+						prop="msg_data"
+						label="模板内容"
+						show-overflow-tooltip>
+						<template slot-scope="scope">
+							【{{scope.row.sign}}】{{scope.row.msg_data}}
+						</template>
+					</el-table-column>
+					<el-table-column
+						prop="status_info"
+						label="审核状态" width="150px;">
+					</el-table-column>
+					<el-table-column
+						prop="ReviewReply"
+						label="未通过原因"
+						show-overflow-tooltip width="250px;">
+					<template slot-scope="scope">
+							{{scope.row.ReviewReply || '-'}}
+						</template>
+					</el-table-column>
+					<el-table-column
+						fixed="right"
+						label="操作"
+						width="100">
+						<template slot-scope="scope">
+							<el-button type="text" size="small" @click="onDeleteClick(scope.row)">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+
+				<div class="pagination-container">
+					<el-pagination background @size-change="onPageSizeChange" @current-change="onPageIndexChange" :current-page="filterTemp.page_index" :page-sizes="[5, 10, 20]" :page-size="filterTemp.page_size" layout="total, sizes, prev, pager, next, jumper"
+					               :total="filterTemp.pageTotal">
+					</el-pagination>
+				</div>
+			</el-card>
+
 		</div>
 	</div>
 </template>
 
 <script>
     import {mapState} from "vuex";
+    import SmsApi from '@/service/sms.js'
 
     export default {
         name: "Sms",
 	    data() {
             return {
                 activeIndex: 'send',
+                filterTemp: {
+                    page_index: 1,
+                    page_size: 10,
+                    pageTotal: null
+                },
                 ruleFormTemp: {
                     temp_name: '',
                     sign: '云逍软件',
@@ -178,16 +242,8 @@
                 },
 
                 send_way: 'now',
-                tempList: [
-                    // {
-                    //     value: 1,
-	                //     label: '夏日头皮体验短信模板'
-                    // },
-	                // {
-                    //     value: 2,
-                    //     label: '护理体验模板'
-                    // }
-                ],
+                tempList: [],
+                loadingTemp: false,
 	            tempMsgPreview: '',
                 rulesSend: {
                     send_target: [
@@ -207,7 +263,10 @@
 	    },
 	    methods: {
             handleSelect(key, keyPath) {
-                this.activeIndex = key
+                this.activeIndex = key;
+	            if (key === "temp"){
+                    this.getTempList()
+                }
             },
 		    getMessageLength(){
                 return this.ruleFormTemp.msg_data.length + this.ruleFormTemp.sign.length + 2 + 5
@@ -236,7 +295,7 @@
                 });
 	            return availableArray
             },
-            // 保存客户
+            // 申请模板
             submitFormTemp(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
@@ -247,10 +306,9 @@
                             });
                             return false
                         }
-                        this.$message({
-                            message: '已提交申请, 请耐心等待...',
-                            type: 'success'
-                        });
+                        this.ruleFormTemp.sms_count = Math.ceil(this.getMessageLength() / 70);
+	                    console.log(this.ruleFormTemp)
+						this.addTemp()
 
                     } else {
                         console.log('error submit!!');
@@ -270,12 +328,102 @@
                 });
             },
 
+            // 获取模板列表
+            async getTempList(){
+                this.loadingTemp = true;
+                try {
+                    const res = await SmsApi.getTempList(this.filterTemp);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.tempList = res.data.data;
+                        this.filterTemp.pageTotal = res.data.page.total
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取模板失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+                this.loadingTemp = false;
+            },
+            // 申请模板
+            async addTemp(){
+                try {
+                    const res = await SmsApi.addTemp(this.ruleFormTemp);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            message: '已提交申请, 请耐心等待...',
+                            type: 'success'
+                        });
+                        this.getTempList()
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '申请模板失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+            // 删除模板
+            async delTemp(id){
+                try {
+                    const res = await SmsApi.delTemp(id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.$message({
+                            message: '删除模板成功!',
+                            type: 'success'
+                        });
+                        this.getTempList()
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '删除模板失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+            // 删除模板
+            onDeleteClick(item) {
+                this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                })
+                    .then(() => {
+                        this.delTemp(item.id)
+                    })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        })
+                    })
+            },
+
+            // 页数量变化
+            onPageSizeChange(val) {
+                this.filterTemp.page_size = val;
+                this.getTempList()
+            },
+            // 页码变化
+            onPageIndexChange(val) {
+                this.filterTemp.page_index = val;
+                this.getTempList()
+            },
+
         },
         computed:{
             ...mapState({
                 themeColor: state=>state.app.themeColor
             })
         },
+	    mounted() {
+        }
     }
 </script>
 
@@ -386,5 +534,11 @@
 
 	.tip .active {
 		color: var(--color) !important;
+	}
+
+	.pagination-container{
+		width: 100%;
+		text-align: center;
+		margin: 20px;
 	}
 </style>
