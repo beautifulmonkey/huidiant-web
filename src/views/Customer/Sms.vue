@@ -45,12 +45,12 @@
 						</el-form-item>
 
 						<el-form-item label="短信模板" label-width="100px" prop="temp_id">
-							<el-select v-model="ruleFormSend.temp_id" placeholder="请选择已通过审核的短信模板" style="width: 300px;" :disabled="tempList.length === 0">
+							<el-select @change="chooseTemp" v-model="ruleFormSend.temp_id" placeholder="请选择已通过审核的短信模板" style="width: 300px;" :disabled="availableTempList.length === 0">
 								<el-option
-									v-for="item in tempList"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
+									v-for="item in availableTempList"
+									:key="item.id"
+									:label="item.temp_name"
+									:value="item.id">
 								</el-option>
 							</el-select>
 							<br>
@@ -240,10 +240,12 @@
                         { required: true, message: '请输入短信内容', trigger: 'blur' },
                     ],
                 },
-
-                send_way: 'now',
                 tempList: [],
                 loadingTemp: false,
+
+	            // send
+                availableTempList: [],
+                send_way: 'now',
 	            tempMsgPreview: '',
                 rulesSend: {
                     send_target: [
@@ -257,6 +259,7 @@
                 ruleFormSend: {
                     send_target: 'input_tel',
                     telData: '',
+                    tel_list: [],
                     temp_id: null
                 }
             }
@@ -320,7 +323,36 @@
             submitFormSend(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        // availableTelArray()
+	                    let alert_txt = "";
+                        if (this.ruleFormSend.send_target === 'input_tel'){
+                            let tel_list = this.availableTelArray();
+                            if (!this.ruleFormSend.telData){
+                                return this.$message.error('请输入手机号!');
+                            }
+                            if (!tel_list.length){
+                                return this.$message.error('未识别到手机号!');
+                            }
+                            this.ruleFormSend.tel_list = tel_list;
+
+                            alert_txt = '您即将群发给指定客户, 确定继续?'
+                        } else if (this.ruleFormSend.send_target === 'all_customer'){
+                            alert_txt = '您即将群发给全部客户, 确定继续?'
+                        }
+
+                        this.$confirm(alert_txt, '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.batchSend()
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消发送'
+                            });
+                            return false
+                        });
+
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -416,6 +448,62 @@
                 this.getTempList()
             },
 
+
+            // 获取审核过的模板
+            async getAvailableTempList(){
+                try {
+                    const res = await SmsApi.getAvailableTempList();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.availableTempList = res.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取模板失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 选择模板,获取单条数据
+            async chooseTemp(id){
+                try {
+                    const res = await SmsApi.getTempOne(id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.tempMsgPreview = "【" + res.data.sign + "】" + res.data.msg_data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取模板失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 群发
+            async batchSend(){
+                try {
+                    const res = await SmsApi.batchSend(this.ruleFormSend);
+                    if (res.status >= 200 && res.status < 300) {
+                        // todo: 发送成功后跳转到短信首页
+                        this.$message({
+                            message: '发送成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '发送失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
         },
         computed:{
             ...mapState({
@@ -423,6 +511,7 @@
             })
         },
 	    mounted() {
+            this.getAvailableTempList()
         }
     }
 </script>

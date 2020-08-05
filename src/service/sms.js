@@ -20,7 +20,28 @@ export default {
     async delTemp(id) {
         const url = `${config.server.url}/sms/temp/${id}`;
         return await request('delete', url)
-    }
+    },
+
+
+    // 获取短信模板列表 (审核过的)
+    async getAvailableTempList() {
+        const url = `${config.server.url}/sms/temp_map`;
+        return await request('get', url)
+    },
+
+
+    // 获取单个模板
+    async getTempOne(id) {
+        const url = `${config.server.url}/sms/temp/${id}`;
+        return await request('get', url)
+    },
+
+
+    // 群发
+    async batchSend(data) {
+        const url = `${config.server.url}/sms/batch/send`;
+        return await request('post', url, data)
+    },
 
 
 }
