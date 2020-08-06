@@ -44,4 +44,11 @@ export default {
     },
 
 
+    // 获取发送记录
+    async sendRecord(filter) {
+        const url = `${config.server.url}/sms/record`;
+        return await request('get', url, filter)
+    },
+
+
 }

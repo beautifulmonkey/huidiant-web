@@ -3,6 +3,7 @@
 		<el-menu :default-active="activeIndex" mode="horizontal" @select="handleSelect">
 			<el-menu-item index="send">发送短信</el-menu-item>
 			<el-menu-item index="temp">模板申请</el-menu-item>
+			<el-menu-item index="record">发送记录</el-menu-item>
 		</el-menu>
 
 		<div v-show="activeIndex==='send'">
@@ -196,12 +197,62 @@
 				</el-table>
 
 				<div class="pagination-container">
-					<el-pagination background @size-change="onPageSizeChange" @current-change="onPageIndexChange" :current-page="filterTemp.page_index" :page-sizes="[5, 10, 20]" :page-size="filterTemp.page_size" layout="total, sizes, prev, pager, next, jumper"
+					<el-pagination background @size-change="onPageSizeChangeTemp" @current-change="onPageIndexChangeTemp" :current-page="filterTemp.page_index" :page-sizes="[10, 20]" :page-size="filterTemp.page_size" layout="total, sizes, prev, pager, next, jumper"
 					               :total="filterTemp.pageTotal">
 					</el-pagination>
 				</div>
 			</el-card>
 
+		</div>
+		<div v-show="activeIndex==='record'">
+			<el-table
+				:data="recordList"
+				style="width: 100%">
+
+				<el-table-column
+					prop="created_at"
+					label="发送时间"
+					width="200">
+				</el-table-column>
+				<el-table-column
+					prop="sms_type"
+					label="短信类型"
+					width="130">
+				</el-table-column>
+				<el-table-column
+					label="发送人数/手机号"
+					width="180"
+					show-overflow-tooltip>
+					<template slot-scope="scope">
+						<div style="width: 30px;">{{scope.row.tel_count}}人</div>
+					</template>
+				</el-table-column>
+				<el-table-column
+					prop="fee"
+					label="消耗余量"
+					width="130">
+					<template slot-scope="scope">
+						<div style="width: 30px;">{{scope.row.fee}}条</div>
+					</template>
+				</el-table-column>
+
+				<el-table-column
+					prop="msg"
+					label="短信内容">
+				</el-table-column>
+
+				<el-table-column
+					prop="send_status"
+					label="状态"
+					width="160">
+				</el-table-column>
+			</el-table>
+
+			<div class="pagination-container">
+				<el-pagination background @size-change="onPageSizeChangeRecord" @current-change="onPageIndexChangeRecord" :current-page="filterRecord.page_index" :page-sizes="[10, 20]" :page-size="filterRecord.page_size" layout="total, sizes, prev, pager, next, jumper"
+				               :total="filterRecord.pageTotal">
+				</el-pagination>
+			</div>
 		</div>
 	</div>
 </template>
@@ -215,6 +266,8 @@
 	    data() {
             return {
                 activeIndex: 'send',
+
+	            // temp
                 filterTemp: {
                     page_index: 1,
                     page_size: 10,
@@ -261,7 +314,15 @@
                     telData: '',
                     tel_list: [],
                     temp_id: null
-                }
+                },
+
+	            // record
+                filterRecord: {
+                    page_index: 1,
+                    page_size: 10,
+                    pageTotal: null
+                },
+                recordList: []
             }
 	    },
 	    methods: {
@@ -269,7 +330,9 @@
                 this.activeIndex = key;
 	            if (key === "temp"){
                     this.getTempList()
-                }
+                }else if (key === "record"){
+	                this.getSendRecord()
+	            }
             },
 		    getMessageLength(){
                 return this.ruleFormTemp.msg_data.length + this.ruleFormTemp.sign.length + 2 + 5
@@ -438,14 +501,25 @@
             },
 
             // 页数量变化
-            onPageSizeChange(val) {
+            onPageSizeChangeTemp(val) {
                 this.filterTemp.page_size = val;
                 this.getTempList()
             },
             // 页码变化
-            onPageIndexChange(val) {
+            onPageIndexChangeTemp(val) {
                 this.filterTemp.page_index = val;
                 this.getTempList()
+            },
+
+            // 页数量变化
+            onPageSizeChangeRecord(val) {
+                this.filterRecord.page_size = val;
+                this.getSendRecord()
+            },
+            // 页码变化
+            onPageIndexChangeRecord(val) {
+                this.filterRecord.page_index = val;
+                this.getSendRecord()
             },
 
 
@@ -488,11 +562,11 @@
                 try {
                     const res = await SmsApi.batchSend(this.ruleFormSend);
                     if (res.status >= 200 && res.status < 300) {
-                        // todo: 发送成功后跳转到短信首页
                         this.$message({
                             message: '发送成功!',
                             type: 'success'
                         });
+                        this.handleSelect("record", "");
                     } else {
                         this.$message({
                             type: 'error',
@@ -503,6 +577,24 @@
                     console.log(error)
                 }
             },
+
+		    // 获取发送记录
+		    async getSendRecord(){
+                try {
+                    const res = await SmsApi.sendRecord(this.filterRecord);
+                    if (res.status >= 200 && res.status < 300) {
+						this.recordList = res.data.data;
+                        this.filterRecord.pageTotal = res.data.page.total;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取记录失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+		    }
 
         },
         computed:{
