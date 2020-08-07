@@ -50,5 +50,9 @@ export default {
         return await request('get', url, filter)
     },
 
-
+    // 获取短信余量
+    async smsBalance() {
+        const url = `${config.server.url}/sms/balance`;
+        return await request('get', url)
+    },
 }

@@ -4,6 +4,8 @@
 			<el-menu-item index="send">发送短信</el-menu-item>
 			<el-menu-item index="temp">模板申请</el-menu-item>
 			<el-menu-item index="record">发送记录</el-menu-item>
+
+			<span style="float: right;line-height: 60px;font-weight: 500">短信余量：<span style="color: #ff711c">{{sms_balance}}</span> 条</span>
 		</el-menu>
 
 		<div v-show="activeIndex==='send'">
@@ -266,6 +268,7 @@
 	    data() {
             return {
                 activeIndex: 'send',
+                sms_balance: 0,
 
 	            // temp
                 filterTemp: {
@@ -365,6 +368,14 @@
             submitFormTemp(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        if(this.sms_balance <= 0){
+                            this.$notify.error({
+                                title: '申请失败',
+                                message: '您的短信余量不足! 请联系软件提供商进行充值'
+                            });
+                            return false
+                        }
+
                         if (this.ruleFormTemp.sign !== '云逍软件'){
                             let info = "短信签名【" + this.ruleFormTemp.sign + "】需要运营商审核! 请联系软件提供商办理相关证明 (建议使用默认签名【云逍软件】无需审核)";
                             this.$alert(info, '模板申请失败 (签名需审核)', {
@@ -400,6 +411,13 @@
                             alert_txt = '您即将群发给指定客户, 确定继续?'
                         } else if (this.ruleFormSend.send_target === 'all_customer'){
                             alert_txt = '您即将群发给全部客户, 确定继续?'
+                        }
+                        if(this.sms_balance <= 0){
+                            this.$notify.error({
+                                title: '发送失败',
+                                message: '您的短信余量不足! 请联系软件提供商进行充值'
+                            });
+                            return false
                         }
 
                         this.$confirm(alert_txt, '提示', {
@@ -567,6 +585,7 @@
                             type: 'success'
                         });
                         this.handleSelect("record", "");
+                        this.smsBalance()
                     } else {
                         this.$message({
                             type: 'error',
@@ -594,7 +613,24 @@
                 } catch (error) {
                     console.log(error)
                 }
-		    }
+		    },
+
+            // 获取短信余量
+            async smsBalance(){
+                try {
+                    const res = await SmsApi.smsBalance();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.sms_balance = res.data.sms_balance;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取短信余量失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
 
         },
         computed:{
@@ -603,7 +639,8 @@
             })
         },
 	    mounted() {
-            this.getAvailableTempList()
+            this.getAvailableTempList();
+		    this.smsBalance();
         }
     }
 </script>
