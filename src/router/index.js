@@ -51,6 +51,11 @@ const router = new Router({
       path: '/bind/:openId',
       name: '客户绑定',
       component: resolve => require([`@/views/Customer/BindPublic`], resolve)
+    },
+    {
+      path: '/public',
+      name: '公众号客户中心',
+      component: resolve => require([`@/views/PublicCenter/Main`], resolve)
     }
   ]
 })
@@ -68,7 +73,9 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    if (!token && to.path.slice(0,5) !== '/bind') {
+    let ignore_path = ["bind", "public"];
+    let path_1 = to.path.split('/')[1];
+    if (!token && ignore_path.indexOf(path_1) === -1) {
       // 如果访问非登录界面，且户会话信息不存在，代表未登录，则跳转到登录界面
       next({ path: '/login' })
     } else {
