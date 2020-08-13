@@ -13,7 +13,7 @@
 				<div style="display: flex">
 					<div>
 						<el-form-item label="消息预览" label-width="100px">
-							<div class="_1sylPCEh-4wyUtQfMS8d7_">
+							<div :style="sms_bgi_style" class="_1sylPCEh-4wyUtQfMS8d7_">
 								<div class="container"><div>
 									<div class="message-content">{{tempMsgPreview || '【云逍软件】 回T退订'}}</div>
 								</div></div>
@@ -98,7 +98,7 @@
 				<div style="display: flex">
 					<div>
 						<el-form-item label="消息内容" label-width="100px">
-							<div class="_1sylPCEh-4wyUtQfMS8d7_">
+							<div class="_1sylPCEh-4wyUtQfMS8d7_" :style="sms_bgi_style">
 								<div class="container"><div>
 									<div class="message-content">【{{ruleFormTemp.sign}}】{{ruleFormTemp.msg_data}} 回T退订</div>
 								</div></div>
@@ -267,6 +267,11 @@
         name: "Sms",
 	    data() {
             return {
+                sms_bgi_style: {
+                    background:`url(${require('@/assets/img/sms_preview.png')})`,
+                    backgroundSize: `435px 654px`
+                },
+
                 activeIndex: 'send',
                 sms_balance: 0,
 
@@ -664,8 +669,6 @@
 	._1sylPCEh-4wyUtQfMS8d7_ {
 		width: 435px;
 		height: 654px;
-		background: url(https://img.yzcdn.cn/public_files/2018/08/13/0f2849931ebea4c24957dcc2da90c1e0.png);
-		background-size: 435px 654px;
 		position: relative;
 	}
 
