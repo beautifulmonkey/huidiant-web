@@ -1,51 +1,49 @@
 <template>
 	<div>
-		<div  class="card-box recharge_card" style="background-image: url(https://b.yzcdn.cn/beauty/card/bgimg/rechargeCard.png);">
-			<div  class="card-box__header">
-				<span  class="dept-info">
-					<img  src="https://img.yzcdn.cn/upload_files/2017/04/06/FkzPke7UiK-QgqA0_KFby82u6KV7.png?imageView2/1/w/48/h/48" alt="" class="card-box__header__face">
-					<span  class="card-box__header__name filter">才子美肤</span>
-				</span><span  class="card-box__header__type">充值卡</span>
+		<div class="card-box" :style="czk_bgi_style">
+			<div class="card-box__header">
+				<span class="dept-info">
+					<img  :src="require('@/assets/img/public_stores_logo.jpeg')" alt="" class="card-box__header__face">
+					<span class="card-box__header__name filter">才子美肤</span>
+				</span><span class="card-box__header__type">充值卡</span>
 			</div>
-			<div  class="card-box__name">才子银卡</div>
-			<div  class="card-box__footer">
-				<span  class="filter">有效期：永久有效</span>
-				<span  class="card-box__footer__info">
+			<div class="card-box__name">才子银卡</div>
+			<div class="card-box__footer">
+				<span class="filter">有效期：永久有效</span>
+				<span class="card-box__footer__info">
 					<span >余额</span>
-					<span  class="card-box__footer__info--white">￥</span>
-					<span  class="card-box__footer__info__name">
+					<span class="card-box__footer__info--white">￥</span>
+					<span class="card-box__footer__info__name">
 						<span >936.4</span>
 					</span><span ></span>
 				</span>
 			</div>
 		</div>
 
-		<el-card style="height: 300px;margin-top: 20px;border-radius: 12px;">
+		<el-card class="right-card">
 			<div>
 				<el-divider>卡项权益</el-divider>
 
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;font-weight: 500">
-					<div style="font-size: 13px;">适用内容</div>
-					<div style="font-size: 13px;">优惠规则</div>
+				<div class="right-card-title">
+					<div>适用内容</div>
+					<div>优惠规则</div>
 				</div>
 
-<!--				<el-divider></el-divider>-->
-
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;">
-					<div style="font-size: 13px;">所有服务</div>
-					<div style="font-size: 13px;">10折</div>
+				<div class="right-card-value">
+					<div>所有服务</div>
+					<div>10折</div>
 				</div>
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;">
-					<div style="font-size: 13px;">烫发</div>
-					<div style="font-size: 13px;">10折</div>
+				<div class="right-card-value">
+					<div>烫发</div>
+					<div>10折</div>
 				</div>
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;">
-					<div style="font-size: 13px;">健康发质多色染</div>
-					<div style="font-size: 13px;">¥380</div>
+				<div class="right-card-value">
+					<div>健康发质多色染</div>
+					<div>¥380</div>
 				</div>
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;">
-					<div style="font-size: 13px;">发型师剪发</div>
-					<div style="font-size: 13px;">¥20</div>
+				<div class="right-card-value">
+					<div>发型师剪发</div>
+					<div>¥20</div>
 				</div>
 
 			</div>
@@ -55,7 +53,18 @@
 
 <script>
     export default {
-        name: "SubPrepaid"
+        name: "SubPrepaid",
+	    data(){
+            return {
+                czk_bgi_style: {
+                    backgroundImage:`url(${require('@/assets/img/czk_bgi.png')})`
+                },
+                ck_bgi_style: {
+                    backgroundImage:`url(${require('@/assets/img/ck_bgi.png')})`
+                }
+
+            }
+	    }
     }
 </script>
 
@@ -166,5 +175,27 @@
 	}
 	.el-divider{
 		margin: 10px 0;
+	}
+
+	.right-card {
+		padding-bottom: 40px;
+		margin-top: 20px;
+		border-radius: 12px;
+	}
+	.right-card-title {
+		display: flex;
+		margin-top: 20px;
+		justify-content: space-between;
+		padding: 0 30px;
+		font-weight: 500;
+		font-size: 13px;
+	}
+
+	.right-card-value {
+		display: flex;
+		margin-top: 20px;
+		justify-content: space-between;
+		padding: 0 30px;
+		font-size: 13px;
 	}
 </style>

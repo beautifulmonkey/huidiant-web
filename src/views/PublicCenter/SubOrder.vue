@@ -18,7 +18,7 @@
 			</div>
 		</el-card>
 
-		<el-button style="margin-bottom: 100px;" @click="LLL=LLL+2">加载更多</el-button>
+		<el-button style="width: 100%;margin-bottom: 100px" type="primary" @click="LLL=LLL+2">加载更多</el-button>
 
 	</div>
 </template>

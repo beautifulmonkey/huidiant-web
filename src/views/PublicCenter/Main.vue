@@ -2,7 +2,7 @@
 	<div id="main-box">
 		<div class="content-box" :style="calcHeight()">
 			<order-component v-if="activeMenu==='order'"></order-component>
-			<me-component v-if="activeMenu==='me'"></me-component>
+			<me-component @redirect="componentRedirect" v-if="activeMenu==='me'"></me-component>
 			<prepaid-component v-if="activeMenu==='prepaid'"></prepaid-component>
 			<counting-component v-if="activeMenu==='counting'"></counting-component>
 		</div>
@@ -59,6 +59,10 @@
                 // return "min-height: 200px";
                 return "min-height: " +  (this.hh - 130).toString() + "px"
             },
+
+            componentRedirect(menu){
+                this.activeMenu = menu
+            }
         },
 	    mounted() {
             this.hh = window.document.getElementById('main-box').clientHeight;

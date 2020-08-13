@@ -1,69 +1,46 @@
 <template>
 	<div>
-		<div @click="details=!details" class="card-box recharge_card" style="background-image: url(https://b.yzcdn.cn/beauty/card/bgimg/timesCard.png);">
-			<div  class="card-box__header">
-				<span  class="dept-info">
-					<img  src="https://img.yzcdn.cn/upload_files/2017/04/06/FkzPke7UiK-QgqA0_KFby82u6KV7.png?imageView2/1/w/48/h/48" alt="" class="card-box__header__face">
-					<span  class="card-box__header__name filter">才子美肤</span>
-				</span><span  class="card-box__header__type">次数卡</span>
-			</div>
-			<div  class="card-box__name">剪发卡10次</div>
-			<div  class="card-box__footer">
-				<span  class="filter">有效期：永久有效</span>
-				<span  class="card-box__footer__info">
-					<span>剩余</span>
-<!--					<span  class="card-box__footer__info&#45;&#45;white">￥</span>-->
-					<span  class="card-box__footer__info__name">
-						<span >3</span>
-					</span>
-					<span >次</span>
-				</span>
-			</div>
-		</div>
-		<el-card v-show="details" style="border-radius: 12px;margin-top: -40px;margin-bottom: 20px;">
-			<div>
-<!--				<el-divider>卡项权益</el-divider>-->
+		<div>
 
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;font-weight: 500">
-					<div style="font-size: 13px;">适用内容</div>
-					<div style="font-size: 13px;">剩余次数</div>
+			<div @click="details=!details" class="card-box" :style="ck_bgi_style">
+				<div  class="card-box__header">
+					<span class="dept-info">
+						<img  :src="require('@/assets/img/public_stores_logo.jpeg')" alt="" class="card-box__header__face">
+						<span class="card-box__header__name filter">才子美肤</span>
+					</span><span class="card-box__header__type">次数卡</span>
 				</div>
-
-				<!--				<el-divider></el-divider>-->
-
-				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;">
-					<div style="font-size: 13px;">剪发</div>
-					<div style="font-size: 13px;">剩余9次</div>
-				</div>
-				<!--				<div style="display: flex;margin-top: 20px;justify-content: space-between;padding: 0 30px;">-->
-				<!--					<div style="font-size: 13px;">烫发</div>-->
-				<!--					<div style="font-size: 13px;">10折</div>-->
-				<!--				</div>-->
-			</div>
-		</el-card>
-
-
-		<div class="card-box recharge_card" style="background-image: url(https://b.yzcdn.cn/beauty/card/bgimg/timesCard.png);">
-			<div  class="card-box__header">
-				<span  class="dept-info">
-					<img  src="https://img.yzcdn.cn/upload_files/2017/04/06/FkzPke7UiK-QgqA0_KFby82u6KV7.png?imageView2/1/w/48/h/48" alt="" class="card-box__header__face">
-					<span  class="card-box__header__name filter">才子美肤</span>
-				</span><span  class="card-box__header__type">次数卡</span>
-			</div>
-			<div  class="card-box__name">剪发卡10次</div>
-			<div  class="card-box__footer">
-				<span  class="filter">有效期：永久有效</span>
-				<span  class="card-box__footer__info">
-					<span>剩余</span>
-					<!--					<span  class="card-box__footer__info&#45;&#45;white">￥</span>-->
-					<span  class="card-box__footer__info__name">
-						<span >3</span>
+				<div class="card-box__name">剪发卡10次</div>
+				<div class="card-box__footer">
+					<span class="filter">有效期：永久有效</span>
+					<span class="card-box__footer__info">
+						<span>剩余</span>
+						<span class="card-box__footer__info__name">
+							<span >3</span>
+						</span>
+						<span >次</span>
 					</span>
-					<span >次</span>
-				</span>
+				</div>
 			</div>
-		</div>
+			<el-card v-show="details" class="right-card">
+				<div>
 
+					<div class="right-card-title">
+						<div>适用内容</div>
+						<div>剩余次数</div>
+					</div>
+
+					<div class="right-card-value">
+						<div>剪发</div>
+						<div>9次</div>
+					</div>
+					<div class="right-card-value">
+						<div>烫发</div>
+						<div>10折</div>
+					</div>
+				</div>
+			</el-card>
+
+		</div>
 	</div>
 </template>
 
@@ -72,7 +49,14 @@
         name: "SubCounting",
 	    data() {
             return {
-                details: false
+                details: false,
+
+                czk_bgi_style: {
+                    backgroundImage:`url(${require('@/assets/img/czk_bgi.png')})`
+                },
+                ck_bgi_style: {
+                    backgroundImage:`url(${require('@/assets/img/ck_bgi.png')})`
+                }
             }
 	    }
     }
@@ -183,5 +167,27 @@
 		font-size: 22px;
 		font-family: 'Avenir Heavy';
 		font-weight: 800;
+	}
+
+	.right-card{
+		border-radius: 12px;
+		margin-top: -40px;
+		margin-bottom: 20px;
+	}
+	.right-card-title {
+		display: flex;
+		margin-top: 20px;
+		justify-content: space-between;
+		padding: 0 30px;
+		font-weight: 500;
+		font-size: 13px;
+	}
+
+	.right-card-value {
+		display: flex;
+		margin-top: 20px;
+		justify-content: space-between;
+		padding: 0 30px;
+		font-size: 13px;
 	}
 </style>
