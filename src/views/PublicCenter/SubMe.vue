@@ -4,7 +4,7 @@
 			<div class="logo">
 				<img :src="require('@/assets/img/public_stores_logo.jpeg')">
 			</div>
-			<span style="font-size: 12px;">才子造型</span>
+			<span style="font-size: 12px;">{{meData.stores_name}}</span>
 		</div>
 
 		<div>
@@ -12,18 +12,19 @@
 				<div class="head-wrap">
 					<div class="avatar-wrap">
 						<img :src="require('@/assets/img/user_smile.png')" class="avatar">
-						<i class="el-icon-male sex-icon" style="color: #409df3"></i>
+						<i v-if="meData.sex===1" class="el-icon-female sex-icon" style="color: #e6419c;font-size: 20px;"></i>
+						<i v-if="meData.sex===2" class="el-icon-male sex-icon" style="color: #409df3;font-size: 20px;"></i>
 					</div>
 
 					<div class="info-wrap flex-item">
-						<div class="username">李运峰</div>
+						<div class="username">{{meData.name}}</div>
 						<div class="version">
 							<img :src="require('@/assets/img/public_level.png')" class="ver-icon">
-							<div class="version-text is-levelundefined">才子造型金卡</div>
+							<div class="version-text is-levelundefined">{{meData.identity}}</div>
 						</div>
 					</div>
 				</div>
-				<div class="member-num-wrap"><span>NO.17610162918</span></div>
+				<div class="member-num-wrap"><span>NO.{{meData.tel}}</span></div>
 			</div>
 
 			<div class="level-info-wrap">
@@ -43,7 +44,7 @@
 						<svg-icon :icon-class="item.icon" style="font-size: 35px;color: #fbae11" />
 						<div style="margin-left: 10px;">
 							<span style="font-size: 12px;color: #555555">{{item.name}}</span><br>
-							<span style="font-weight: 500;">{{item.val}}</span>
+							<span style="font-weight: 500;">{{meData[item.key]}}</span>
 						</div>
 					</div>
 				</el-card>
@@ -55,6 +56,8 @@
 </template>
 
 <script>
+    import publicApi from '@/service/public.js'
+
     export default {
         name: "SubMe",
 	    data(){
@@ -63,16 +66,37 @@
                     "background": "url(" + require('@/assets/img/public_me.jpg') +  ") center center / cover no-repeat"
                 },
 	            vip_card: [
-                    {icon: "dashboard_wallet", name: "余额", menu: "prepaid", val: 0},
-                    {icon: "dashboard_card", name: "套餐", menu: "counting", val: 2}
+                    {icon: "dashboard_wallet", name: "余额", menu: "prepaid", key: "card_balance"},
+                    {icon: "dashboard_card", name: "套餐", menu: "counting", key: "counting_card_length"}
 	            ],
+	            meData: {}
             }
 	    },
 	    methods:{
             redirect(menu){
                 this.$emit('redirect', menu)
-            }
-	    }
+            },
+
+            async customerCenterMe(){
+                try {
+                    const res = await publicApi.customerCenterMe(this.$route.params.openId);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.meData = res.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取个人信息失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+        },
+	    mounted() {
+            this.customerCenterMe()
+        }
     }
 </script>
 

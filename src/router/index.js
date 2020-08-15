@@ -53,7 +53,7 @@ const router = new Router({
       component: resolve => require([`@/views/Customer/BindPublic`], resolve)
     },
     {
-      path: '/public',
+      path: '/public/:openId',
       name: '公众号客户中心',
       component: resolve => require([`@/views/PublicCenter/Main`], resolve)
     }

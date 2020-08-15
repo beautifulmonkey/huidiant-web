@@ -1,34 +1,45 @@
 <template>
 	<div class="box-rolling" :style="calcHeight()">
 
-		<el-card v-for="n in LLL" shadow="never">
+		<el-card v-for="order in orderList" shadow="never">
 			<div class="head-wrap">
-				<span>2020.08.08 21.40</span>
-				<span>成功{{n}}</span>
+				<span>{{order.created_at}}</span>
+				<span>成功</span>
 			</div>
 			<el-divider></el-divider>
 			<div class="goods-wrap">
-				<div><el-tag type="warning" size="mini">品项</el-tag>&nbsp;<span>首席剪发</span></div>
-				<div><el-tag type="warning" size="mini">品项</el-tag>&nbsp;<span>欧莱雅烫发</span></div>
+				<div v-for="goodsItem in order.goods">
+					<el-tag type="warning" size="mini">{{order.order_type_info}}</el-tag>&nbsp;
+					<span>{{goodsItem.goods_name}}</span>
+					<span v-if="goodsItem.type === 3" style="font-size: 12px;color: rgb(153, 153, 153);">{{goodsItem.reduce_text}}</span>
+				</div>
 			</div>
 
-			<div class="amount-wrap">
-				<span>订单金额: 58.00元</span><br>
-				<span style="font-size: 13px;color: #878787">余额: 194元</span>
+			<div class="amount-wrap" v-if="order.paid_amount">
+				<span>订单金额:{{order.paid_amount}}元</span><br>
+				<span style="font-size: 13px;color: #878787">余额: {{order.total_balance_after}}元</span>
 			</div>
 		</el-card>
 
-		<el-button style="width: 100%;margin-bottom: 100px" type="primary" @click="LLL=LLL+2">加载更多</el-button>
+		<el-button :disabled="btnDisabled" v-show="btnShow" style="width: 100%;margin-bottom: 100px" type="primary" @click="viewMore">{{!btnDisabled ? '加载更多': '没有更多了...'}}</el-button>
 
 	</div>
 </template>
 
 <script>
+    import publicApi from '@/service/public.js'
+
     export default {
         name: "SubOrder",
 	    data(){
             return {
-                LLL: 10
+                filter: {
+                    page_index: 1,
+                    page_size: 10
+                },
+	            btnShow: false,
+                btnDisabled: false,
+	            orderList: []
             }
 	    },
 	    methods: {
@@ -39,7 +50,41 @@
                 }
                 return "height: 300px";
             },
-	    }
+
+		    viewMore(){
+			    this.customerCenterOrder()
+		    },
+
+            async customerCenterOrder(){
+                try {
+                    const res = await publicApi.customerCenterOrder(this.$route.params.openId, this.filter);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.orderList = this.orderList.concat(res.data.data);
+                        this.filter.total = res.data.page.total;
+
+                        this.btnShow = true;
+
+                        if (this.filter.total === this.orderList.length){
+                            this.btnDisabled = true
+                        }else {
+                            this.filter.page_index += 1
+                        }
+
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取订单信息失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+	    },
+        mounted() {
+            this.customerCenterOrder()
+        }
     }
 </script>
 
@@ -48,7 +93,6 @@
 		overflow-y: auto;
 		overflow-x: hidden;
 		padding: 2px;
-
 	}
 	.el-card {
 		width: 100%;

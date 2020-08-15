@@ -1,27 +1,36 @@
 <template>
-	<div>
-		<div>
+	<div class="box-rolling" :style="calcHeight()">
 
-			<div @click="details=!details" class="card-box" :style="ck_bgi_style">
+		<div v-for="card in countingList">
+			<div class="card-box" :style="ck_bgi_style">
 				<div  class="card-box__header">
 					<span class="dept-info">
 						<img  :src="require('@/assets/img/public_stores_logo.jpeg')" alt="" class="card-box__header__face">
-						<span class="card-box__header__name filter">才子美肤</span>
+						<span class="card-box__header__name filter">{{stores_name}}</span>
 					</span><span class="card-box__header__type">次数卡</span>
 				</div>
-				<div class="card-box__name">剪发卡10次</div>
+				<div class="card-box__name">{{card.name}}</div>
 				<div class="card-box__footer">
-					<span class="filter">有效期：永久有效</span>
-					<span class="card-box__footer__info">
+					<span class="filter">有效期：{{card.expiry_date || '永久有效'}}</span>
+
+					<span class="card-box__footer__info" v-if="card.counting !== -1">
 						<span>剩余</span>
 						<span class="card-box__footer__info__name">
-							<span >3</span>
+							<span >{{card.counting}}</span>
 						</span>
 						<span >次</span>
 					</span>
+					<span class="card-box__footer__info" v-else>
+						<span class="card-box__footer__info__name" style="font-size: 16px">
+							<span >无限次</span>
+						</span>
+					</span>
+
+
 				</div>
 			</div>
-			<el-card v-show="details" class="right-card">
+
+			<el-card class="right-card">
 				<div>
 
 					<div class="right-card-title">
@@ -29,13 +38,9 @@
 						<div>剩余次数</div>
 					</div>
 
-					<div class="right-card-value">
-						<div>剪发</div>
-						<div>9次</div>
-					</div>
-					<div class="right-card-value">
-						<div>烫发</div>
-						<div>10折</div>
+					<div class="right-card-value" v-for="item in card.items">
+						<div>{{item.name}}</div>
+						<div>{{item.counting_info}}</div>
 					</div>
 				</div>
 			</el-card>
@@ -45,24 +50,63 @@
 </template>
 
 <script>
+
+    import publicApi from '@/service/public.js'
+
     export default {
         name: "SubCounting",
 	    data() {
             return {
-                details: false,
-
+                stores_name: '',
                 czk_bgi_style: {
                     backgroundImage:`url(${require('@/assets/img/czk_bgi.png')})`
                 },
                 ck_bgi_style: {
                     backgroundImage:`url(${require('@/assets/img/ck_bgi.png')})`
-                }
+                },
+	            countingList: []
             }
-	    }
+	    },
+	    methods: {
+            calcHeight(){
+                const container = window.document.getElementById('main-box');
+                if(container){
+                    return "height: " +  (container.clientHeight - 75).toString() + "px"
+                }
+                return "height: 300px";
+            },
+
+            async customerCenterCounting(){
+                try {
+                    const res = await publicApi.customerCenterCounting(this.$route.params.openId);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.stores_name = res.data.stores_name;
+                        this.countingList = res.data.counting;
+                        // this.countingList = this.countingList.concat(this.countingList);
+
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取订单信息失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+	    },
+        mounted() {
+            this.customerCenterCounting()
+        }
     }
 </script>
 
 <style scoped>
+	.box-rolling {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
 	.card-box {
 		height: 165px;
 		border-radius: 12px;

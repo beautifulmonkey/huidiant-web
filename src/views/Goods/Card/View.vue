@@ -101,7 +101,6 @@
                     const res = await cardApi.getCardDetails(this.$route.params.id);
                     if (res.status >= 200 && res.status < 300) {
                         this.cardData = res.data;
-                        debugger
                     } else {
                         this.$message({
                             type: 'error',

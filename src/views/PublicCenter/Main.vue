@@ -2,12 +2,12 @@
 	<div id="main-box">
 		<div class="content-box" :style="calcHeight()">
 			<order-component v-if="activeMenu==='order'"></order-component>
-			<me-component @redirect="componentRedirect" v-if="activeMenu==='me'"></me-component>
+			<me-component @redirect="componentRedirect" v-show="activeMenu==='me'"></me-component>
 			<prepaid-component v-if="activeMenu==='prepaid'"></prepaid-component>
 			<counting-component v-if="activeMenu==='counting'"></counting-component>
 		</div>
-		<div style="width: 100%;text-align: center;color: #888;font-size: 13px;" v-if="activeMenu==='me'">
-			由<span style="padding: 0 3px;color: #cc9434;">云逍科技</span>提供技术支持
+		<div v-if="activeMenu==='me'" class="company-support-bar">
+			由<span>云逍科技</span>提供技术支持
 		</div>
 
 		<div class="mint-tabbar is-fixed">
@@ -52,11 +52,6 @@
 	    },
         methods: {
             calcHeight(){
-                // const container = window.document.getElementById('main-box');
-                // if(container){
-                //     return "min-height: " +  (container.clientHeight - 75).toString() + "px"
-                // }
-                // return "min-height: 200px";
                 return "min-height: " +  (this.hh - 130).toString() + "px"
             },
 
@@ -66,6 +61,11 @@
         },
 	    mounted() {
             this.hh = window.document.getElementById('main-box').clientHeight;
+
+            let cType = this.$router.history.current.query.cType;
+            if (cType) {
+                this.activeMenu = cType
+            }
         }
     }
 </script>
@@ -129,5 +129,17 @@
 
 	.content-box{
 		padding: 20px;
+	}
+
+	.company-support-bar {
+		width: 100%;
+		text-align: center;
+		color: #888;
+		font-size: 13px;
+	}
+
+	.company-support-bar span{
+		padding: 0 3px;
+		color: #cc9434;
 	}
 </style>

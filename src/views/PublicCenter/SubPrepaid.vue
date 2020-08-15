@@ -1,26 +1,27 @@
 <template>
-	<div>
+	<div class="box-rolling" :style="calcHeight()">
 		<div class="card-box" :style="czk_bgi_style">
 			<div class="card-box__header">
 				<span class="dept-info">
 					<img  :src="require('@/assets/img/public_stores_logo.jpeg')" alt="" class="card-box__header__face">
-					<span class="card-box__header__name filter">才子美肤</span>
+					<span class="card-box__header__name filter">{{meData.stores_name}}</span>
 				</span><span class="card-box__header__type">充值卡</span>
 			</div>
-			<div class="card-box__name">才子银卡</div>
+			<div class="card-box__name">{{meData.identity}}</div>
 			<div class="card-box__footer">
+				<!--todo: 有效期不能写死-->
 				<span class="filter">有效期：永久有效</span>
 				<span class="card-box__footer__info">
 					<span >余额</span>
 					<span class="card-box__footer__info--white">￥</span>
 					<span class="card-box__footer__info__name">
-						<span >936.4</span>
+						<span >{{meData.card_balance}}</span>
 					</span><span ></span>
 				</span>
 			</div>
 		</div>
 
-		<el-card class="right-card">
+		<el-card class="right-card" v-show="rightsCardShow">
 			<div>
 				<el-divider>卡项权益</el-divider>
 
@@ -29,21 +30,9 @@
 					<div>优惠规则</div>
 				</div>
 
-				<div class="right-card-value">
-					<div>所有服务</div>
-					<div>10折</div>
-				</div>
-				<div class="right-card-value">
-					<div>烫发</div>
-					<div>10折</div>
-				</div>
-				<div class="right-card-value">
-					<div>健康发质多色染</div>
-					<div>¥380</div>
-				</div>
-				<div class="right-card-value">
-					<div>发型师剪发</div>
-					<div>¥20</div>
+				<div class="right-card-value" v-for="rights in cardRights">
+					<div>{{rights.content}}</div>
+					<div>{{rights.rule}}</div>
 				</div>
 
 			</div>
@@ -52,10 +41,16 @@
 </template>
 
 <script>
+
+    import publicApi from '@/service/public.js'
+
     export default {
         name: "SubPrepaid",
 	    data(){
             return {
+                rightsCardShow: false,
+                meData: {},
+	            cardRights: {},
                 czk_bgi_style: {
                     backgroundImage:`url(${require('@/assets/img/czk_bgi.png')})`
                 },
@@ -64,11 +59,61 @@
                 }
 
             }
-	    }
+	    },
+	    methods: {
+            calcHeight(){
+                const container = window.document.getElementById('main-box');
+                if(container){
+                    return "height: " +  (container.clientHeight - 75).toString() + "px"
+                }
+                return "height: 300px";
+            },
+
+            async customerCenterMe(){
+                try {
+                    const res = await publicApi.customerCenterMe(this.$route.params.openId);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.meData = res.data;
+                        this.customerCenterPrepaidRights()
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取个人信息失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+		    async customerCenterPrepaidRights(){
+                try {
+                    const res = await publicApi.customerCenterPrepaidRights(this.$route.params.openId, this.meData.prepaid_card);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.cardRights = res.data.card_rights;
+                        this.rightsCardShow = true
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取卡项信息失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+		    }
+	    },
+	    mounted() {
+            this.customerCenterMe()
+        }
     }
 </script>
 
 <style scoped>
+	.box-rolling {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
 	.card-box {
 		height: 165px;
 		border-radius: 12px;
@@ -180,6 +225,7 @@
 	.right-card {
 		padding-bottom: 40px;
 		margin-top: 20px;
+		margin-bottom: 50px;
 		border-radius: 12px;
 	}
 	.right-card-title {
