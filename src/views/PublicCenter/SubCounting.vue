@@ -46,6 +46,11 @@
 			</el-card>
 
 		</div>
+
+
+		<div v-if="!countingList.length" class="no-data">
+			暂无套餐
+		</div>
 	</div>
 </template>
 
@@ -233,5 +238,13 @@
 		justify-content: space-between;
 		padding: 0 30px;
 		font-size: 13px;
+	}
+	.no-data{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: rgb(150, 151, 153);
 	}
 </style>

@@ -1,27 +1,33 @@
 <template>
 	<div class="box-rolling" :style="calcHeight()">
 
-		<el-card v-for="order in orderList" shadow="never">
-			<div class="head-wrap">
-				<span>{{order.created_at}}</span>
-				<span>成功</span>
-			</div>
-			<el-divider></el-divider>
-			<div class="goods-wrap">
-				<div v-for="goodsItem in order.goods">
-					<el-tag type="warning" size="mini">{{order.order_type_info}}</el-tag>&nbsp;
-					<span>{{goodsItem.goods_name}}</span>
-					<span v-if="goodsItem.type === 3" style="font-size: 12px;color: rgb(153, 153, 153);">{{goodsItem.reduce_text}}</span>
+		<div v-if="orderList.length">
+			<el-card v-for="order in orderList" shadow="never">
+				<div class="head-wrap">
+					<span>{{order.created_at}}</span>
+					<span>成功</span>
 				</div>
-			</div>
+				<el-divider></el-divider>
+				<div class="goods-wrap">
+					<div v-for="goodsItem in order.goods">
+						<el-tag type="warning" size="mini">{{order.order_type_info}}</el-tag>&nbsp;
+						<span>{{goodsItem.goods_name}}</span>
+						<span v-if="goodsItem.type === 3" style="font-size: 12px;color: rgb(153, 153, 153);">{{goodsItem.reduce_text}}</span>
+					</div>
+				</div>
 
-			<div class="amount-wrap" v-if="order.paid_amount">
-				<span>订单金额:{{order.paid_amount}}元</span><br>
-				<span style="font-size: 13px;color: #878787">余额: {{order.total_balance_after}}元</span>
-			</div>
-		</el-card>
+				<div class="amount-wrap" v-if="order.paid_amount">
+					<span>订单金额:{{order.paid_amount}}元</span><br>
+					<span style="font-size: 13px;color: #878787">余额: {{order.total_balance_after}}元</span>
+				</div>
+			</el-card>
 
-		<el-button :disabled="btnDisabled" v-show="btnShow" style="width: 100%;margin-bottom: 100px" type="primary" @click="viewMore">{{!btnDisabled ? '加载更多': '没有更多了...'}}</el-button>
+			<el-button :disabled="btnDisabled" v-show="btnShow" style="width: 100%;margin-bottom: 100px" type="primary" @click="viewMore">{{!btnDisabled ? '加载更多': '没有更多了...'}}</el-button>
+		</div>
+
+		<div v-if="this.filter.total===0" class="no-data">
+			暂无消费记录
+		</div>
 
 	</div>
 </template>
@@ -122,6 +128,14 @@
 	.amount-wrap {
 		font-size: 15px;
 		text-align: right
+	}
+	.no-data{
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: rgb(150, 151, 153);
 	}
 
 </style>

@@ -282,7 +282,7 @@
 	}
 
 	.vip-card-box {
-		display: flex;
+		display: -webkit-box;
 		width: 100%;
 		align-items: center
 	}

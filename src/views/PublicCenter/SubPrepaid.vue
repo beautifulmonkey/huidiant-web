@@ -74,7 +74,9 @@
                     const res = await publicApi.customerCenterMe(this.$route.params.openId);
                     if (res.status >= 200 && res.status < 300) {
                         this.meData = res.data;
-                        this.customerCenterPrepaidRights()
+                        if (this.meData.prepaid_card){
+                            this.customerCenterPrepaidRights()
+                        }
                     } else {
                         this.$message({
                             type: 'error',
