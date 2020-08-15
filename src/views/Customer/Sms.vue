@@ -750,6 +750,11 @@
 		top: 13px;
 	}
 	.warm_tips2 p {
+		display: block;
+		margin-block-start: 1em;
+		margin-block-end: 1em;
+		margin-inline-start: 0px;
+		margin-inline-end: 0px;
 		margin-left: 46px;
 	}
 
