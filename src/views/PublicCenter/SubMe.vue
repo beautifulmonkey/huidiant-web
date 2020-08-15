@@ -1,53 +1,57 @@
 <template>
 	<div>
-		<div class="store-info">
-			<div class="logo">
-				<img :src="require('@/assets/img/public_stores_logo.jpeg')">
+
+		<div v-show="boxShow">
+			<div class="store-info">
+				<div class="logo">
+					<img :src="require('@/assets/img/public_stores_logo.jpeg')">
+				</div>
+				<span style="font-size: 12px;">{{meData.stores_name}}</span>
 			</div>
-			<span style="font-size: 12px;">{{meData.stores_name}}</span>
-		</div>
 
-		<div>
-			<div class="card-bg" :style="cardBgStyle">
-				<div class="head-wrap">
-					<div class="avatar-wrap">
-						<img :src="require('@/assets/img/user_smile.png')" class="avatar">
-						<i v-if="meData.sex===1" class="el-icon-female sex-icon" style="color: #e6419c;font-size: 20px;"></i>
-						<i v-if="meData.sex===2" class="el-icon-male sex-icon" style="color: #409df3;font-size: 20px;"></i>
-					</div>
+			<div>
+				<div class="card-bg" :style="cardBgStyle">
+					<div class="head-wrap">
+						<div class="avatar-wrap">
+							<img :src="require('@/assets/img/user_smile.png')" class="avatar">
+							<i v-if="meData.sex===1" class="el-icon-female sex-icon" style="color: #e6419c;font-size: 20px;"></i>
+							<i v-if="meData.sex===2" class="el-icon-male sex-icon" style="color: #409df3;font-size: 20px;"></i>
+						</div>
 
-					<div class="info-wrap flex-item">
-						<div class="username">{{meData.name}}</div>
-						<div class="version">
-							<img :src="require('@/assets/img/public_level.png')" class="ver-icon">
-							<div class="version-text is-levelundefined">{{meData.identity}}</div>
+						<div class="info-wrap flex-item">
+							<div class="username">{{meData.name}}</div>
+							<div class="version">
+								<img :src="require('@/assets/img/public_level.png')" class="ver-icon">
+								<div class="version-text is-levelundefined">{{meData.identity}}</div>
+							</div>
 						</div>
 					</div>
+					<div class="member-num-wrap"><span>NO.{{meData.tel}}</span></div>
 				</div>
-				<div class="member-num-wrap"><span>NO.{{meData.tel}}</span></div>
-			</div>
 
-			<div class="level-info-wrap">
-				<div class="level-text">
-					尊享更多等级权益
-				</div>
-				<div class="level-btn" @click="redirect('prepaid')">
-					了解详情
-				</div>
-			</div>
-		</div>
-
-		<div>
-			<div class="card-info">
-				<el-card v-for="item in vip_card" @click.native="redirect(item.menu)">
-					<div class="vip-card-box">
-						<svg-icon :icon-class="item.icon" style="font-size: 35px;color: #fbae11" />
-						<div style="margin-left: 10px;">
-							<span style="font-size: 12px;color: #555555">{{item.name}}</span><br>
-							<span style="font-weight: 500;">{{meData[item.key]}}</span>
-						</div>
+				<div class="level-info-wrap">
+					<div class="level-text">
+						尊享更多等级权益
 					</div>
-				</el-card>
+					<div class="level-btn" @click="redirect('prepaid')">
+						了解详情
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="card-info">
+					<el-card v-for="item in vip_card" @click.native="redirect(item.menu)">
+						<div class="vip-card-box">
+							<svg-icon :icon-class="item.icon" style="font-size: 35px;color: #fbae11" />
+							<div style="margin-left: 10px;">
+								<span style="font-size: 12px;color: #555555">{{item.name}}</span><br>
+								<span style="font-weight: 500;">{{meData[item.key]}}</span>
+							</div>
+						</div>
+					</el-card>
+				</div>
+
 			</div>
 
 		</div>
@@ -62,6 +66,7 @@
         name: "SubMe",
 	    data(){
             return {
+                boxShow: false,
                 cardBgStyle: {
                     "background": "url(" + require('@/assets/img/public_me.jpg') +  ") center center / cover no-repeat"
                 },
@@ -82,6 +87,7 @@
                     const res = await publicApi.customerCenterMe(this.$route.params.openId);
                     if (res.status >= 200 && res.status < 300) {
                         this.meData = res.data;
+                        this.boxShow = true
                     } else {
                         this.$message({
                             type: 'error',
@@ -96,7 +102,10 @@
         },
 	    mounted() {
             this.customerCenterMe()
-        }
+        },
+        created () {
+            document.title = '会员中心'
+        },
     }
 </script>
 

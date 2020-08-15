@@ -90,7 +90,10 @@
 	    },
         mounted() {
             this.customerCenterOrder()
-        }
+        },
+        created () {
+            document.title = '消费记录'
+        },
     }
 </script>
 

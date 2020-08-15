@@ -103,7 +103,10 @@
 	    },
         mounted() {
             this.customerCenterCounting()
-        }
+        },
+        created () {
+            document.title = '套餐列表'
+        },
     }
 </script>
 

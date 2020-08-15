@@ -107,7 +107,10 @@
 	    },
 	    mounted() {
             this.customerCenterMe()
-        }
+        },
+        created () {
+            document.title = '我的会员卡'
+        },
     }
 </script>
 

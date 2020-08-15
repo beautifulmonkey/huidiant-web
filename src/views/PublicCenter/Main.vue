@@ -2,7 +2,7 @@
 	<div id="main-box">
 		<div class="content-box" :style="calcHeight()">
 			<order-component v-if="activeMenu==='order'"></order-component>
-			<me-component @redirect="componentRedirect" v-show="activeMenu==='me'"></me-component>
+			<me-component @redirect="componentRedirect" v-if="activeMenu==='me'"></me-component>
 			<prepaid-component v-if="activeMenu==='prepaid'"></prepaid-component>
 			<counting-component v-if="activeMenu==='counting'"></counting-component>
 		</div>
