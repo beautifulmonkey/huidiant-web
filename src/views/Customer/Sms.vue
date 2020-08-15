@@ -767,4 +767,7 @@
 		text-align: center;
 		margin: 20px;
 	}
+	.el-divider {
+		height: 15px!important;
+	}
 </style>

@@ -141,7 +141,10 @@
                 }
             },
 
-	    }
+	    },
+        created () {
+            document.title = '绑定账号'
+        },
     }
 </script>
 
