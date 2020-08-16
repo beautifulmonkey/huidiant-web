@@ -94,17 +94,17 @@
                         <span class="label">余额（元）</span>
                         <i class="el-icon-arrow-right"></i>
                     </div>
-                    <div class="value">9486.00</div>
+                    <div class="value">{{customerData.card_balance}}</div>
                 </div>
             </div>
 
             <div class="assets-item">
                 <div class="coupon-wrap">
                     <div class="label-wrap flex justify-between align-center">
-                        <span class="label">卡项（张）</span>
+                        <span class="label">次卡（张）</span>
                         <i class="el-icon-arrow-right"></i>
                     </div>
-                    <div class="value">2</div>
+                    <div class="value">{{customerData.counting_card_length}}</div>
                 </div>
             </div>
 
@@ -114,23 +114,39 @@
                         <span class="label">累计消费（元）</span>
                         <i class="el-icon-arrow-right"></i>
                     </div>
-                    <div class="value">1080</div>
+                    <div class="value">{{customerData.consume_total}}</div>
                 </div>
             </div>
         </div>
 
 
         <!--组件-->
-        <div class="m-wrap-16" style="height: 500px;margin-top: 24px;">
+        <div class="m-wrap-16" style="margin-top: 24px;min-height: 400px;">
             <div>
                 <el-tabs type="card">
                     <el-tab-pane label="消费记录">
+                        <order-list-component :customer_id="this.$route.params.id"></order-list-component>
                     </el-tab-pane>
                     <el-tab-pane label="次卡信息">
+                        <counting-cart-component :customer_id="this.$route.params.id"></counting-cart-component>
                     </el-tab-pane>
                     <el-tab-pane label="客户档案">
+                        <div>
+                            <form class="el-form member-detail-form">
+                                <div v-for="item in detail_info" class="el-form-item is-required is-no-asterisk el-form-item--medium">
+                                    <label class="el-form-item__label" style="width: 150px;">{{ item.label }}：</label>
+                                    <div class="el-form-item__content" style="margin-left: 150px;">
+                                        <div>
+                                            <p class="text">{{ customerData[item.key] }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
                     </el-tab-pane>
                 </el-tabs>
+
             </div>
 
         </div>
@@ -139,17 +155,69 @@
 </template>
 
 <script>
+    import customerApi from '@/service/customer.js'
+    import upSertCustomerComponent from '@/views/Customer/upSertCustomer.vue'
+    import countingCartComponent from '@/views/Customer/Guest/countingCardSub.vue'
+    import orderListComponent from '@/views/Orders/List.vue'
 
     export default {
         name: "Details",
+        components: {
+            upSertCustomerComponent,
+            orderListComponent,
+            countingCartComponent
+        },
         data(){
             return {
                 showDetail: true,
                 level_style: {
                     backgroundImage:`url(${require('@/assets/img/public_level.png')})`
                 },
-                imgUrl: "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJr6r7kclyDcRcicmOtnrFIXUyhbIV0D7sLMIgH0nrnmxPxo8uovxv9R9IO5vSiaVynj4Rib4vdarEeg/132?v=201904231643"
+                // imgUrl: "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJr6r7kclyDcRcicmOtnrFIXUyhbIV0D7sLMIgH0nrnmxPxo8uovxv9R9IO5vSiaVynj4Rib4vdarEeg/132?v=201904231643",
+                imgUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+
+                customerData: {},
+                detail_info: [
+                    {
+                        label: "生日",
+                        key: "birthday"
+                    },
+                    {
+                        label: "微信号",
+                        key: "wechat_id"
+                    },
+                    {
+                        label: "地址",
+                        key: "address"
+                    }
+                ],
             }
+        },
+        methods: {
+            // 获取客户详情
+            async getCustomerDetails(){
+                try {
+                    const res = await customerApi.getCustomerDetails(this.$route.params.id);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.customerData = res.data;
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取客户失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            // 重新加载页面
+            reloadData(){
+                this.getCustomerDetails();
+            }
+        },
+        mounted() {
+            this.getCustomerDetails();
         }
     }
 </script>
@@ -320,5 +388,11 @@
         -webkit-box-pack: justify;
         -ms-flex-pack: justify;
         justify-content: space-between;
+    }
+    .member-detail-form .text{
+        display: inline-block;
+        margin: 0;
+        padding: 0 8px;
+        word-break: break-all;
     }
 </style>

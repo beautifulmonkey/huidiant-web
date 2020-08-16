@@ -105,7 +105,7 @@
 
         </div>
 
-        <div class="m-wrap-16">
+        <div :class="{'m-wrap-16' : !customer_id}">
 
             <header style="margin: 20px 0;background-color: #f7f8fa;padding: 0 10px;">
                 <table>
