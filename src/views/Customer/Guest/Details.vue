@@ -1,267 +1,236 @@
 <template>
-    <div class="padding-20">
-        <div class="box-head">
-            <!--头像区域-->
-            <div style="width: 120px;margin-top: 10px;">
-                <el-avatar :size="70" :src="circleUrl"></el-avatar>
-            </div>
+    <div class="details-box">
 
-            <!--内容区域-->
-            <div style="margin-left: 5px">
-                <div class="justify-between">
-                    <div class="align-center">
-                        <strong style="font-size: 30px">{{customerData.name}}</strong>&nbsp;
-                        <i v-if="customerData.sex===1" class="el-icon-female" style="color: #e6419c;font-size: 20px;"></i>
-                        <i v-if="customerData.sex===2" class="el-icon-male" style="color: #409df3;font-size: 20px;"></i>
-                        &nbsp;&nbsp;
+        <!--头区域-->
+        <div class="m-wrap-16">
+            <div class="title-wrap flex align-center">
+                <h2 class="title flex-item">会员详情</h2>
+                <div class="button-group">
+                    <el-button type="primary" icon="el-icon-edit" plain size="medium">编辑资料</el-button>
 
-                        <up-sert-customer-component @data-save="reloadData"></up-sert-customer-component>
-                    </div>
-
-                    <div>
-                        <el-button size="mini" @click="$router.push({path: '/cashier', query: {uid: $route.params.id}})">开单</el-button>
-                        <el-button size="mini" @click="$router.push(
-                            {path: '/cashier', query: {uid: $route.params.id, cType: 'createCard'}})">办卡</el-button>
-                    </div>
-                </div>
-
-                <div style="float: left">
-                    <i class="el-icon-medal" style="color: #f8ce87"></i>
-                    <span style="font-size: 15px">{{customerData.identity}}</span>
-                </div>
-
-                <div style="margin-top: 30px">
-                    <div style="display: flex">
-                        <div class="head-item">
-                            <span style="color: rgb(153, 153, 153)">手机号:</span> {{customerData.tel}}
-                        </div>
-                        <div class="head-item">
-                            <span style="color: rgb(153, 153, 153)">注册时间:</span> {{customerData.created_at}}
-                        </div>
-                        <div class="head-item">
-                            <span style="color: rgb(153, 153, 153)">来源:</span> {{customerData.source || '-'}}
-                        </div>
-                    </div>
-
-                    <div class="head-item" style="display:flex; margin-top: 10px;">
-                        <span style="color: rgb(153, 153, 153)">备注:&nbsp;</span> {{customerData.description || '-'}}
-                    </div>
+                    <el-button type="primary" size="medium">办卡</el-button>
+                    <el-button type="primary" size="medium">开单</el-button>
                 </div>
             </div>
 
-        </div>
+            <div class="info-wrap">
+                <div class="basic-info-wrap">
+                    <div class="flex align-center">
+                        <div class="avatar-wrap">
+                            <span class="avatar el-avatar el-avatar--circle" style="height: 80px; width: 80px; line-height: 80px;">
+                                <img :src="imgUrl" style="object-fit: cover;">
+                            </span>
+                        </div>
 
-        <div class="box-main">
-            <div>
-                <div class="main-title">余额:</div>
-                <div class="main-value">￥{{customerData.card_balance}}</div>
-            </div>
-            <div>
-                <div class="main-title">次卡:</div>
-                <div class="main-value">{{customerData.counting_card_length}}张</div>
-            </div>
-            <div>
-                <div class="main-title">累计消费:</div>
-                <div class="main-value">{{customerData.consume_total}}元</div>
-            </div>
-            <div>
-                <div class="main-title">消费次数:</div>
-                <div class="main-value">{{customerData.consume_count}}次</div>
-            </div>
-            <div>
-                <div class="main-title">最后消费时间:</div>
-                <div>{{customerData.last_consume_date}}</div>
-            </div>
-<!--            <div>-->
-<!--                <span style="color: rgb(153, 153, 153)">充值卡过期时间:</span><br>-->
-<!--                <div class="main-title">余额:</div>-->
-<!--                <span></span>-->
-<!--            </div>-->
-        </div>
-
-        <div class="box-tabs">
-            <div>
-                <el-tabs type="card">
-                    <el-tab-pane label="消费记录">
-                        <order-list-component :customer_id="this.$route.params.id"></order-list-component>
-                    </el-tab-pane>
-                    <el-tab-pane label="次卡信息">
-                        <counting-cart-component :customer_id="this.$route.params.id"></counting-cart-component>
-                    </el-tab-pane>
-                    <el-tab-pane label="客户档案">
-                        <div>
-                            <div class="title">基本档案</div>
-                            <div v-for="item in detail_info" :key="item.key" class="align-center details-info">
-                                <div class="details-info-label"><span>{{ item.label }}:</span></div>
-                                <div class="details-info-value"><span>{{ customerData[item.key] }}</span></div>
+                        <div class="flex-item">
+                            <div class="name-info">
+                                <span class="name">杨逍逍</span>
+                                <div class="member-level level1">
+                                    <div class="level-icon" :style="level_style"></div>
+                                    <span style="font-weight: 600">普卡会员</span>
+                                </div>
                             </div>
+                            <div class="phone">17610162918</div>
+                            <div class="description">参加开业活动,充2000送1000, 目前还剩300元 原价消费</div>
                         </div>
-                    </el-tab-pane>
-                    <el-tab-pane disabled label="跟进记录(开发中)">跟进记录</el-tab-pane>
-                </el-tabs>
+                    </div>
+
+                </div>
+
+
+                <div class="other-info-wrap" v-show="showDetail">
+                    <div class="flex-wrap el-row el-row--flex" style="margin-left: -12px; margin-right: -12px;">
+                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">卡号</span>
+                            <span class="value">NO.2</span>
+                        </div>
+
+                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">成为会员时间</span>
+                            <span class="value">2020-07-16 00:33</span>
+                        </div>
+
+                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">来源</span>
+                            <span class="value">在线预约</span>
+                        </div>
+
+                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">到店次数</span>
+                            <span class="value">0</span>
+                        </div>
+
+                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">最近到店时间</span>
+                            <span class="value">-</span>
+                        </div>
+
+                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">最近登录时间</span>
+                            <span class="value">2020-08-11 19:07</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div style="width: 100%;text-align: center">
+                    <button type="button" class="el-button other-info-control el-button--text el-button--medium" @click="showDetail=!showDetail">
+                        <span v-if="!showDetail">更多信息<i class="el-icon--right el-icon-arrow-down"></i></span>
+                        <span v-if="showDetail">收起信息<i class="el-icon--right el-icon-arrow-up"></i></span>
+                    </button>
+                </div>
+
             </div>
+
+
+        </div>
+
+        <div class="m-wrap-16" style="width: 100%;height: 200px;">
+        </div>
+
+        <div class="m-wrap-16" style="width: 100%;height: 700px;">
         </div>
     </div>
 </template>
 
 <script>
-    import customerApi from '@/service/customer.js'
-    import upSertCustomerComponent from '@/views/Customer/upSertCustomer.vue'
-    import countingCartComponent from '@/views/Customer/Guest/countingCardSub.vue'
-    import orderListComponent from '@/views/Orders/List.vue'
 
     export default {
         name: "Details",
-        components: {
-            upSertCustomerComponent,
-            orderListComponent,
-            countingCartComponent
-        },
-        data() {
+        data(){
             return {
-                customerData: {},
-                detail_info: [
-                    {
-                        label: "生日",
-                        key: "birthday"
-                    },
-                    {
-                        label: "微信号",
-                        key: "wechat_id"
-                    },
-                    {
-                        label: "地址",
-                        key: "address"
-                    }
-                ],
-                circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                showDetail: true,
+                level_style: {
+                    backgroundImage:`url(${require('@/assets/img/public_level.png')})`
+                },
+                imgUrl: "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJr6r7kclyDcRcicmOtnrFIXUyhbIV0D7sLMIgH0nrnmxPxo8uovxv9R9IO5vSiaVynj4Rib4vdarEeg/132?v=201904231643"
             }
-        },
-        methods: {
-            // 获取客户详情
-            async getCustomerDetails(){
-                try {
-                    const res = await customerApi.getCustomerDetails(this.$route.params.id);
-                    if (res.status >= 200 && res.status < 300) {
-                        this.customerData = res.data;
-                    } else {
-                        this.$message({
-                            type: 'error',
-                            message: '获取客户失败!'
-                        })
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            },
-
-            // 重新加载页面
-            reloadData(id){
-                this.getCustomerDetails();
-            }
-        },
-        mounted() {
-            this.getCustomerDetails();
         }
     }
 </script>
 
 <style scoped>
-    .box-head {
-        display: flex;
-        padding: 30px 10px;
-        background-color: #f7f8fa;
-    }
-
-    .box-main {
-        margin-top: 30px;
-        margin-left: 50px;
-        display: flex;
-        /*align-items:center;*/
-        /*justify-content:center;*/
-        flex-wrap: wrap;
-    }
-
-    .box-tabs {
-        margin-top: 30px;
-        align-items:center;
-        justify-content:center;
-        flex-wrap: wrap;
-    }
-
-    .box-main div{
-        width: 150px;
-        margin-bottom: 10px;
+    .details-box {
         text-align: left;
+        font-size: 14px;
+        color: #000;
+        font-family: MicrosoftYaHei,Arial,Helvetica,sans-serif;
     }
 
-
-    .padding-20{
-        padding: 20px;
+    .m-wrap-16 {
+        margin: 7px;
+        margin-bottom: 20px;
+        padding: 24px;
+        background: #fff;
     }
-
-    .align-center{
+    .title-wrap {
         display: flex;
-        align-items:center;
-        /*justify-content:center;*/
-    }
-
-    .justify-between {
-        display: flex;
-        align-items:center;
         justify-content: space-between;
     }
 
-    .head-item {
-        margin-right: 30px;
-        font-size: 14px;
+    .align-center {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
     }
-    .details-info {
-        margin-top: 10px;
-    }
-
-    .details-info-label {
-        color: rgb(153, 153, 153);
-        width: 60px;
-        text-align: right;
-        margin-right: 20px;
-    }
-    .details-info-value {
-        width: 100px;
-        text-align: left;
-    }
-    .main-title {
-        color: rgb(153, 153, 153)
+    .title-wrap .title {
+        color: #000;
+        font-size: 20px;
+        margin: 0;
+        margin-bottom: 10px;
+        font-weight: 400;
     }
 
-    .title{
-        background: #f8f8f8;
-        height: 24px;
-        padding: 12px 16px;
-        font-family: PingFangSC-Semibold Helvetica,Arial,Verdana,Tahoma,sans-serif;
-        color: #323232;
-        letter-spacing: 0;
-        line-height: 24px;
+
+    .basic-info-wrap .avatar-wrap {
         position: relative;
-        text-align: left;
-        width: 30%;
+        margin-right: 24px;
     }
-
-    .title:after{
-        content: "";
-        position: absolute;
-        left: 6px;
-        top: 16px;
-        width: 4px;
+    .flex-item {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 0 0px;
+        flex: 1 0 0;
+    }
+    .flex {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+    }
+    .basic-info-wrap .name-info {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        color: #000;
+        font-size: 20px;
+    }
+    .basic-info-wrap .name-info .name {
+        padding-right: 10px;
+    }
+    .member-level.level1{
+        background: #fbae11;
+    }
+    .member-level {
+        position: relative;
+        display: inline-block;
+        margin-left: 11px;
+        padding: 0 7px 0 15px;
         height: 16px;
-        background: #8558fa;
+        line-height: 16px;
+        font-size: 12px;
+        color: #fafafa;
+        background: #8169ff;
+        border-radius: 0 8px 8px 0;
+        white-space: nowrap;
     }
 
-    .main-value {
-        font-size: 26px;
-        font-weight: 500;
-        line-height: 24px;
-        vertical-align: middle;
-        /*color: #8558fa;*/
+
+    .member-level .level-icon {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -11px;
+        height: 18px;
+        width: 22px;
+        margin: auto;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
     }
+
+    .basic-info-wrap .phone {
+        margin-top: 10px;
+        color: #000;
+    }
+    .basic-info-wrap .description {
+        margin-top: 10px;
+        color: #353535;
+    }
+
+    .other-info-wrap {
+        background: #fafafa;
+        margin-top: 20px;
+        padding: 4px 24px 24px;
+    }
+    .flex-wrap {
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+    .other-info-wrap .item {
+        padding-top: 20px;
+        font-size: 14px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        line-height: 1;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .other-info-wrap .label {
+        color: #a6a6a6;
+        width: 117px;
+    }
+
 </style>
