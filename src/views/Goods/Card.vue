@@ -1,6 +1,6 @@
 <template>
     <div class="Card">
-        <div class="m-wrap-16 table-head">
+        <div class="m-wrap-24 table-head">
 
             <el-row>
                 <el-col :span="24"><div style="float: left">
@@ -264,7 +264,15 @@
 
 <style scoped>
     .m-wrap-16 {
-        margin: 16px;
+        padding: 16px;
     }
-
+    .m-wrap-24{
+        padding: 24px;
+        background: #f7f8fa;
+    }
+    .Card{
+        background: #fff;
+        margin: 7px;
+        padding: 16px;
+    }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="m-wrap-16">
+		<div class="m-wrap-16" style="text-align: left">
 			<el-button size="small" type="primary" @click="addShop">新增门店</el-button>
 		</div>
 
@@ -41,13 +41,14 @@
 				</el-table-column>
 
 			</el-table>
+
+			<div class="pagination-container">
+				<el-pagination background :current-page="1" :page-sizes="[5,10]" :page-size="5" layout="total, sizes, prev, pager, next, jumper"
+				               :total="1">
+				</el-pagination>
+			</div>
 		</div>
 
-		<div class="pagination-container">
-			<el-pagination background :current-page="1" :page-sizes="[5,10]" :page-size="5" layout="total, sizes, prev, pager, next, jumper"
-			               :total="1">
-			</el-pagination>
-		</div>
 	</div>
 </template>
 
@@ -86,7 +87,10 @@
 
 <style scoped>
 	.m-wrap-16 {
-		margin: 16px;
-		text-align: left;
+		margin: 7px;
+		margin-bottom: 20px;
+		padding: 24px;
+		background: #fff;
+		/*text-align: left;*/
 	}
 </style>

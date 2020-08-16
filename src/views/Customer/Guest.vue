@@ -119,7 +119,7 @@
             </el-row>
         </div>
 
-        <div class="m-wrap-16" style="margin-top: 50px;">
+        <div class="m-wrap-16">
             <el-table
                     size="medium"
                     :data="tableData"
@@ -349,15 +349,10 @@
 <style scoped>
 
     .m-wrap-16 {
-        margin-left: 16px;
-        margin-right: 16px;
-        margin-top: 16px;
-    }
-    .m-wrap-5 {
-        margin-right: 5px;
-    }
-    .p-wrap-16-top {
-        padding-top: 16px;
+        margin: 7px;
+        margin-bottom: 20px;
+        padding: 24px;
+        background: #fff;
     }
 
     .el-row {

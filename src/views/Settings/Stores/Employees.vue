@@ -1,5 +1,5 @@
 <template>
-	<div class="padding-20">
+	<div class="m-wrap-16">
 		<el-tabs v-model="activeName" @tab-click="tabClick">
 			<el-tab-pane name="em" label="员工列表">
 				<el-button size="small" type="primary" @click="addBtnEM">添加员工</el-button>
@@ -437,9 +437,12 @@
 </script>
 
 <style scoped>
-	.padding-20{
+	.m-wrap-16 {
+		margin: 7px;
+		margin-bottom: 20px;
+		padding: 24px;
+		background: #fff;
 		text-align: left;
-		padding: 20px;
 	}
 
 	.el-divider {

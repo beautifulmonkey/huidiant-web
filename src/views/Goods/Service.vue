@@ -1,6 +1,6 @@
 <template>
     <div class="ServiceDiv">
-        <div class="m-wrap-16">
+        <div class="m-wrap-24" style="background: #f7f8fa;">
 
             <el-row>
                 <el-col :span="24"><div style="float: left">
@@ -327,9 +327,16 @@
 </script>
 
 <style scoped>
-
+    .ServiceDiv{
+        background: #fff;
+        margin: 7px;
+        padding: 16px;
+    }
     .m-wrap-16 {
-        margin: 16px;
+        padding: 16px;
+    }
+    .m-wrap-24 {
+        padding: 24px;
     }
     .m-wrap-5 {
         margin-right: 5px;

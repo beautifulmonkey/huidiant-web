@@ -140,7 +140,10 @@
 		background: #8558fa;
 	}
 	.m-wrap-16 {
-		margin: 16px;
+		margin: 7px;
+		margin-bottom: 20px;
+		padding: 24px;
+		background: #fff;
 		text-align: left;
 	}
 

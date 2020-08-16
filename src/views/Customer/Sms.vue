@@ -652,10 +652,11 @@
 
 <style scoped>
 	.m-wrap-16 {
-		margin-left: 16px;
-		margin-right: 16px;
-		margin-top: 16px;
+		margin: 7px;
+		padding: 16px;
 		text-align: left;
+		background: #fff;
+		height: 100%;
 	}
 
 	.el-menu{

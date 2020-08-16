@@ -77,7 +77,7 @@
 
         </div>
 
-        <div class="m-wrap-16" style="margin-top: 50px;">
+        <div class="m-wrap-16">
 
             <header style="margin: 20px 0;background-color: #f7f8fa;padding: 0 10px;">
                 <table>
@@ -422,9 +422,10 @@
 <style scoped>
 
     .m-wrap-16 {
-        margin-left: 16px;
-        margin-right: 16px;
-        margin-top: 16px;
+        margin: 7px;
+        margin-bottom: 20px;
+        padding: 24px;
+        background: #fff;
     }
 
     .el-input {

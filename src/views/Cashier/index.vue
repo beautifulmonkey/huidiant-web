@@ -1002,6 +1002,7 @@
     .menu-box {
         margin-left: 5px;
         width: 100px;
+        background: #fff;
     }
     .main-box {
         width: 50%;

@@ -1,6 +1,6 @@
 <template>
 	<div style="text-align: left">
-		<div class="m-wrap-16">
+		<div class="m-wrap-16" style="text-align: left">
 			<el-popover
 				placement="right"
 				trigger="click"
@@ -12,6 +12,9 @@
 				</div>
 				<el-button slot="reference" size="small" type="primary">新建</el-button>
 			</el-popover>
+		</div>
+
+		<div class="m-wrap-16">
 
 		<el-table
 			:data="customerSourceList"
@@ -179,9 +182,11 @@
 
 <style scoped>
 	.m-wrap-16 {
-		margin-left: 16px;
-		margin-right: 16px;
-		margin-top: 16px;
+		margin: 7px;
+		margin-bottom: 20px;
+		padding: 24px;
+		background: #fff;
+		text-align: left;
 	}
 
 	.el-divider {
