@@ -1,10 +1,12 @@
 <template>
 	<div>
-		<div class="m-wrap-8">
-			<el-page-header @back="$router.push('/goods/card')" content="卡项详情"></el-page-header>
-		</div>
+<!--		<div class="m-wrap-16">-->
+<!--			<el-page-header @back="$router.push('/goods/card')" content="卡项详情"></el-page-header>-->
+<!--		</div>-->
 
 		<div class="m-wrap-16">
+			<el-page-header style="margin-bottom: 20px;" @back="$router.push('/goods/card')" content="卡项详情"></el-page-header>
+
 			<el-row>
 				<el-col :span="24"><div style="float: left">
 					<el-button v-if="cardData.type === 1" @click="$router.push('/goods/card/prepaid/edit/' + $route.params.id)" size="small" type="primary">编辑</el-button>
@@ -170,7 +172,12 @@
 
 <style scoped>
 	.m-wrap-16 {
-		margin: 16px;
+		/*margin: 16px;*/
+		margin: 7px;
+		margin-bottom: 20px;
+		padding: 24px;
+		background: #fff;
+		height: 100%;
 	}
 
 	.m-wrap-8 {

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="m-wrap-16">
         <div class="m-wrap-8">
             <el-page-header @back="$router.push('/goods/card')" content="添加充值卡"></el-page-header>
         </div>
@@ -411,6 +411,14 @@
 </script>
 
 <style scoped>
+    .m-wrap-16 {
+        margin: 7px;
+        margin-bottom: 20px;
+        padding: 24px;
+        background: #fff;
+        text-align: left;
+        height: 100%;
+    }
     .m-wrap-8 {
         margin: 8px;
     }
