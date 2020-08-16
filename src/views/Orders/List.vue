@@ -1,67 +1,81 @@
 <template>
     <div class="ServiceDiv">
-        <div class="m-wrap-16" v-if="!customer_id">
+        <div class="m-wrap-16 cond-box" v-if="!customer_id">
+
+
+            <div class="cond-row">
+                <el-button type="primary" size="small" @click="$router.push('/cashier')" >开单收银</el-button>
+            </div>
+
+
+
 
             <div class="cond-row">
                 <div class="cond-column">
-                    <span>客户信息:&nbsp;</span>
-                    <el-input v-model="filter.customer_query" size="mini" clearable placeholder="客户姓名/手机号"></el-input>
+                    <div v-show="condition_details" class="title">客户信息:</div>
+                    <el-input  prefix-icon="el-icon-search" style="width: 300px;" v-model="filter.customer_query"
+                               :size="!condition_details ? 'small': 'mini'" clearable placeholder="客户姓名/手机号"></el-input>
                 </div>
 
-                <div class="cond-column">
-                    <el-button type="primary" icon="el-icon-search" size="mini" @click="onSearchClick">搜索</el-button>
-                    <el-button icon="el-icon-refresh" size="mini" @click="condClear">清空条件</el-button>
+                <div class="cond-column" v-show="!condition_details">
+                    <el-button type="primary" size="small" @click="onSearchClick">搜索</el-button>
                 </div>
             </div>
 
 
-            <div class="cond-row">
-                <div class="cond-column">
-                    <span>订单类型:&nbsp;</span>
-                    <el-select v-model="filter.order_type" clearable placeholder="选择订单类型" size="mini" >
-                        <el-option
-                                v-for="item in orderTypeList"
-                                :key="item.key"
-                                :label="item.label"
-                                :value="item.key">
-                        </el-option>
-                    </el-select>
+
+
+
+
+            <div v-show="condition_details">
+
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <div class="title">订单类型:</div>
+                        <el-select v-model="filter.order_type" clearable placeholder="选择订单类型" size="mini" >
+                            <el-option
+                                    v-for="item in orderTypeList"
+                                    :key="item.key"
+                                    :label="item.label"
+                                    :value="item.key">
+                            </el-option>
+                        </el-select>
+                    </div>
                 </div>
 
-                <div class="cond-column">
-                    <span>付款方式:&nbsp;</span>
-                    <el-select v-model="filter.pay_type" clearable placeholder="选择付款方式" size="mini" >
-<!--                        <el-option :key=0 label="全部" :value=0></el-option>-->
-                        <el-option
-                            v-for="item in customPayList"
-                            :key="'custom_' + item.id"
-                            :label="item.name"
-                            :value="'custom_' + item.id">
-                        </el-option>
-                        <el-option
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <div class="title">付款方式:</div>
+                        <el-select v-model="filter.pay_type" clearable placeholder="选择付款方式" size="mini" >
+                            <!--                        <el-option :key=0 label="全部" :value=0></el-option>-->
+                            <el-option
+                                v-for="item in customPayList"
+                                :key="'custom_' + item.id"
+                                :label="item.name"
+                                :value="'custom_' + item.id">
+                            </el-option>
+                            <el-option
                                 v-for="item in payTypeList"
                                 :key="item.key"
                                 :label="item.label"
                                 :value="item.key">
-                        </el-option>
-                    </el-select>
+                            </el-option>
+                        </el-select>
+                    </div>
                 </div>
-            </div>
 
-
-            <div class="cond-row">
-                <div class="cond-column">
-                    <span>支付金额:&nbsp;</span>
-                    <el-input v-model="filter.paid_amount_gt" class="interval-input" size="mini" clearable placeholder="金额大于" ></el-input>
-                    &nbsp;至&nbsp;
-                    <el-input v-model="filter.paid_amount_lt" class="interval-input" size="mini" clearable placeholder="金额小于" ></el-input>
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <div class="title">支付金额:</div>
+                        <el-input v-model="filter.paid_amount_gt" class="interval-input" size="mini" clearable placeholder="金额大于" ></el-input>
+                        <div class="limit-middle">至</div>
+                        <el-input v-model="filter.paid_amount_lt" class="interval-input" size="mini" clearable placeholder="金额小于" ></el-input>
+                    </div>
                 </div>
-            </div>
 
-
-            <div class="cond-row">
+                <div class="cond-row">
                 <div class="cond-column">
-                    <span>下单时间:&nbsp;</span>
+                    <div class="title">下单时间:</div>
                     <el-date-picker
                             size="mini"
                             v-model="filter.daterange"
@@ -73,6 +87,20 @@
                             :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                 </div>
+            </div>
+
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <el-button type="primary" size="mini" @click="onSearchClick">搜索</el-button>
+                        <el-button icon="el-icon-refresh" size="mini" @click="condClear">清空条件</el-button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="width: 100%;text-align: left">
+                <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-down" @click="condition_details=true">高级选项</el-button>
+                <el-button type="text" v-if="condition_details" icon="el-icon-arrow-up" @click="condition_details=false">收起选项</el-button>
             </div>
 
         </div>
@@ -225,6 +253,7 @@
         },
         data() {
             return {
+                condition_details: false,
                 filter: {
                     customer_query: '',
                     order_type: null,
@@ -251,6 +280,10 @@
                 orderData: [],
                 pageSizes: [5, 10, 20],
                 pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+
                     shortcuts: [{
                         text: '今天',
                         onClick(picker) {
@@ -420,7 +453,9 @@
 </script>
 
 <style scoped>
-
+    .cond-box {
+        font-size: 15px;
+    }
     .m-wrap-16 {
         margin: 7px;
         margin-bottom: 20px;
@@ -441,11 +476,16 @@
         display: flex;
         align-items:center;
         justify-content:flex-start;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     .cond-column {
-        margin-right: 30px;
+        margin-right: 20px;
+    }
+    .cond-column .title {
+        width: 80px;
+        text-align: left;
+        display: inline-block;
     }
 
     .order-head{
@@ -477,7 +517,10 @@
     }
 
     .interval-input{
-        width: 100px;
+        width: 200px;
+    }
+    .el-select {
+        width: 200px;
     }
 
     .color-999{
@@ -490,6 +533,16 @@
 
     .el-table >>> .el-table__body tr:hover>td {
         background-color: #fff;
+    }
+
+    .limit-middle {
+        display: inline;
+        color: rgb(125, 126, 128);
+        padding: 0 5px;
+        font-size: 13px;
+    }
+    .el-date-editor {
+        width: 431px !important;
     }
 
 </style>

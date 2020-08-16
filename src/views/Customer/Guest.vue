@@ -1,38 +1,39 @@
 <template>
     <div class="ServiceDiv">
-        <div class="m-wrap-16">
+        <div class="m-wrap-16 cond-box">
 
 
             <div class="cond-row">
                 <up-sert-customer-component @data-save="reloadData"></up-sert-customer-component>
-                <el-button style="margin-left: 15px;" size="small" @click="$router.push('/goods/card')" plain>管理卡项</el-button>
             </div>
 
 
             <div class="cond-row">
                 <div class="cond-column">
-                    <span>关键文字:&nbsp;</span>
-                    <el-input v-model="filter.query" size="mini" clearable placeholder="客户姓名/手机号"></el-input>
+                    <div v-show="condition_details" class="title">关键字:</div>
+                    <el-input style="width: 300px;" prefix-icon="el-icon-search" v-model="filter.query"
+                              :size="!condition_details ? 'small': 'mini'" clearable placeholder="客户姓名/手机号"></el-input>
                 </div>
 
-                <div class="cond-column">
-                    <el-button type="primary" icon="el-icon-search" size="mini" @click="onSearchClick">搜索</el-button>
-                    <el-button icon="el-icon-refresh" size="mini" @click="condClear">清空条件</el-button>
+                <div class="cond-column" v-show="!condition_details">
+                    <el-button type="primary" size="small" @click="onSearchClick">搜索</el-button>
                 </div>
             </div>
 
+            <div v-show="condition_details">
 
-            <div class="cond-row">
-                <div class="cond-column">
-                    <span>客户身份:&nbsp;</span>
-                    <el-select v-model="filter.isvip" clearable placeholder="选择客户身份" size="mini" >
-                        <el-option
-                                v-for="item in identityList"
-                                :key="item.key"
-                                :label="item.label"
-                                :value="item.key">
-                        </el-option>
-                    </el-select>
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <div class="title">客户身份:</div>
+                        <el-select v-model="filter.isvip" clearable placeholder="选择客户身份" size="mini" >
+                            <el-option
+                                    v-for="item in identityList"
+                                    :key="item.key"
+                                    :label="item.label"
+                                    :value="item.key">
+                            </el-option>
+                        </el-select>
+                    </div>
                 </div>
 
 <!--                <div class="cond-column">-->
@@ -47,55 +48,58 @@
 <!--                    </el-select>-->
 <!--                </div>-->
 
-                <div class="cond-column">
-                    <span>客户来源:&nbsp;</span>
-                    <el-select v-model="filter.source_id" clearable placeholder="选择客户来源" size="mini" >
-                        <el-option :key=0 label="全部" :value=0></el-option>
-                        <el-option
+
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <div class="title">客户来源:</div>
+                        <el-select v-model="filter.source_id" clearable placeholder="选择客户来源" size="mini" >
+                            <el-option :key=0 label="全部" :value=0></el-option>
+                            <el-option
                                 v-for="item in customerSourceList"
                                 :key="item.id"
                                 :label="item.name"
                                 :value="item.id">
-                        </el-option>
-                    </el-select>
+                            </el-option>
+                        </el-select>
+                    </div>
                 </div>
-            </div>
 
-
-            <div class="cond-row">
+                <div class="cond-row">
                 <div class="cond-column">
-                    <span>累计消费:&nbsp;</span>
+                    <div class="title">累计消费:</div>
                     <el-input v-model="filter.consume_total_gt" class="interval-input" size="mini" clearable placeholder="金额大于" ></el-input>
-                    &nbsp;至&nbsp;
+                    <div class="limit-middle">至</div>
                     <el-input v-model="filter.consume_total_lt" class="interval-input" size="mini" clearable placeholder="金额小于" ></el-input>
                 </div>
-
-                <div class="cond-column">
-                    <span>可用储值:&nbsp;</span>
-                    <el-input v-model="filter.card_balance_gt" class="interval-input" size="mini" clearable placeholder="金额大于" ></el-input>
-                    &nbsp;至&nbsp;
-                    <el-input v-model="filter.card_balance_lt" class="interval-input" size="mini" clearable placeholder="金额小于" ></el-input>
-                </div>
             </div>
 
-            <div v-if="condition_details">
+                <div class="cond-row">
+
+                    <div class="cond-column">
+                        <div class="title">可用储值:</div>
+                        <el-input v-model="filter.card_balance_gt" class="interval-input" size="mini" clearable placeholder="金额大于" ></el-input>
+                        <div class="limit-middle">至</div>
+                        <el-input v-model="filter.card_balance_lt" class="interval-input" size="mini" clearable placeholder="金额小于" ></el-input>
+                    </div>
+                </div>
+
                 <div class="cond-row">
                     <div class="cond-column">
-                        <span>消费次数:&nbsp;</span>
+                        <div class="title">消费次数:</div>
                         <el-input v-model="filter.consume_count_gt" class="interval-input" clearable size="mini" placeholder="次数大于" ></el-input>
-                        &nbsp;至&nbsp;
+                        <div class="limit-middle">至</div>
                         <el-input v-model="filter.consume_count_lt" class="interval-input" clearable size="mini" placeholder="次数小于" ></el-input>
                     </div>
                 </div>
 
                 <div class="cond-row">
                     <div class="cond-column">
-                        <span>最后消费:&nbsp;</span>
-                        <el-date-picker v-model="filter.last_consume_start" size="mini"
+                        <div class="title">最后消费:</div>
+                        <el-date-picker v-model="filter.last_consume_start" size="mini" :picker-options="pickerOptions"
                                         type="date" placeholder="时间大于" value-format="timestamp">
                         </el-date-picker>
-                        &nbsp;至&nbsp;
-                        <el-date-picker v-model="filter.last_consume_end" size="mini"
+                        <div class="limit-middle">至</div>
+                        <el-date-picker v-model="filter.last_consume_end" size="mini" :picker-options="pickerOptions"
                                         type="date" placeholder="时间小于" value-format="timestamp">>
                         </el-date-picker>
                     </div>
@@ -103,20 +107,28 @@
 
                 <div class="cond-row">
                     <div class="cond-column">
-                        <span>注册时间:&nbsp;</span>
-                        <el-date-picker v-model="filter.created_at_start" size="mini" type="date" placeholder="时间大于" value-format="timestamp"></el-date-picker>
-                        &nbsp;至&nbsp;
-                        <el-date-picker v-model="filter.created_at_end" size="mini" type="date" placeholder="时间小于" value-format="timestamp"></el-date-picker>
+                        <div class="title">注册时间:</div>
+                        <el-date-picker :picker-options="pickerOptions" v-model="filter.created_at_start" size="mini" type="date" placeholder="时间大于" value-format="timestamp"></el-date-picker>
+                        <div class="limit-middle">至</div>
+                        <el-date-picker :picker-options="pickerOptions" v-model="filter.created_at_end" size="mini" type="date" placeholder="时间小于" value-format="timestamp"></el-date-picker>
                     </div>
                 </div>
+
+                <div class="cond-row">
+                    <div class="cond-column">
+                        <el-button type="primary" icon="el-icon-search" size="mini" @click="onSearchClick">搜索</el-button>
+                        <el-button icon="el-icon-refresh" size="mini" @click="condClear">清空条件</el-button>
+                    </div>
+                </div>
+
             </div>
 
-            <el-row>
-                <el-col :span="6" :offset="6"><div class="grid-content bg-purple">
-                    <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-down" @click="condition_details=true">更多选项</el-button>
+
+            <div style="width: 100%;text-align: left">
+                    <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-down" @click="condition_details=true">高级选项</el-button>
                     <el-button type="text" v-if="condition_details" icon="el-icon-arrow-up" @click="condition_details=false">收起选项</el-button>
-                </div></el-col>
-            </el-row>
+            </div>
+
         </div>
 
         <div class="m-wrap-16">
@@ -218,7 +230,12 @@
                     page_size: 10
                 },
                 pageSizes: [10, 30, 50],
-                tableData: []
+                tableData: [],
+                pickerOptions: {
+                    disabledDate(time) {
+                        return time.getTime() > Date.now();
+                    },
+                }
             }
         },
         methods: {
@@ -368,19 +385,42 @@
         padding: 32px 16px;
     }
 
+    .cond-box {
+        font-size: 15px;
+    }
+
     .cond-row {
         display: flex;
-        align-items:center;
-        justify-content:flex-start;
-        margin-bottom: 20px;
+        /*align-items:center;*/
+        /*justify-content:flex-start;*/
+        margin-bottom: 16px;
     }
 
     .cond-column {
-        margin-right: 30px;
+        margin-right: 20px;
+    }
+    .cond-column .title {
+        width: 80px;
+        text-align: left;
+        display: inline-block;
     }
 
     .interval-input{
-        width: 100px;
+        width: 200px;
+    }
+    .el-select {
+        width: 200px;
+    }
+
+    .el-date-editor {
+        width: 200px !important;
+    }
+
+    .limit-middle {
+        display: inline;
+        color: rgb(125, 126, 128);
+        padding: 0 5px;
+        font-size: 13px;
     }
 
 
