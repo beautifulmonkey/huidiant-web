@@ -85,11 +85,56 @@
 
         </div>
 
-        <div class="m-wrap-16" style="width: 100%;height: 200px;">
+        <!--余额区域-->
+        <div class="flex assets-wrap">
+
+            <div class="assets-item">
+                <div class="coupon-wrap">
+                    <div class="label-wrap flex justify-between align-center">
+                        <span class="label">余额（元）</span>
+                        <i class="el-icon-arrow-right"></i>
+                    </div>
+                    <div class="value">9486.00</div>
+                </div>
+            </div>
+
+            <div class="assets-item">
+                <div class="coupon-wrap">
+                    <div class="label-wrap flex justify-between align-center">
+                        <span class="label">卡项（张）</span>
+                        <i class="el-icon-arrow-right"></i>
+                    </div>
+                    <div class="value">2</div>
+                </div>
+            </div>
+
+            <div class="assets-item" style="margin-right: 0">
+                <div class="coupon-wrap">
+                    <div class="label-wrap flex justify-between align-center">
+                        <span class="label">累计消费（元）</span>
+                        <i class="el-icon-arrow-right"></i>
+                    </div>
+                    <div class="value">1080</div>
+                </div>
+            </div>
         </div>
 
-        <div class="m-wrap-16" style="width: 100%;height: 700px;">
+
+        <!--组件-->
+        <div class="m-wrap-16" style="height: 500px;margin-top: 24px;">
+            <div>
+                <el-tabs type="card">
+                    <el-tab-pane label="消费记录">
+                    </el-tab-pane>
+                    <el-tab-pane label="次卡信息">
+                    </el-tab-pane>
+                    <el-tab-pane label="客户档案">
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+
         </div>
+
     </div>
 </template>
 
@@ -233,4 +278,47 @@
         width: 117px;
     }
 
+    .assets-wrap {
+        margin: 7px;
+        margin-top: 24px;
+    }
+
+    .assets-wrap .assets-item {
+        margin-right: 24px;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+    }
+
+    .assets-wrap .coupon-wrap {
+        overflow: hidden;
+        cursor: pointer;
+        padding: 0 16px;
+        height: 116px;
+        background: #fff;
+        -webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.02);
+        box-shadow: 0 0 10px 0 rgba(0,0,0,.02);
+    }
+    .assets-wrap .label-wrap {
+        margin-top: 24px;
+    }
+    .assets-wrap .label-wrap .label {
+        color: #535353;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .assets-wrap .value {
+        font-size: 30px;
+        line-height: 1;
+        color: #535353;
+        word-break: break-all;
+        margin-top: 18px;
+    }
+
+    .justify-between {
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    }
 </style>
