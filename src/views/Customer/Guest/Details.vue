@@ -20,7 +20,7 @@
                     <div class="flex align-center">
                         <div class="avatar-wrap">
                             <span class="avatar el-avatar el-avatar--circle" style="height: 80px; width: 80px; line-height: 80px;">
-                                <img :src="customerData.img || defaultImg" style="object-fit: cover;">
+                                <img @click="customerImgClick" :src="customerData.img || defaultImg" style="object-fit: cover;">
                             </span>
                         </div>
 
@@ -71,7 +71,7 @@
         <!--余额区域-->
         <div class="flex assets-wrap">
 
-            <div class="assets-item">
+            <div @click="activeTabs='order'" class="assets-item">
                 <div class="coupon-wrap">
                     <div class="label-wrap flex justify-between align-center">
                         <span class="label">余额（元）</span>
@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <div class="assets-item">
+            <div @click="activeTabs='counting'" class="assets-item">
                 <div class="coupon-wrap">
                     <div class="label-wrap flex justify-between align-center">
                         <span class="label">次卡（张）</span>
@@ -95,7 +95,7 @@
                 <div class="coupon-wrap">
                     <div class="label-wrap flex justify-between align-center">
                         <span class="label">累计消费（元）</span>
-                        <i class="el-icon-arrow-right"></i>
+<!--                        <i class="el-icon-arrow-right"></i>-->
                     </div>
                     <div class="value">{{customerData.consume_total}}</div>
                 </div>
@@ -106,14 +106,14 @@
         <!--组件-->
         <div class="m-wrap-16" style="margin-top: 24px;min-height: 400px;">
             <div>
-                <el-tabs type="card">
-                    <el-tab-pane label="消费记录">
+                <el-tabs type="card" v-model="activeTabs">
+                    <el-tab-pane label="消费记录" name="order">
                         <order-list-component :customer_id="this.$route.params.id"></order-list-component>
                     </el-tab-pane>
-                    <el-tab-pane label="次卡信息">
+                    <el-tab-pane label="次卡信息" name="counting">
                         <counting-cart-component :customer_id="this.$route.params.id"></counting-cart-component>
                     </el-tab-pane>
-                    <el-tab-pane label="客户档案">
+                    <el-tab-pane label="客户档案" name="info">
                         <div>
                             <form class="el-form member-detail-form">
                                 <div v-for="item in detail_info" class="el-form-item is-required is-no-asterisk el-form-item--medium">
@@ -158,6 +158,7 @@
                 },
                 defaultImg: require('@/assets/img/user_smile.png'),
 
+                activeTabs: 'order',
                 customerData: {},
                 viewData: [
                     {"label": "手机号", "key": "tel"},
@@ -204,6 +205,12 @@
             // 重新加载页面
             reloadData(){
                 this.getCustomerDetails();
+            },
+
+            customerImgClick(){
+                if (!this.customerData.img){
+                    this.$message('客户绑定公众号后在此显示微信头像');
+                }
             }
         },
         mounted() {
