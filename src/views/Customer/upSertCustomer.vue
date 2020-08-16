@@ -2,7 +2,9 @@
     <div>
         <div v-show="BtnShow">
             <el-button v-if="!this.$route.params.id" size="small" icon="el-icon-plus" type="primary" @click="btnClick(null)">添加客户</el-button>
-            <el-button v-if="this.$route.params.id" type="text" @click="btnClick(null)">编辑</el-button>
+            <el-button v-if="this.$route.params.id" icon="el-icon-edit" plain type="primary" size="medium" @click="btnClick(null)">编辑资料</el-button>
+<!--            <el-button type="primary" icon="el-icon-edit" plain size="medium">编辑资料</el-button>-->
+
         </div>
 
         <el-dialog title="客户基本信息" :visible.sync="dialogFormVisible" :close-on-click-modal="false">

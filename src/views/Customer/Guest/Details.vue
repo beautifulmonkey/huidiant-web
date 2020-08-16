@@ -6,10 +6,12 @@
             <div class="title-wrap flex align-center">
                 <h2 class="title flex-item">会员详情</h2>
                 <div class="button-group">
-                    <el-button type="primary" icon="el-icon-edit" plain size="medium">编辑资料</el-button>
-
-                    <el-button type="primary" size="medium">办卡</el-button>
-                    <el-button type="primary" size="medium">开单</el-button>
+                    <div style="margin-right: 10px;">
+                        <up-sert-customer-component @data-save="reloadData"></up-sert-customer-component>
+                    </div>
+                    <el-button type="primary" size="medium" @click="$router.push(
+                            {path: '/cashier', query: {uid: $route.params.id, cType: 'createCard'}})">办卡</el-button>
+                    <el-button type="primary" size="medium" @click="$router.push({path: '/cashier', query: {uid: $route.params.id}})">开单</el-button>
                 </div>
             </div>
 
@@ -18,20 +20,27 @@
                     <div class="flex align-center">
                         <div class="avatar-wrap">
                             <span class="avatar el-avatar el-avatar--circle" style="height: 80px; width: 80px; line-height: 80px;">
-                                <img :src="imgUrl" style="object-fit: cover;">
+                                <img :src="customerData.img || defaultImg" style="object-fit: cover;">
                             </span>
                         </div>
 
                         <div class="flex-item">
                             <div class="name-info">
-                                <span class="name">杨逍逍</span>
+                                <span class="name">{{customerData.name}}
+                                    <i v-if="customerData.sex===1" class="el-icon-female" style="color: #e6419c;font-size: 18px;"></i>
+                                    <i v-if="customerData.sex===2" class="el-icon-male" style="color: #409df3;font-size: 18px;"></i>
+                                </span>
+
                                 <div class="member-level level1">
                                     <div class="level-icon" :style="level_style"></div>
-                                    <span style="font-weight: 600">普卡会员</span>
+                                    <span style="font-weight: 600">{{customerData.identity}}</span>
                                 </div>
                             </div>
-                            <div class="phone">17610162918</div>
-                            <div class="description">参加开业活动,充2000送1000, 目前还剩300元 原价消费</div>
+                            <div class="phone">{{customerData.tel}}</div>
+                            <div class="description">
+                                <span style="color: rgb(153, 153, 153)">备注：</span>
+                                {{customerData.description || '-'}}
+                            </div>
                         </div>
                     </div>
 
@@ -40,36 +49,10 @@
 
                 <div class="other-info-wrap" v-show="showDetail">
                     <div class="flex-wrap el-row el-row--flex" style="margin-left: -12px; margin-right: -12px;">
-                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
-                            <span class="label">卡号</span>
-                            <span class="value">NO.2</span>
+                        <div v-for="item in viewData" class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
+                            <span class="label">{{item.label}}</span>
+                            <span class="value">{{customerData[item.key] || '-'}}</span>
                         </div>
-
-                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
-                            <span class="label">成为会员时间</span>
-                            <span class="value">2020-07-16 00:33</span>
-                        </div>
-
-                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
-                            <span class="label">来源</span>
-                            <span class="value">在线预约</span>
-                        </div>
-
-                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
-                            <span class="label">到店次数</span>
-                            <span class="value">0</span>
-                        </div>
-
-                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
-                            <span class="label">最近到店时间</span>
-                            <span class="value">-</span>
-                        </div>
-
-                        <div class="item el-col el-col-8" style="padding-left: 12px; padding-right: 12px;">
-                            <span class="label">最近登录时间</span>
-                            <span class="value">2020-08-11 19:07</span>
-                        </div>
-
                     </div>
                 </div>
 
@@ -137,7 +120,7 @@
                                     <label class="el-form-item__label" style="width: 150px;">{{ item.label }}：</label>
                                     <div class="el-form-item__content" style="margin-left: 150px;">
                                         <div>
-                                            <p class="text">{{ customerData[item.key] }}</p>
+                                            <p class="text">{{ customerData[item.key] || '-'}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -173,10 +156,17 @@
                 level_style: {
                     backgroundImage:`url(${require('@/assets/img/public_level.png')})`
                 },
-                // imgUrl: "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJr6r7kclyDcRcicmOtnrFIXUyhbIV0D7sLMIgH0nrnmxPxo8uovxv9R9IO5vSiaVynj4Rib4vdarEeg/132?v=201904231643",
-                imgUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+                defaultImg: require('@/assets/img/user_smile.png'),
 
                 customerData: {},
+                viewData: [
+                    {"label": "手机号", "key": "tel"},
+                    {"label": "客户身份", "key": "identity"},
+                    {"label": "注册时间", "key": "created_at"},
+                    {"label": "客户来源", "key": "source"},
+                    {"label": "消费次数", "key": "consume_count"},
+                    {"label": "最后消费时间", "key": "last_consume_date"},
+                ],
                 detail_info: [
                     {
                         label: "生日",
@@ -240,7 +230,9 @@
         display: flex;
         justify-content: space-between;
     }
-
+    .button-group {
+        display: flex;
+    }
     .align-center {
         -webkit-box-align: center;
         -ms-flex-align: center;
@@ -361,7 +353,7 @@
     .assets-wrap .coupon-wrap {
         overflow: hidden;
         cursor: pointer;
-        padding: 0 16px;
+        padding: 0 24px;
         height: 116px;
         background: #fff;
         -webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.02);
