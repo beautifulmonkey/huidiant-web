@@ -1,18 +1,18 @@
 <template>
-	<div>
-		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+	<div class="sub-comp">
+		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px">
 			<el-form-item label="名称" prop="name">
-				<el-input v-model="ruleForm.name" class="from-item-input" size="mini"></el-input>
+				<el-input v-model="ruleForm.name" class="from-item-input" size="small"></el-input>
 			</el-form-item>
 
 			<el-form-item label="售价" prop="price">
-				<el-input v-model="ruleForm.price" class="from-item-input" size="mini">
+				<el-input v-model="ruleForm.price" class="from-item-input" size="small">
 					<template slot="prepend">￥</template>
 				</el-input>
 			</el-form-item>
 
 			<el-form-item label="分类" prop="category_id">
-				<el-select v-model="ruleForm.category_id" placeholder="选择服务分类" size="mini" class="from-item-input">
+				<el-select v-model="ruleForm.category_id" placeholder="选择服务分类" size="small" class="from-item-input">
 					<el-option
 						v-for="item in categoryList"
 						:key="item.id"
@@ -23,7 +23,7 @@
 			</el-form-item>
 
 			<el-form-item label="标签" prop="tag_id_list">
-				<el-select v-model="ruleForm.tag_id_list" multiple placeholder="选择服务标签" size="mini" class="from-item-input">
+				<el-select v-model="ruleForm.tag_id_list" multiple placeholder="选择服务标签" size="small" class="from-item-input">
 					<el-option
 						v-for="item in tagList"
 						:key="item.id"
@@ -37,15 +37,13 @@
 				<el-input type="textarea" v-model="ruleForm.description"></el-input>
 			</el-form-item>
 
-
-			<!--                todo: 保存时关闭当前标签页-->
 			<el-form-item>
 				<div style="float: left" v-if="this.$route.params.id">
-					<el-button type="primary" @click="submitForm('ruleForm')" size="mini">保存</el-button>
+					<el-button type="primary" @click="submitForm('ruleForm')" size="medium">保存</el-button>
 				</div>
 				<div style="float: left" v-else>
-					<el-button type="primary" @click="submitForm('ruleForm')" size="mini">立即创建</el-button>
-					<el-button @click="resetForm('ruleForm')" size="mini">重置</el-button>
+					<el-button type="primary" @click="submitForm('ruleForm')" size="medium">立即创建</el-button>
+					<el-button @click="resetForm('ruleForm')" size="medium">重置</el-button>
 				</div>
 			</el-form-item>
 		</el-form>
@@ -227,18 +225,18 @@
 </script>
 
 <style scoped>
-	.from-item-input {
-		/*width: 400px;*/
-		width: 100%;
-	}
+
 	.el-form-item {
 		font-weight: 700
 	}
-	.m-wrap-8 {
-		margin: 8px;
+	.el-input {
+		width: 300px;
+	}
+	.el-select {
+		width: 300px;
 	}
 
-	.m-wrap-from {
-		margin: 40px;
+	.sub-comp {
+		margin-top: 40px;
 	}
 </style>
