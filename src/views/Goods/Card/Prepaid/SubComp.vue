@@ -4,12 +4,12 @@
 		<div class="m-wrap-from">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="名称" prop="name">
-					<el-input v-model="ruleForm.name" class="from-item-input" size="mini"></el-input>
+					<el-input v-model="ruleForm.name" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="充值金额" prop="price">
 					<div class="item-align-center">
-						<el-input v-model="ruleForm.price" class="from-item-input" size="mini">
+						<el-input v-model="ruleForm.price" class="from-item-input" size="small">
 							<template slot="prepend">￥</template>
 						</el-input>
 					</div>
@@ -51,7 +51,7 @@
 							<el-radio label="-1" >永久有效</el-radio>
 							<el-radio label="1">&nbsp;</el-radio>
 						</el-radio-group>
-						<el-input style="width: 150px;" v-model="ruleForm.valid_days" size="mini" :disabled="valid_days_type==='-1'">
+						<el-input style="width: 150px;" v-model="ruleForm.valid_days" size="small" :disabled="valid_days_type==='-1'">
 							<template slot="append">天</template>
 						</el-input>
 					</div>
@@ -63,11 +63,11 @@
 
 				<el-form-item>
 					<div v-if="!$route.params.id" style="float: left">
-						<el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="mini">立即创建</el-button>
-						<el-button @click="resetForm('ruleForm')" size="mini">重置</el-button>
+						<el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="medium">立即创建</el-button>
+						<el-button @click="resetForm('ruleForm')" size="medium">重置</el-button>
 					</div>
 					<div v-else style="float: left">
-						<el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="mini">保存</el-button>
+						<el-button type="primary" @click="prepaidSubmitForm('ruleForm')" size="medium">保存</el-button>
 					</div>
 				</el-form-item>
 			</el-form>
@@ -76,6 +76,7 @@
 
 		<!--            todo: 高度50%如何定义-->
 		<el-dialog
+			:close-on-click-modal="false"
 			title="添加权益"
 			width="90%"
 			:visible.sync="dialogVisible"
@@ -83,6 +84,7 @@
 			<el-row>
 				<el-col :span="8">
 					<el-input
+						style="width: 100%;"
 						clearable
 						placeholder="输入关键字进行过滤"
 						v-model="filterText">
@@ -119,10 +121,10 @@
 						</el-table-column>
 						<el-table-column
 							prop="rule"
-							width="200px;"
+							width="300px;"
 							label="优惠设置">
 							<template slot-scope="scope">
-								<el-input size="mini" placeholder="请输入内容" v-model="scope.row.value"
+								<el-input size="mini" placeholder="请输入内容" v-model="scope.row.value" style="width: 180px;"
 								          oninput="value=value.replace(/[^\d.]/g,'')">
 									<template slot="append">
 										<el-select v-model="scope.row.mode" size="mini" style="width: 60px">
@@ -136,7 +138,8 @@
 						</el-table-column>
 						<el-table-column
 							prop="handle"
-							label="操作">
+							label="操作"
+						width="200px;">
 							<template slot-scope="scope">
 								<el-button
 									@click.native.prevent="deleteRow(scope.$index, scope.row.code)"
@@ -506,4 +509,33 @@
 
 <style scoped>
 
+	.m-wrap-from {
+		margin: 40px;
+	}
+	.from-item-input {
+		/*width: 400px;*/
+		width: 100%;
+	}
+
+	.el-form-item {
+		font-weight: 700
+	}
+	.el-input {
+		width: 300px;
+	}
+	.el-select {
+		width: 300px;
+	}
+	.el-textarea {
+		width: 400px;
+	}
+	.item-align-center {
+		display: flex;
+		align-items: center;
+		height: 40px;
+	}
+	.rightsErr{
+		color: #f55e5b;
+		font-size: 12px;
+	}
 </style>
