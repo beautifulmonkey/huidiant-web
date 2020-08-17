@@ -2,64 +2,38 @@
 	<div>
 
 		<div style="display: flex;margin-left: 50px; margin-top: 30px;">
-			<label class="zent-radio-wrap" @click="ruleForm.counting_card_type='1'"
+
+			<label v-for="cbox in card_box" class="zent-radio-wrap" @click="ruleForm.counting_card_type=cbox.counting_card_type"
 			       :style="{'--color': themeColor}"
-			       v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='1'}">
+			       v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type===cbox.counting_card_type}">
                 <span>
-                    <div class="title">有限次卡</div>
-                    <p class="desc">支持创建多个服务集合有限次数的次卡</p>
+                    <div class="title">{{cbox.title}}</div>
+                    <p class="desc">{{cbox.desc}}</p>
 
-                    <div v-if="ruleForm.counting_card_type==='1'">
-							<svg-icon slot="reference" icon-class="check_mark" class="icon" :style="{'--color': themeColor}"/>
-                    </div>
-
-                </span>
-			</label>
-
-
-			<label class="zent-radio-wrap" @click="ruleForm.counting_card_type='2'"
-			       :style="{'--color': themeColor}"
-			       v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='2'}">
-                <span>
-                    <div class="title">不限次卡</div>
-                    <p class="desc">支持创建多个服务集合且不限次数的次卡，月卡、年卡等</p>
-
-                    <div v-if="ruleForm.counting_card_type==='2'">
-							<svg-icon slot="reference" icon-class="check_mark" class="icon" :style="{'--color': themeColor}"/>
-                    </div>
-                </span>
-			</label>
-
-			<label class="zent-radio-wrap" @click="ruleForm.counting_card_type='3'"
-			       :style="{'--color': themeColor}"
-			       v-bind:class="{ 'zent-radio-checked': ruleForm.counting_card_type==='3'}">
-                <span>
-                    <div class="title">通卡</div>
-                    <p class="desc">设定一个总次数，会员可在次数内消费卡中任意项目</p>
-
-                    <div v-if="ruleForm.counting_card_type==='3'">
+                    <div v-if="ruleForm.counting_card_type===cbox.counting_card_type">
                         <svg-icon slot="reference" icon-class="check_mark" class="icon" :style="{'--color': themeColor}"/>
                     </div>
                 </span>
 			</label>
+
 		</div>
 
-		<div class="m-wrap-from" style="width: 40%">
+		<div class="m-wrap-from">
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 
 				<el-form-item label="名称" prop="name">
-					<el-input v-model="ruleForm.name" class="from-item-input" size="mini"></el-input>
+					<el-input v-model="ruleForm.name" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="售价" prop="price">
 					<div class="item-align-center">
-						<el-input v-model="ruleForm.price" class="from-item-input" size="mini">
+						<el-input v-model="ruleForm.price" class="from-item-input" size="small">
 							<template slot="prepend">￥</template>
 						</el-input>
 					</div>
 				</el-form-item>
 
-				<el-form-item label="权益" prop="rule" style="width: 100vh;">
+				<el-form-item label="权益" prop="rule" style="width: 600px;">
 					<service-choose-component @return-value="setRights" ref="serviceComponent"></service-choose-component>
 					<el-table
 						border
@@ -82,7 +56,7 @@
 					</el-table>
 
 
-					<div style="text-align: left;margin-top: 10px" class="batch-box"
+					<div style="text-align: left;margin-top: 10px;width: 100vh;" class="batch-box"
 					     v-if="ruleForm.counting_card_type==='3'&&ruleForm.rule.service.length>0" >
 						<span class="set-span">以上{{ruleForm.rule.service.length}}个服务总次数：</span>
 						<span class="batch-input"><span>共&nbsp;</span>
@@ -99,7 +73,7 @@
 							<el-radio label="-1" >永久有效</el-radio>
 							<el-radio label="1">&nbsp;</el-radio>
 						</el-radio-group>
-						<el-input style="width: 150px;" v-model="ruleForm.valid_days" size="mini" :disabled="valid_days_type==='-1'">
+						<el-input style="width: 150px;" v-model="ruleForm.valid_days" size="small" :disabled="valid_days_type==='-1'">
 							<template slot="append">天</template>
 						</el-input>
 					</div>
@@ -111,7 +85,7 @@
 
 				<el-form-item>
 					<div style="float: left">
-						<el-button type="primary" @click="countingSubmitForm('ruleForm')" size="mini">{{$route.params.id ? '保存' : '立即创建'}}</el-button>
+						<el-button type="primary" @click="countingSubmitForm('ruleForm')" size="medium">{{$route.params.id ? '保存' : '立即创建'}}</el-button>
 					</div>
 				</el-form-item>
 
@@ -138,6 +112,12 @@
         },
         data () {
             return {
+                card_box: [
+	                {title: '有限次卡', desc:'支持创建多个服务集合有限次数的次卡', counting_card_type: '1'},
+                    {title: '不限次卡', desc:'支持创建多个服务集合且不限次数的次卡，月卡、年卡等', counting_card_type: '2'},
+                    {title: '通卡', desc:'设定一个总次数，会员可在次数内消费卡中任意项目', counting_card_type: '3'}
+                ],
+
                 valid_days_type: "-1",
                 ruleForm: {
                     counting_card_type: '1',
@@ -361,7 +341,15 @@
 		/*width: 400px;*/
 		width: 100%;
 	}
-
+	.el-input {
+		width: 300px;
+	}
+	.el-select {
+		width: 300px;
+	}
+	.el-textarea {
+		width: 400px;
+	}
 
 	.icon {
 		position: absolute;

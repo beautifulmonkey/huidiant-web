@@ -1,6 +1,6 @@
 <template>
     <div class="m-wrap-16">
-    <div style="width: 40%">
+    <div>
 
         <div class="m-wrap-8">
             <el-page-header @back="$router.push('/goods/service')" content="编辑服务"></el-page-header>

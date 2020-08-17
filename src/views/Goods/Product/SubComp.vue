@@ -251,7 +251,9 @@
 	.el-select {
 		width: 300px;
 	}
-
+	.el-textarea {
+		width: 400px;
+	}
 	.sub-comp {
 		margin-top: 40px;
 	}
