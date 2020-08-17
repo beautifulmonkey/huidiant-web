@@ -260,6 +260,10 @@
         },
 
 	    methods: {
+            deepClone(obj) {
+                return JSON.parse(JSON.stringify(obj));
+            },
+
             resetForm(formName) {
                 this.rightsTableData = [];
                 this.rightsRealData = [];
@@ -288,14 +292,14 @@
                 if (Object.keys(this.errorCheck).length){
                     this.$message.error('优惠设置不正确!');
                 }else{
-                    this.rightsRealData = this.rightsTableData;
+                    this.rightsRealData = this.deepClone(this.rightsTableData);
                     this.dialogVisible = false
                 }
             },
 
             // 添加权益
             rightsAdd(){
-                this.rightsTableData = this.rightsRealData;
+                this.rightsTableData = this.deepClone(this.rightsRealData);
                 this.dialogVisible = true;
                 this.$nextTick(() => {
                     let check_node = [];
