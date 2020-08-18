@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-button style="margin-right: 70px;width: 100px;border-radius: 2px;" type="primary" @click="payDialogOpen">收款</el-button>
+        <el-button style="margin-right: 70px;width: 100px;height: 45px;" type="primary" @click="payDialogOpen">收款</el-button>
 
         <el-dialog title="结算"
                    :visible.sync="dialogFormVisible"

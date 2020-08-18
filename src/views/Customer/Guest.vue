@@ -142,7 +142,7 @@
                 <el-table-column fixed label="客户信息" width="170">
                     <template slot-scope="scope">
                         <div style="display: flex; align-items: center;justify-content: center">
-                                <el-avatar icon="el-icon-user-solid"></el-avatar>
+                                <el-avatar :src="scope.row.img || defaultImg"></el-avatar>
 
                             <div style="margin-left: 10px;">
                                 <el-button size="medium" type="text" style="color: #5a5e66">{{scope.row.name}}</el-button>
@@ -201,6 +201,7 @@
         },
         data() {
             return {
+                defaultImg: require('@/assets/img/user_smile.png'),
                 condition_details: false,
                 identityList: [
                     {"label": "全部", "key": ''},

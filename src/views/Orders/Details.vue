@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-box">
         <div class="m-wrap-16">
             <div class="title">订单信息</div>
             <div class="content">
@@ -31,22 +31,21 @@
         <div class="m-wrap-16">
             <div class="title">客户信息</div>
             <div class="content">
-                <div class="display-center">
-                    <el-avatar :size="45" :src="circleUrl"></el-avatar>
-                    <h3 style="margin-left: 10px;">{{orderData.customer_name}}</h3>
-                </div>
-
-
-                <div style="display: flex;font-size: 90%;margin-top: 10px;" v-if="orderData.customer_id">
-                    <div style="width: 350px">
-                        <span class="label" >联系电话：</span>
-                        <span class="text" >{{orderData.customer_tel}}</span>
+                <div class="customer">
+                    <div class="el-image image">
+                        <img :src="orderData.customer_img ||defaultImg" class="el-image__inner" style="object-fit: cover;"><!---->
                     </div>
 
-                    <div style="width: 350px">
-                        <span class="label" >客户身份：</span>
-                        <span class="text" >{{orderData.customer_identity}}</span>
+                    <div class="name-phone">
+                        <div class="name-info">
+                            <span class="name">{{orderData.customer_name}}</span>
+                            <div class="member-level level1" v-show="orderData.customer_id">
+                                <div class="level-icon" :style="level_style"></div>{{orderData.customer_identity}}
+                            </div>
+                        </div>
+                        <div class="phone" >{{orderData.customer_tel || '-'}}</div>
                     </div>
+
                 </div>
 
             </div>
@@ -54,7 +53,7 @@
 
         <div class="m-wrap-16">
             <div class="title">消费信息</div>
-            <div class="content" style="margin: 20px 70px;">
+            <div class="content" style="margin-top: 20px;">
                 <el-table
                         border
                         :header-cell-style="'background: #f7f8fa;'"
@@ -141,7 +140,10 @@
             return {
                 user: {},
                 orderData: {},
-                circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+                defaultImg: require('@/assets/img/user_smile.png'),
+                level_style: {
+                    backgroundImage:`url(${require('@/assets/img/public_level.png')})`
+                },
             }
         },
         methods: {
@@ -169,6 +171,12 @@
 </script>
 
 <style scoped>
+    .main-box{
+        margin: 7px;
+        margin-bottom: 20px;
+        padding: 12px;
+        background: #fff;
+    }
     .m-wrap-16 {
         margin-left: 16px;
         margin-right: 16px;
@@ -178,6 +186,7 @@
 
 
     .title{
+        font-size: 15px;
         background: #f8f8f8;
         height: 24px;
         padding: 12px 16px;
@@ -236,5 +245,67 @@
 
     .text {
         color: #111;
+    }
+
+    .content>.customer {
+        color: #111;
+        position: relative;
+        display: inline-block;
+        padding-right: 30px;
+        height: 60px;
+        vertical-align: top;
+        padding-top: 7px;
+        font-size: 14px;
+    }
+    .content>.customer .image {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .content>.customer .name-phone {
+        display: inline-block;
+        line-height: 1;
+    }
+    .content>.customer .name-phone .name-info {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .content>.customer .name-phone .name-info .name {
+        padding-right: 10px;
+    }
+    .member-level.level1 {
+        background: #fbae11;
+    }
+    .member-level {
+        position: relative;
+        display: inline-block;
+        margin-left: 11px;
+        padding: 0 7px 0 15px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 12px;
+        color: #fafafa;
+        background: #8169ff;
+        border-radius: 0 8px 8px 0;
+        white-space: nowrap;
+    }
+    .member-level .level-icon {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -11px;
+        height: 18px;
+        width: 22px;
+        margin: auto;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
+    .content>.customer .name-phone .phone {
+        margin-top: 15px;
     }
 </style>

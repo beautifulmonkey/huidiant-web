@@ -149,7 +149,7 @@
 			</el-form>
 
 			<el-card style="margin: 50px 0;">
-
+				<span style="font-weight: 700;margin-left: 10px;">模板列表</span>
 				<el-button size="mini" type="primary" style="margin: 10px;" @click="getTempList">刷新</el-button>
 				<el-table
 					:data="tempList"
@@ -656,7 +656,7 @@
 		padding: 16px;
 		text-align: left;
 		background: #fff;
-		height: 100%;
+		/*height: 100%;*/
 	}
 
 	.el-menu{
