@@ -27,7 +27,7 @@
 					placement="right"
 					trigger="click"
 					v-model="visiblePT">
-					<el-input size="mini" v-model="FormPT.name" placeholder="请输入职称名称"></el-input>
+					<el-input style="width: 150px;" size="mini" v-model="FormPT.name" placeholder="请输入职称名称"></el-input>
 					<div style="text-align: right; margin: 5px;">
 						<el-button size="mini" type="text" @click="clearBindData()">取消</el-button>
 						<el-button type="primary" size="mini" @click="addPT()">确定</el-button>
@@ -67,7 +67,7 @@
 
 			<el-form :model="ruleFormEM" :rules="rulesEM" ref="ruleFormEM" label-width="100px">
 				<el-form-item label="姓名" prop="name">
-					<el-input v-model="ruleFormEM.name" class="from-item-input" size="mini"></el-input>
+					<el-input v-model="ruleFormEM.name" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="性别" prop="sex">
@@ -78,12 +78,12 @@
 				</el-form-item>
 
 				<el-form-item label="手机号" prop="tel">
-					<el-input type="text" placeholder="请输入内容" v-model="ruleFormEM.tel" class="from-item-input" size="mini"
+					<el-input type="text" placeholder="请输入内容" v-model="ruleFormEM.tel" class="from-item-input" size="small"
 					          maxlength="11" show-word-limit>
 					</el-input>
 				</el-form-item>
 				<el-form-item label="职称" prop="professional_title">
-					<el-select v-model="ruleFormEM.professional_title" placeholder="请选择" size="mini">
+					<el-select v-model="ruleFormEM.professional_title" placeholder="请选择" size="small">
 						<el-option
 							v-for="item in PTList"
 							:key="item.id"
@@ -93,14 +93,14 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item label="身份证号码" prop="id_card_number">
-					<el-input v-model="ruleFormEM.id_card_number" class="from-item-input" size="mini" maxlength="18" show-word-limit></el-input>
+					<el-input v-model="ruleFormEM.id_card_number" class="from-item-input" size="small" maxlength="18" show-word-limit></el-input>
 				</el-form-item>
 				<el-form-item label="联系地址" prop="address">
-					<el-input v-model="ruleFormEM.address" type="textarea" class="from-item-input" size="mini"></el-input>
+					<el-input v-model="ruleFormEM.address" type="textarea" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="备注" prop="description">
-					<el-input v-model="ruleFormEM.description" type="textarea" class="from-item-input" size="mini"></el-input>
+					<el-input v-model="ruleFormEM.description" type="textarea" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 
@@ -447,5 +447,18 @@
 
 	.el-divider {
 		height: 15px !important;
+	}
+
+	.el-form-item {
+		font-weight: 700
+	}
+	.el-input {
+		width: 300px;
+	}
+	.el-select {
+		width: 300px;
+	}
+	.el-textarea {
+		width: 400px;
 	}
 </style>

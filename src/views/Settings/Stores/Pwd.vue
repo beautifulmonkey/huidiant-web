@@ -4,20 +4,20 @@
 
 		<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="m-wrap-from">
 			<el-form-item label="当前密码" prop="old_pwd">
-				<el-input type="password" v-model="ruleForm.old_pwd" class="from-item-input" size="mini"></el-input>
+				<el-input type="password" v-model="ruleForm.old_pwd" class="from-item-input" size="small"></el-input>
 			</el-form-item>
 
 			<el-form-item label="新密码" prop="new_pwd">
-				<el-input type="password" v-model="ruleForm.new_pwd" class="from-item-input" size="mini"></el-input>
+				<el-input type="password" v-model="ruleForm.new_pwd" class="from-item-input" size="small"></el-input>
 			</el-form-item>
 
 			<el-form-item label="确认密码" prop="check_pwd">
-				<el-input type="password" v-model="ruleForm.check_pwd" class="from-item-input" size="mini"></el-input>
+				<el-input type="password" v-model="ruleForm.check_pwd" class="from-item-input" size="small"></el-input>
 			</el-form-item>
 
 			<el-form-item>
 				<div style="float: left">
-					<el-button type="primary" @click="submitForm('ruleForm')" size="mini">确定修改</el-button>
+					<el-button type="primary" @click="submitForm('ruleForm')" size="medium">确定修改</el-button>
 				</div>
 			</el-form-item>
 		</el-form>

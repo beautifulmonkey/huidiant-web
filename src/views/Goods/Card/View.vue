@@ -23,7 +23,7 @@
 		<div class="m-wrap-16">
 			<div style="display: flex">
 				<div class="preview">
-					<div class="elLnRK" :class="'bgi_' + cardData.type">
+					<div class="elLnRK" :style="getBgmStyle()">
 						<header><span>{{user.stores_name}}</span></header>
 						<p>{{cardData.name}}</p>
 						<section>
@@ -94,9 +94,24 @@
             return {
                 user: {},
                 cardData: {},
+
+                style_bgi_1: {
+                    background:`url(${require('@/assets/img/czk_bgi.png')}) center center / cover no-repeat`
+                },
+                style_bgi_2: {
+                    background:`url(${require('@/assets/img/ck_bgi.png')}) center center / cover no-repeat`
+                },
+
             }
 	    },
 	    methods: {
+            getBgmStyle(){
+                if (this.cardData.type===1){
+                    return this.style_bgi_1
+                }else if(this.cardData.type===2){
+                    return this.style_bgi_2
+                }
+            },
             // 获取单个详情
             async getCardDetails(){
                 try {
@@ -199,12 +214,6 @@
 		width: 100%
 	}
 
-	.bgi_1{
-		background: url(https://b.yzcdn.cn/beauty/card/bgimg/rechargeCard.png) center center / cover no-repeat;
-	}
-	.bgi_2{
-		background: url(https://b.yzcdn.cn/beauty/card/bgimg/timesCard.png) center center / cover no-repeat;
-	}
 	.elLnRK {
 		text-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px;
 		width: 355px;

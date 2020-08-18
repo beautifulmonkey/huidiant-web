@@ -263,5 +263,7 @@
     .el-form-item div{
         float: left;
     }
-
+    .el-form-item {
+        font-weight: 700
+    }
 </style>

@@ -20,7 +20,7 @@
 						</el-checkbox-group>
 					</div>
 
-					<el-button @click="submit" size="small">保存</el-button>
+					<el-button type="primary" plain @click="submit" size="small">保存</el-button>
 
 				</div>
 			</div>

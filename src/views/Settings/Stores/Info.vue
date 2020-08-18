@@ -10,7 +10,7 @@
 			<div style="display: flex"><div class="zent-form__control-label">门店简介：</div>{{info.stores_info || '-'}}</div>
 			<div style="display: flex"><div class="zent-form__control-label">负责人电话：</div>{{info.tel}}</div>
 			<div style="display: flex"><div class="zent-form__control-label"></div>
-				<el-button @click="editBtn" size="mini">编辑</el-button>
+				<el-button @click="editBtn" size="medium">编辑</el-button>
 			</div>
 		</div>
 
@@ -28,26 +28,31 @@
 
 			<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				<el-form-item label="门店名称" prop="stores_name">
-					<el-input v-model="ruleForm.stores_name" class="from-item-input" size="mini"></el-input>
+					<el-input v-model="ruleForm.stores_name" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="门店logo" prop="name">
-					<el-input v-model="ruleForm.logo" class="from-item-input" size="mini"></el-input>
+					<el-upload
+						:multiple="false"
+						action="https://jsonplaceholder.typicode.com/posts/"
+						list-type="picture-card">
+						<i class="el-icon-plus"></i>
+					</el-upload>
 				</el-form-item>
 
 				<el-form-item label="门店地址" prop="stores_address">
-					<el-input v-model="ruleForm.stores_address" class="from-item-input" size="mini"></el-input>
+					<el-input :rows="3" type="textarea" v-model="ruleForm.stores_address" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="门店简介" prop="info">
-					<el-input v-model="ruleForm.stores_info" class="from-item-input" size="mini"></el-input>
+					<el-input :rows="3" type="textarea" v-model="ruleForm.stores_info" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 				<el-form-item label="主营类目">
-					<el-input disabled value="美发店" class="from-item-input" size="mini"></el-input>
+					<el-input disabled value="美发店" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 				<el-form-item label="负责人电话" prop="tel">
-					<el-input disabled :value="info.tel" class="from-item-input" size="mini"></el-input>
+					<el-input disabled :value="info.tel" class="from-item-input" size="small"></el-input>
 				</el-form-item>
 
 			</el-form>
@@ -226,5 +231,18 @@
 		font-size: 15px;
 		color: #222;
 		margin-bottom: 30px;
+	}
+
+	.el-form-item {
+		font-weight: 700
+	}
+	.el-input {
+		width: 300px;
+	}
+	.el-select {
+		width: 300px;
+	}
+	.el-textarea {
+		width: 400px;
 	}
 </style>

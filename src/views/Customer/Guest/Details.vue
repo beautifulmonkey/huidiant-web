@@ -4,7 +4,7 @@
         <!--头区域-->
         <div class="m-wrap-16">
             <div class="title-wrap flex align-center">
-                <h2 class="title flex-item">会员详情</h2>
+                <h2 class="title flex-item">客户详情</h2>
                 <div class="button-group">
                     <div style="margin-right: 10px;">
                         <up-sert-customer-component @data-save="reloadData"></up-sert-customer-component>
