@@ -31,4 +31,10 @@ export default {
     bottom: 0px;
     // background: rgba(224, 234, 235, 0.1);
   }
+  /deep/ .el-dialog__header{
+      text-align: left !important;
+      font-size: 18px;
+      font-weight: 700;
+      background: #f8f8f8 !important;
+  }
 </style>

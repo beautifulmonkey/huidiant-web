@@ -1206,4 +1206,10 @@
         border-bottom: 1px dashed #c8c9cc;
         margin-bottom: 10px;
     }
+    /deep/ .el-dialog__header{
+        text-align: left !important;
+        font-size: 18px;
+        font-weight: 700;
+        background: #f8f8f8 !important;
+    }
 </style>
