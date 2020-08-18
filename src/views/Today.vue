@@ -1,12 +1,11 @@
 <template>
-    <div>
+    <div class="base-box">
 
-        <div class="justify-between">
-            <div :class="{ 'width-100': isMobile(), 'width-75': !isMobile() }">
-                <el-card class="card-items" shadow="always">
+        <div class="main-box">
+                <div class="card-items">
 
                     <div class="g-start">
-                        <span style="font-size: 120%; font-weight: 500;">今日数据</span>
+                        <span>今日数据</span>
 
                         <el-button style="margin-left: 10px;" type="text" size="mini"
                                 @click="$router.push('/analysis/summary')">更多数据</el-button>
@@ -57,21 +56,19 @@
                             </div>
                         </div>
                     </div>
-                </el-card>
+                </div>
 
-
-
-                <el-card class="card-items" shadow="always">
+                <div class="card-items">
                     <div class="g-start">
-                        <span style="font-size: 120%; font-weight: 500;">近7日实收</span>
+                        <span>近7日实收</span>
                     </div>
                     <div class="echarts-for-vue-7" ref="chartWeeK"></div>
-                </el-card>
+                </div>
 
-                <el-card class="card-items" shadow="always">
+                <div class="card-items">
 
                     <div class="g-start">
-                        <span style="font-size: 120%; font-weight: 500;">常用功能</span>&nbsp;
+                        <span>常用功能</span>&nbsp;
                         <el-button type="text" @click="guidePage()" size="mini">新手引导<i class="el-icon-right"></i></el-button>
                     </div>
 
@@ -86,43 +83,35 @@
                         </div>
                     </div>
 
-                </el-card>
+                </div>
             </div>
 
-
-
-            <div v-if="!isMobile()" class="card-items" style="width: 25%;padding: 0px;">
-                <div style="display: flex; justify-content: center">
+        <div class="right-box" v-if="!isMobile()" >
+                <div>
                     <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
                 </div>
 
-                <el-card class="right-bar">
-                    <div style="display: flex">
+                <div class="right-card">
+                    <div>
                         <div><svg-icon icon-class="nav_service" style="height: 44px;width: 44px" /></div>
                         <div class="info">
                             <p>技术支持</p>
                             <p class="sub-text">提供 7*12 小时的技术服务</p>
                         </div>
                     </div>
-                </el-card>
+                </div>
 
-                <el-card class="right-bar">
-                    <div style="display: flex">
+                <div class="right-card">
+                    <div>
                         <div><svg-icon icon-class="nav_ipad" style="height: 44px;width: 44px" /></div>
                         <div class="info">
                             <p>兼容 平板/ipad收银</p>
                             <p class="sub-text">在平板/ipad中输入网址即可使用</p>
                         </div>
                     </div>
-                </el-card>
-
+                </div>
 
             </div>
-
-
-        </div>
-
-
 
     </div>
 </template>
@@ -384,17 +373,42 @@
 </script>
 
 <style scoped>
-    .justify-between {
+    .base-box {
+        margin: 10px;
         display: flex;
-        justify-content: space-between
+
+    }
+    .main-box{
+        width: 100%;
+        margin-right: 20px
+    }
+    .right-box {
+        width: 340px;
     }
 
-    .card-items {
-        margin: 20px;
+    .main-box .card-items {
+        margin-bottom: 20px;
+        text-align: left;
+        background: white;
+        padding: 20px;
+    }
+
+    .main-box .card-items .g-start span{
+        font-size: 120%; font-weight: 500;
+    }
+
+    .right-box .right-card {
+        margin-top: 20px;
+        padding: 20px;
+        background: white;
         text-align: left;
     }
+    .right-box .right-card div {
+        display: flex;
+    }
 
-    .flex-box {
+
+    .main-box .card-items .flex-box {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -404,14 +418,14 @@
         /*margin-bottom: 50px;*/
     }
 
-    .overview {
+    .main-box .card-items .overview {
         -webkit-box-flex: 1;
         -ms-flex: 1;
         flex: 1;
         text-align: left;
     }
 
-    .content {
+    .main-box .card-items .content {
         padding: 24px 24px 0;
     }
 
@@ -454,9 +468,6 @@
         cursor: pointer;
     }
 
-    .right-bar {
-        margin-top: 20px;
-    }
     .info {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -488,14 +499,6 @@
         height: 235px;
         margin: -30px 0 -30px 0;
         width: 100%;
-    }
-
-    .width-100{
-        width: 100%;
-    }
-
-    .width-75{
-        width: 75%;
     }
 
     .card-content {
