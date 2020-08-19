@@ -9,12 +9,13 @@ var menu_list = [
         "fullname": "收银",
         "menuIndex": "/cashier",
         "icon": "el-icon-monitor",
+        // "icon": "icon iconfont icon-gaikuang",
     },
     {
         "name": "概况",
         "fullname": "概况",
         "menuIndex": "/today",
-        "icon": "el-icon-data-line",
+        "icon": "icon iconfont icon-gaikuang2",
         "children": [],
         "linkSelf": true
     },
@@ -22,7 +23,7 @@ var menu_list = [
         "name": "数据",
         "fullname": "数据分析",
         "menuIndex": "/analysis",
-        "icon": "el-icon-s-data",
+        "icon": "icon iconfont icon-shuju2",
         "redirect": "/analysis/summary",
         "children": [
 
@@ -38,7 +39,7 @@ var menu_list = [
         "name": "商品",
         "fullname": "商品管理",
         "menuIndex": "/goods",
-        "icon": "el-icon-shopping-bag-2",
+        "icon": "icon iconfont icon-shangpin",
         "redirect": "/goods/service",
         "children": [
 
@@ -141,7 +142,9 @@ var menu_list = [
         "name": "客户",
         "fullname": "客户管理",
         "menuIndex": "/customer",
-        "icon": "el-icon-user",
+        // "icon": "icon iconfont icon-huiyuan2",
+        "icon": "el-icon-user-solid",
+        // "icon": "el-icon-s-custom",
         "redirect": "/customer/guest",
         "children": [
             {
@@ -177,7 +180,7 @@ var menu_list = [
         "name": "订单",
         "fullname": "订单管理",
         "menuIndex": "/orders",
-        "icon": "el-icon-s-order",
+        "icon": "icon iconfont icon-dingdan2",
         "redirect": "/orders/list",
         "children": [
             {
@@ -216,7 +219,7 @@ var menu_list = [
         "name": "设置",
         "fullname": "设置中心",
         "menuIndex": "/settings",
-        "icon": "el-icon-setting",
+        "icon": "icon iconfont icon-shezhi1",
         "redirect": "/settings/stores/info",
         "children": [
             {

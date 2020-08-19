@@ -14,7 +14,7 @@
 				<el-menu-item :index=item.menuIndex v-for="item in headMenu"
 				              :style="{'--color': themeColor}"
 				              @click="menuRouterPush(item.menuIndex)">
-					<i :class="item.icon"></i>
+					<i :class="item.icon" class="nav-icon"></i>
 					<span slot="title">{{item.name}}</span>
 				</el-menu-item>
 			</el-menu>
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import '@/assets/css/navbarIcon.css';
 import { mapState } from 'vuex'
 import MenuTree from "@/components/MenuTree"
 export default {
@@ -123,6 +124,12 @@ export default {
 	/deep/ .right-bar .el-menu-item {
 		min-width: 150px !important;
 		/*overflow: hidden !important;*/
+	}
+
+	.nav-icon {
+		font-size: 18px;
+		margin-right: 5px;
+		text-align: center;
 	}
 }
 
