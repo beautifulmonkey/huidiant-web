@@ -1,5 +1,6 @@
 <template>
   <div class="headbar" :class="navTree.length?'position-left':'position-collapse-left'">
+      <span v-show="!navTree.length" :style="{'--color': themeColor}" class="ui-label">云逍科技</span>
     <!-- 工具栏 -->
     <span class="toolbar">
       <el-menu class="el-menu-demo" :background-color="'#fff'" mode="horizontal">
@@ -27,15 +28,15 @@
 <!--          </el-popover>-->
 <!--        </el-menu-item>-->
 
-        <el-menu-item index="4" v-popover:popover-notice>
-          <!-- 系统通知 -->
-          <el-badge :value="1" :max="99" class="badge" type="success">
-            <li style="color: #555555;" class="fa fa-bell-o fa-lg"></li>
-          </el-badge>
-          <el-popover ref="popover-notice" placement="bottom-end" trigger="click">
-            <notice-panel></notice-panel>
-          </el-popover>
-        </el-menu-item>
+<!--        <el-menu-item index="4" v-popover:popover-notice>-->
+<!--          &lt;!&ndash; 系统通知 &ndash;&gt;-->
+<!--          <el-badge :value="1" :max="99" class="badge" type="success">-->
+<!--            <li style="color: #555555;" class="fa fa-bell-o fa-lg"></li>-->
+<!--          </el-badge>-->
+<!--          <el-popover ref="popover-notice" placement="bottom-end" trigger="click">-->
+<!--            <notice-panel></notice-panel>-->
+<!--          </el-popover>-->
+<!--        </el-menu-item>-->
 
         <el-menu-item index="5" v-popover:popover-personal>
           <!-- 用户信息 -->
@@ -113,6 +114,7 @@ export default {
 
 <style scoped lang="scss">
 .headbar {
+  text-align: left;
   position: fixed;
   top: 0;
   right: 0;
@@ -161,4 +163,22 @@ export default {
 .position-collapse-left {
     left: 100px;
 }
+
+.ui-label {
+    margin-left: 20px;
+    font-size:15px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    min-width: 40px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 5px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #bfbfbf;
+
+    border-color: var(--color) !important;
+    color: var(--color) !important;
+}
+
 </style>

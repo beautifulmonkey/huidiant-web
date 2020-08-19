@@ -91,25 +91,56 @@
                     <img class="init_widget" src="@/assets/guide.png" @click="guidePage">
                 </div>
 
-                <div class="right-card">
-                    <div>
-                        <div><svg-icon icon-class="nav_service" style="height: 44px;width: 44px" /></div>
-                        <div class="info">
-                            <p>技术支持</p>
-                            <p class="sub-text">提供 7*12 小时的技术服务</p>
+
+                <el-popover
+                    placement="left-start"
+                    trigger="hover">
+                    <div class="right-card" slot="reference">
+                        <div slot="reference">
+                                <div><svg-icon icon-class="nav_public" style="height: 44px;width: 44px" /></div>
+                            <div class="info">
+                                <p>客户端公众号</p>
+                                <p class="sub-text">客户接收消费通知 余额 消费记录</p>
+                            </div>
                         </div>
+                    </div>
+                    <div class="qrcode">
+                        <span>客户扫码关注</span>
+                        <img src="@/assets/img/yxkj_public.jpg">
+                        <el-button type="text" size="mini" @click="downloadCodeImg('公众号二维码')"><i class="el-icon-download"></i>下载二维码</el-button>
+                    </div>
+                </el-popover>
+
+                <el-popover
+                    placement="left-start"
+                    trigger="hover">
+                    <div class="right-card" slot="reference">
+                        <div>
+                            <div><svg-icon icon-class="nav_service" style="height: 44px;width: 44px" /></div>
+                            <div class="info">
+                                <p>云逍客服支持</p>
+                                <p class="sub-text">一对一指导您营销和使用</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="qrcode">
+                        <span>添加您的专属营销专家<br>一对一指导您使用和营销玩法</span>
+                        <img src="@/assets/img/kefu_qrcode.png">
+                    </div>
+                </el-popover>
+
+
+                <div class="right-card" style="padding: 16px;">
+                    <span style="font-size: 14px;font-weight: 700">产品动态</span>
+                    <div style="display: block;font-size: 12px">
+                        <p>08/19 界面UI细节优化</p>
+                        <p>08/15 短信发送功能上线</p>
+                        <p>08/15 微信公众号客户中心上线</p>
+                        <p>08/06 修复已知的BUG</p>
+                        <p>07/25 员工管理功能上线</p>
                     </div>
                 </div>
 
-                <div class="right-card">
-                    <div>
-                        <div><svg-icon icon-class="nav_ipad" style="height: 44px;width: 44px" /></div>
-                        <div class="info">
-                            <p>兼容 平板/ipad收银</p>
-                            <p class="sub-text">在平板/ipad中输入网址即可使用</p>
-                        </div>
-                    </div>
-                </div>
 
             </div>
 
@@ -354,7 +385,16 @@
                     }]
 
                 });
-            }
+            },
+
+
+            downloadCodeImg(name){
+                var a = document.createElement('a')
+                a.download =  name;
+                // 设置图片地址
+                a.href = require('@/assets/img/yxkj_public.jpg');
+                a.click();
+            },
 
 
         },
@@ -631,9 +671,23 @@
         font-size: 14px;
     }
 
-    .text {
+    .card-content .text {
         display: block;
         color: #505050;
         font-size: 15px;
+    }
+
+    .qrcode {
+        text-align: center;
+    }
+    .qrcode span {
+        font-size: 12px;
+        color: rgb(178, 178, 178);
+    }
+    .qrcode img {
+        display: block;
+        width: 200px;
+        height: 200px;
+        cursor: pointer;
     }
 </style>
