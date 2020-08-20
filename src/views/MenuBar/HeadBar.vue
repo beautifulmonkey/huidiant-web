@@ -1,6 +1,6 @@
 <template>
   <div class="headbar" :class="navTree.length?'position-left':'position-collapse-left'">
-      <span v-show="!navTree.length" :style="{'--color': themeColor}" class="ui-label">云逍科技</span>
+      <span :style="{'--color': themeColor}" class="ui-label">云逍科技</span>
     <!-- 工具栏 -->
     <span class="toolbar">
       <el-menu class="el-menu-demo" :background-color="'#fff'" mode="horizontal">
@@ -165,7 +165,7 @@ export default {
 }
 
 .ui-label {
-    margin-left: 20px;
+    margin-left: 19px;
     font-size:15px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;

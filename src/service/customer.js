@@ -58,6 +58,12 @@ export default {
         return await request('put', url, params)
     },
 
+    // 修改客户备注
+    async updateCustomerDesc(id, desc) {
+        const url = `${config.server.url}/customer/customer/${id}/desc`;
+        return await request('patch', url, {description: desc})
+    },
+
     // 添加客户
     async addCustomer(params) {
         const url = `${config.server.url}/customer/customer`;

@@ -114,28 +114,29 @@
                 </div>
                 <!--选择客户显示客户信息-->
                 <div v-if="isChooseCustomer" class="customer-info">
-                <div class="align-justify-center" style="margin-left: 30px;">
-                    <el-avatar icon="el-icon-user-solid"></el-avatar>
+                    <div class="align-justify-center" style="margin-left: 30px;">
+                        <el-avatar @click.native="customerDetailsOpen(chooseCustomerData.id)" style="cursor:pointer"
+                                   :src="chooseCustomerData.img ||require('@/assets/img/user_smile.png')"></el-avatar>
 
-                    <div style="margin-left: 10px;">
-                        <div style="float: left">
-                            <el-button size="medium" type="text" style="color: #5a5e66"
-                                       @click="customerDetailsOpen(chooseCustomerData.id)">{{chooseCustomerData.name}}</el-button>
-                            <i v-if="chooseCustomerData.sex===1" class="el-icon-female" style="color: #e6419c"></i>
-                            <i v-if="chooseCustomerData.sex===2" class="el-icon-male" style="color: #409df3"></i>
-                        </div><br>
-                        <div style="float: left">
-                            <span>{{chooseCustomerData.tel}}</span>
-                            <el-tag style="margin-left: 10px;" type="warning"  effect="dark" size="mini">{{chooseCustomerData.identity}}</el-tag>
+                        <div style="margin-left: 10px;">
+                            <div style="float: left">
+                                <el-button class="customer-name-btn" size="medium" type="text" style="color: #5a5e66"
+                                           @click="customerDetailsOpen(chooseCustomerData.id)">{{chooseCustomerData.name}}</el-button>
+                                <span style="color: #777;font-size: 13px;">{{chooseCustomerData.tel}}</span>
+                                <el-tag style="margin-left: 10px;" type="warning"  effect="dark" size="mini">{{chooseCustomerData.identity}}</el-tag>
+
+                            </div><br>
+                            <div style="text-align: left">
+                                <el-link @click="updateCustomerDescription" style="font-size: 13px">备注：{{formatCustomerDescription()}}</el-link>
+                            </div>
                         </div>
                     </div>
-                </div>
 
 
-                <div style="margin-right: 20px;">
-                    <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCustomer"></el-button>
+                    <div style="margin-right: 20px;">
+                        <el-button style="color: #635c5e" type="text" icon="el-icon-delete" circle @click="clearCustomer"></el-button>
+                    </div>
                 </div>
-            </div>
                 <!--添加客户-->
                 <up-sert-customer-component @data-save="initCustomer" :BtnShow="false" ref="upSertCustomer"></up-sert-customer-component>
             </div>
@@ -664,6 +665,8 @@
                         name: item.name,
                         tel: item.tel,
                         sex: item.sex,
+                        img: item.img,
+                        description: item.description,
                         identity: item.identity,
                         prepaid_card: item.prepaid_card,
                         card_balance: item.card_balance,
@@ -980,6 +983,52 @@
             async initCustomer(uid){
                 let data = await this.customerQueryBE("null", uid);
                 this.customerChoose(data[0])
+            },
+
+
+            // 修改客户备注
+            async updateCustomerDesc(new_desc){
+                try {
+                    const res = await customerApi.updateCustomerDesc(this.chooseCustomerData.id, new_desc);
+                    if (res.status >= 200 && res.status < 300) {
+                        this.chooseCustomerData.description = new_desc;
+                        this.$message({
+                            type: 'success',
+                            message: "修改成功!"
+                        });
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '修改失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            formatCustomerDescription(){
+                let desc = this.chooseCustomerData.description;
+                if (!desc){return '-'}
+                if(desc.length > 40){
+                    desc = desc.substring(0,40);
+                    desc += " ..."
+                }
+                return desc
+            },
+            // 修改客户备注
+            updateCustomerDescription() {
+                this.$prompt(null, '修改备注', {
+                    closeOnClickModal: false,
+                    inputPlaceholder: "请输入客户备注",
+                    confirmButtonText: '确定',
+                    inputType: "textarea",
+                    inputValue: this.chooseCustomerData.description,
+                    cancelButtonText: '取消',
+                }).then(({ value }) => {
+                    this.updateCustomerDesc(value)
+                }).catch(() => {
+                });
             }
 
         },
@@ -1211,5 +1260,13 @@
         font-size: 18px;
         font-weight: 700;
         background: #f8f8f8 !important;
+    }
+    .customer-info .el-link.el-link--default {
+        /*color: #777;*/
+        font-size: 13px;
+        font-weight: normal;
+    }
+    .customer-info .customer-name-btn {
+        padding: 0;
     }
 </style>
