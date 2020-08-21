@@ -124,7 +124,7 @@
             </div>
 
 
-            <div style="width: 100%;text-align: left">
+            <div style="width: 100%">
                     <el-button type="text" v-if="!condition_details" icon="el-icon-arrow-down" @click="condition_details=true">高级选项</el-button>
                     <el-button type="text" v-if="condition_details" icon="el-icon-arrow-up" @click="condition_details=false">收起选项</el-button>
             </div>
@@ -138,14 +138,18 @@
                     tooltip-effect="dark"
                     style="width: 100%;color: #3f393b"
             >
-
-                <el-table-column fixed label="客户信息" width="170">
+                <el-table-column
+                    :show-overflow-tooltip="false"
+                    type="selection"
+                    width="30">
+                </el-table-column>
+                <el-table-column fixed label="客户信息" width="180">
                     <template slot-scope="scope">
-                        <div style="display: flex; align-items: center;justify-content: center">
+                        <div style="display: flex; align-items: center;justify-content: flex-start">
                                 <el-avatar :src="scope.row.img || defaultImg"></el-avatar>
 
-                            <div style="margin-left: 10px;">
-                                <el-button size="medium" type="text" style="color: #5a5e66">{{scope.row.name}}</el-button>
+                            <div class="customer-common-info">
+                                <el-button size="small" type="text" @click="$router.push('/customer/guest/details/' + scope.row.id)">{{scope.row.name}}</el-button>
                                 <i v-if="scope.row.sex===1" class="el-icon-female" style="color: #e6419c"></i>
                                 <i v-if="scope.row.sex===2" class="el-icon-male" style="color: #409df3"></i>
                                 <br>
@@ -157,9 +161,10 @@
 
                 <el-table-column fixed label="客户身份" width="160">
                     <template slot-scope="scope">
-                        <div>
+                        <div style="font-size: 13px;line-height: 17px;">
                             <span>{{scope.row.identity}}</span><br>
-                            <span style="color: #999">次卡:&nbsp;</span><span>{{scope.row.counting_card_length}}张</span><br>
+                            <span style="color: #999">次卡:&nbsp;</span><span>{{scope.row.counting_card_length}}张</span>
+                            <br>
                             <span style="color: #999">储值余额:&nbsp;</span><span>¥{{scope.row.card_balance}}</span>
                         </div>
                     </template>
@@ -228,9 +233,9 @@
                     created_at_end: null,
                     pageTotal: null,
                     page_index: 1,
-                    page_size: 10
+                    page_size: 20
                 },
-                pageSizes: [10, 30, 50],
+                pageSizes: [20, 30, 50],
                 tableData: [],
                 pickerOptions: {
                     disabledDate(time) {
@@ -371,6 +376,27 @@
         margin-bottom: 20px;
         padding: 24px;
         background: #fff;
+        text-align: left;
+    }
+
+    /deep/ .customer-common-info .el-button span{
+        font-weight: 400 !important;
+        font-size: 13px;
+    }
+    /deep/ .customer-common-info .el-button{
+        padding: 0
+    }
+
+    /deep/ .el-table-column--selection .cell {
+        padding: 0 !important;
+        padding-left: 8px !important;
+    }
+    .customer-common-info i{
+        font-size: 10px;
+    }
+    .customer-common-info {
+        margin-left: 10px;
+        line-height: 20px;
     }
 
     .el-row {
@@ -383,6 +409,8 @@
 
     .pagination-container {
         background: #fff;
+        width: 100%;
+        text-align: center;
         padding: 32px 16px;
     }
 
@@ -402,7 +430,6 @@
     }
     .cond-column .title {
         width: 80px;
-        text-align: left;
         display: inline-block;
     }
 

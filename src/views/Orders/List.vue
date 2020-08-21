@@ -107,23 +107,22 @@
 
         <div :class="{'m-wrap-16' : !customer_id}">
 
-            <header style="margin: 20px 0;background-color: #f7f8fa;padding: 0 10px;">
+            <header class="table-header">
                 <table>
                     <thead>
                         <tr style="line-height: 50px;">
-                            <th style="width: 200px;"><div style="text-align: left;width: 200px;">商品</div></th>
-                            <th style="width: 16%;">单价</th>
-                            <th style="width: 16%;">数量</th>
-                            <th style="width: 20%;">客户</th>
-                            <th style="width: 15%;">金额</th>
-                            <th style="width: 10%">状态</th>
-                            <th style="width: 5%">操作</th>
+                            <th style="width: 190px;"><div style="text-align: left;width: 190px;">商品</div></th>
+                            <th style="width: 20%;">单价</th>
+                            <th style="width: 15%;">数量</th>
+                            <th style="width: 25%;">客户</th>
+                            <th style="width: 20%;">金额</th>
+                            <th style="width: 20%">状态</th>
                         </tr>
                     </thead>
                 </table>
             </header>
 
-            <div v-for="order in orderData">
+            <div class="order-data" v-for="order in orderData">
 
                 <div class="order-head">
                     <div>
@@ -149,14 +148,14 @@
                             prop="goods_name"
                             label="商品">
                     </el-table-column>
-                    <el-table-column label="单价" style="width: 15%">
+                    <el-table-column label="单价" min-width="20">
                         <template slot-scope="scope">
                             <div style="text-align: center">
                                 <span>￥{{scope.row.original_price}}</span>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="数量" style="width: 15%">
+                    <el-table-column label="数量" min-width="15">
                         <template slot-scope="scope">
                             <div style="text-align: center">
                                 <span>x {{scope.row.count}}</span>
@@ -164,19 +163,20 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="客户" style="width: 20%">
+                    <el-table-column label="客户"  min-width="25">
                         <template slot-scope="scope">
-                            <div style="text-align: center">
-                                <span v-if="!order.customer_id">{{order.customer_name}}</span>
-                                <el-button :style="{'padding': 0, 'color': themeColor}" v-if="order.customer_id" type="text"
+                            <div style="text-align: center;line-height: 18px;">
+                                <el-button v-if="order.customer_id" style="padding: 0" type="text"
                                            @click="$router.push('/customer/guest/details/' + order.customer_id)">{{order.customer_name}}</el-button>
+                                <span v-else>{{order.customer_name}}</span>
+
                                 <span class="color-999" v-if="order.customer_tel"><br>{{order.customer_tel}}</span>
                                 <span class="color-999" v-if="order.customer_identity"><br>{{order.customer_identity}}</span>
                             </div>
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="金额" style="width: 15%">
+                    <el-table-column label="金额" min-width="20">
                         <template slot-scope="scope">
                             <div style="text-align: center">
                                 <span>￥{{order.paid_amount}}</span>
@@ -185,7 +185,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column label="状态" style="width: 15%">
+                    <el-table-column label="状态" min-width="20">
                         <template slot-scope="scope">
                             <div style="text-align: center">
                                 <span>已完成</span>
@@ -236,7 +236,6 @@
 <script>
     import orderApi from '@/service/order.js'
     import storeSettingApi from '@/service/storeSetting.js'
-    import {mapState} from "vuex";
 
     export default {
         name: "Service",
@@ -245,11 +244,6 @@
                 type: String,
                 default: null
             },
-        },
-        computed: {
-            ...mapState({
-                themeColor: state=>state.app.themeColor
-            })
         },
         data() {
             return {
@@ -453,6 +447,9 @@
 </script>
 
 <style scoped>
+    /deep/ .order-data .el-button span{
+        font-weight: 400 !important;
+    }
     .cond-box {
         font-size: 15px;
     }
@@ -510,7 +507,7 @@
         width: 100%;
         height: 30px;
         /*background: #f7f8fa;*/
-        background: #fff7cc;
+        /*background: #fff7cc;*/
         border: 1px solid #ebedf0;
         margin-top: -1px;
         font-size: 0.9rem;
@@ -544,5 +541,11 @@
     .el-date-editor {
         width: 431px !important;
     }
-
+    .ServiceDiv .table-header {
+        text-align:center;
+        margin: 20px 0;
+        background-color: #f7f8fa;
+        padding: 0 10px;
+        color: #909399;
+    }
 </style>

@@ -1010,8 +1010,8 @@
             formatCustomerDescription(){
                 let desc = this.chooseCustomerData.description;
                 if (!desc){return '-'}
-                if(desc.length > 40){
-                    desc = desc.substring(0,40);
+                if(desc.length > 35){
+                    desc = desc.substring(0,35);
                     desc += " ..."
                 }
                 return desc
