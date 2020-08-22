@@ -8,7 +8,7 @@
 			text-color="#818a9c"
 			active-text-color="#fff">
 				<div class="store-logo">
-					<img src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+					<img :src="getStoreImg() ||require('@/assets/img/public_stores_logo.jpeg')" />
 				</div>
 
 				<el-menu-item :index=item.menuIndex v-for="item in headMenu"
@@ -60,7 +60,13 @@ export default {
   methods: {
       menuRouterPush(menuIndex){
           this.$router.push(menuIndex)
-      }
+      },
+	  getStoreImg(){
+          if (localStorage.userInfo) {
+              return JSON.parse(localStorage.userInfo).img_url;
+          }
+          return null
+	  }
   }
 }
 </script>
@@ -103,7 +109,7 @@ export default {
 		img {
 			width: 37px;
 			height: 37px;
-			border-radius: 10px;
+			border-radius: 50px;
 			margin-top: 15px;
 			float: right;
 		}

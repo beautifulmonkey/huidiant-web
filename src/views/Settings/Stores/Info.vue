@@ -4,13 +4,17 @@
 
 		<div style="margin-top: 30px;" class="data-info">
 			<div style="display: flex"><div class="zent-form__control-label">门店名称：</div>{{info.stores_name}}</div>
-			<div style="display: flex"><div class="zent-form__control-label">门店logo：</div></div>
+			<div style="display: flex"><div class="zent-form__control-label">门店logo：</div>
+				<div class="team-logo">
+					<img :src="info.img_url || defaultImg" role="presentation" alt="">
+				</div>
+			</div>
 			<div style="display: flex"><div class="zent-form__control-label">主营类目：</div>美发店</div>
 			<div style="display: flex"><div class="zent-form__control-label">门店地址：</div>{{info.stores_address || '-'}}</div>
 			<div style="display: flex"><div class="zent-form__control-label">门店简介：</div>{{info.stores_info || '-'}}</div>
 			<div style="display: flex"><div class="zent-form__control-label">负责人电话：</div>{{info.tel}}</div>
 			<div style="display: flex"><div class="zent-form__control-label"></div>
-				<el-button @click="editBtn" size="medium">编辑</el-button>
+				<el-button @click="editBtn" type="primary" plain size="medium">编辑</el-button>
 			</div>
 		</div>
 
@@ -32,10 +36,13 @@
 				</el-form-item>
 
 				<el-form-item label="门店logo" prop="name">
-					<el-upload
-						:multiple="false"
-						action="https://jsonplaceholder.typicode.com/posts/"
-						list-type="picture-card">
+
+					<el-upload :action="uploadAction" :headers="headers" list-type="picture-card" :file-list="fileList"
+					           :multiple="false" :class="{'disabled':uploadDisabled()}"
+					           :on-remove="handleRemove"
+					           :on-success="handleUploadSuccess"
+					           :before-upload="handleBeforeUpload"
+					           :on-error="handleUploadError">
 						<i class="el-icon-plus"></i>
 					</el-upload>
 				</el-form-item>
@@ -70,6 +77,7 @@
 <script>
 
     import storeSettingApi from '@/service/storeSetting.js'
+    import config from '@/config/env.js'
 
     import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
     import BmView from 'vue-baidu-map/components/map/MapView.vue'
@@ -84,6 +92,14 @@
         },
         data () {
             return {
+                defaultImg: require('@/assets/img/public_stores_logo.jpeg'),
+                fileList: [],
+                headers: {
+                    Authorization: `Bearer ${localStorage.access_token}`
+                    // token为系统访问需要的,放在header中
+                },
+                uploadAction: `${config.server.url}/utils/img`,
+
                 info: {},
                 dialogFormVisible: false,
                 ruleForm: {},
@@ -107,8 +123,14 @@
                 this.ruleForm = {
                     stores_name: this.info.stores_name,
                     stores_address: this.info.stores_address,
-                    stores_info: this.info.stores_info
+                    stores_info: this.info.stores_info,
+                    img: this.info.img
                 };
+                if (this.info.img){
+                    this.fileList = [{
+                        "url": this.info.img_url
+                    }]
+                }
                 this.dialogFormVisible=true;
             },
 
@@ -125,11 +147,20 @@
             },
 
             // 获取门店信息
-            async getStoreInfo(){
+            async getStoreInfo(changeSession){
                 try {
                     const res = await storeSettingApi.getStoreInfo();
                     if (res.status >= 200 && res.status < 300) {
                         this.info = res.data;
+                        // 防止异步
+                        if (changeSession){
+                            let userInfo = JSON.parse(localStorage.userInfo);
+                            userInfo.stores_name = this.info.stores_name;
+                            userInfo.stores_address = this.info.stores_address;
+                            userInfo.stores_info = this.info.stores_info;
+                            userInfo.img_url = this.info.img_url;
+                            localStorage.userInfo = JSON.stringify(userInfo)
+                        }
                     } else {
                         this.$message({
                             type: 'error',
@@ -147,17 +178,11 @@
                 try {
                     const res = await storeSettingApi.updateStoreInfo(this.ruleForm);
                     if (res.status >= 200 && res.status < 300) {
-                        this.getStoreInfo();
+                        this.getStoreInfo(true);
                         this.$message({
                             type: 'success',
                             message: '修改成功!'
                         });
-
-                        let userInfo = JSON.parse(localStorage.userInfo);
-                        userInfo.stores_name = this.ruleForm.stores_name
-                        userInfo.stores_address = this.ruleForm.stores_address
-                        userInfo.stores_info = this.ruleForm.stores_info
-                        localStorage.userInfo = JSON.stringify(userInfo)
                     } else {
                         this.$message({
                             type: 'error',
@@ -183,10 +208,45 @@
                 geocoder.getLocation(e.point, res => {
                     console.log(res);
                 })
-            }
+            },
+
+            // 移除图片
+            handleRemove(file, fileList) {
+                this.ruleForm.img = null;
+                this.fileList = [];
+            },
+            // 上传成功
+            handleUploadSuccess(response, file, fileList) {
+                this.ruleForm.img = response.key
+            },
+            // 拦截文件上传
+            handleBeforeUpload(file) {
+                const isJPG = file.type === 'image/jpeg'
+                const isPNG = file.type === 'image/png'
+                const isLt5M = file.size / 1024 / 1024 < 5;
+                if (!isJPG && !isPNG) {
+                    this.$message.error('上传图片只能是 JPG 格式或 PNG格式!')
+                }
+                if (!isLt5M) {
+                    this.$message.error('上传头像图片大小不能超过 5MB!')
+                }
+                console.log((isPNG || isJPG) && isLt5M)
+                return (isPNG || isJPG) && isLt5M
+            },
+            // 图片上传失败
+            handleUploadError(err, file, fileList) {
+                this.$message({
+                    type: 'error',
+                    message: '图片上传失败!'
+                })
+            },
+            uploadDisabled() {
+                return Boolean(this.ruleForm.img)
+            },
+
 	    },
         mounted() {
-            this.getStoreInfo();
+            this.getStoreInfo(false);
         }
     }
 </script>
@@ -232,6 +292,10 @@
 		color: #222;
 		margin-bottom: 30px;
 	}
+	.data-info div {
+		margin-bottom: 20px;
+		font-size: 14px;
+	}
 
 	.el-form-item {
 		font-weight: 700
@@ -244,5 +308,17 @@
 	}
 	.el-textarea {
 		width: 400px;
+	}
+	/deep/ .disabled .el-upload--picture-card {
+		display: none;
+	}
+	.team-logo{
+		width: 60px;
+		height: 60px;
+		border: 1px solid #e5e5e5;
+	}
+	.team-logo img {
+		width: 60px;
+		height: 60px;
 	}
 </style>

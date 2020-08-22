@@ -132,12 +132,12 @@
 
                 <div class="right-card" style="padding: 16px;">
                     <span style="font-size: 14px;font-weight: 700">产品动态</span>
-                    <div style="display: block;font-size: 12px">
+                    <div class="product-version">
+                        <p>08/22 订单列表、客户列表 UI优化</p>
+                        <p>08/22 店铺信息支持上传店铺Logo</p>
                         <p>08/19 界面UI细节优化</p>
                         <p>08/15 短信发送功能上线</p>
                         <p>08/15 微信公众号客户中心上线</p>
-                        <p>08/06 修复已知的BUG</p>
-                        <p>07/25 员工管理功能上线</p>
                     </div>
                 </div>
 
@@ -689,5 +689,12 @@
         width: 200px;
         height: 200px;
         cursor: pointer;
+    }
+    .product-version {
+        display: block !important;
+        font-size: 12px !important;
+    }
+    .product-version p {
+        margin: 12px 0;
     }
 </style>

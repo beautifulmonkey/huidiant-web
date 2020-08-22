@@ -2,8 +2,7 @@
   <div class="personal-panel">
     <div class="personal-desc" :style="{'background':this.$store.state.app.themeColor}">
         <div class="avatar-container">
-            <!--          <img class="avatar" :src="require('@/assets/user.png')" />-->
-        <img class="avatar" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
+            <img class="avatar"  :src="getStoreImg() ||require('@/assets/img/public_stores_logo.jpeg')" />
         </div>
         <div class="name-role">
           <span class="sender">{{ user.stores_name }}</span>
@@ -104,6 +103,12 @@ export default {
       })
       .catch(() => {})
     },
+      getStoreImg(){
+          if (localStorage.userInfo) {
+              return JSON.parse(localStorage.userInfo).img_url;
+          }
+          return null
+      }
   },
   mounted() {
   }
