@@ -263,7 +263,7 @@ var menu_list = [
                         "name": "开单设置",
                         "url": "/settings/trading/order",
                         // "icon": "el-icon-money",
-                        "disabled": true,
+                        // "disabled": true,
                     },
                     {
                         "id": "/settings/trading/pay",
@@ -284,13 +284,13 @@ var menu_list = [
                         "url": "/settings/customer/vip",
                         // "icon": "el-icon-star-off",
                     },
-                    {
-                        "id": "/settings/customer/tag",
-                        "name": "标签设置",
-                        "url": "/settings/customer/tag",
-                        // "icon": "el-icon-price-tag",
-                        "disabled": true,
-                    },
+                    // {
+                    //     "id": "/settings/customer/tag",
+                    //     "name": "标签设置",
+                    //     "url": "/settings/customer/tag",
+                    //     // "icon": "el-icon-price-tag",
+                    //     "disabled": true,
+                    // },
                     {
                         "id": "/settings/customer/source",
                         "name": "来源管理",

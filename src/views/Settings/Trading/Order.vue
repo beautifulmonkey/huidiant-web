@@ -1,69 +1,174 @@
 <template>
-	<h1>开单</h1>
+	<div class="m-wrap-16">
+
+		<div class="_2Mis2rBbK_zPYBCfB921_W">
+			<div class="setting-cashier-setting-row ui-title">
+				<span class="setting-cashier-setting-label">
+					抹零
+					<span class="setting-cashier-setting-tip">开启后，开单收款时订单合计金额如不为整数，则抹除角分金额</span>
+				</span>
+				<div class="g-group">
+					<el-switch name="moling" @change="switchChangeMoling" v-model="moling"></el-switch>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="_2Mis2rBbK_zPYBCfB921_W">
+			<div class="setting-cashier-setting-row ui-title">
+				<span class="setting-cashier-setting-label">
+					手动改价
+					<span class="setting-cashier-setting-tip">开启后，开单时可修改商品价格</span>
+				</span>
+				<div class="g-group">
+					<el-switch name="gaijia" @change="switchChangeGaijia" v-model="gaijia"></el-switch>
+				</div>
+			</div>
+		</div>
+
+		<div class="_2Mis2rBbK_zPYBCfB921_W">
+			<div class="setting-cashier-setting-row ui-title">
+				<span class="setting-cashier-setting-label">
+					升卡
+					<span class="setting-cashier-setting-tip">开启后，会员充值卡可升级为更高面值的充值卡</span>
+				</span>
+				<div class="g-group">
+					<el-switch name="shengka" @change="switchChangeShengka" v-model="shengka"></el-switch>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
 </template>
 
 <script>
+    import storeSettingApi from '@/service/storeSetting.js'
+
     export default {
-        name: "Order"
+        name: "Order",
+	    data(){
+            return {
+                moling: false,
+                gaijia: false,
+                shengka: false,
+            }
+	    },
+	    methods: {
+            switchChangeMoling(status){
+                this.updateOrderConfig("moling", status)
+            },
+            switchChangeGaijia(status){
+                this.updateOrderConfig("gaijia", status)
+            },
+            switchChangeShengka(status){
+                this.updateOrderConfig("shengka", status)
+            },
+
+            async getOrderConfig(){
+                try {
+                    const res = await storeSettingApi.getOrderConfig();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.moling = Boolean(res.data.moling);
+                        this.gaijia = Boolean(res.data.gaijia);
+                        this.shengka = Boolean(res.data.shengka);
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
+
+            async updateOrderConfig(key, status){
+                try {
+                    const res = await storeSettingApi.updateOrderConfig(key, Number(status));
+                    if (res.status >= 200 && res.status < 300) {
+
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '修改失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+
+
+        },
+	    mounted() {
+            this.getOrderConfig()
+        }
     }
 </script>
 
 <style scoped>
+	.m-wrap-16 {
+		margin: 7px;
+		margin-bottom: 20px;
+		padding: 24px;
+		background: #fff;
+		text-align: left;
+	}
+
+	._2Mis2rBbK_zPYBCfB921_W .setting-cashier-setting-row {
+		height: 50px;
+		line-height: 50px;
+		color: #000;
+		padding: 0 18px 0 20px;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-pack: justify;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		margin-bottom: 16px;
+	}
+	.ui-title {
+		height: 48px;
+		line-height: 48px;
+		background: #f7f8fa;
+		font-size: 16px;
+		font-weight: 400;
+		position: relative;
+		padding: 0 16px;
+	}
+	.ui-title:before {
+		content: "";
+		position: absolute;
+		width: 4px;
+		height: 16px;
+		left: 6px;
+		top: 16px;
+		background: #8558fa
+	}
+	._2Mis2rBbK_zPYBCfB921_W .setting-cashier-setting-label {
+		font-size: 16px;
+		font-weight: 400;
+	}
+	._2Mis2rBbK_zPYBCfB921_W .setting-cashier-setting-tip {
+		color: #969799;
+		height: 18px;
+		line-height: 18px;
+		margin-left: 18px;
+		display: inline-block;
+		font-size: 12px;
+	}
+	.g-group {
+		display: -webkit-inline-box;
+		display: -ms-inline-flexbox;
+		display: inline-flex;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+	}
 
 </style>
-
-
-<!--<template>-->
-<!--	<div class="demo">-->
-<!--		<el-button @click="printPdf" >打印</el-button>-->
-
-<!--		<form id="form1">-->
-<!--			<table border="1" width="300" id="tb01" bgcolor="#CCFFCC" style="border:solid 1px black;border-collapse:collapse"><tr><td width="133" id="mtb001">-->
-<!--				<font face="黑体" color="#FF0000" size="3"><u>&nbsp;《表单一》&nbsp;</u></font></td></tr></table>-->
-<!--			<table border="1" width="300" height="106" cellspacing="0" bgcolor="#CCFFFF"style="border-collapse:collapse;table-layout:fixed;border:solid 1px black;"><tr>-->
-<!--				<td width="66" height="16" style="border:solid 1px black"><font color="#0000FF">A</font><font color="#0000FF">等</font></td>-->
-<!--				<td width="51" height="16" style="border:solid 1px black"><font color="#0000FF">B</font><font color="#0000FF">等</font></td>-->
-<!--				<td width="51" height="16" style="border:solid 1px black"><font color="#0000FF">C</font><font color="#0000FF">等</font></td></tr>-->
-<!--				<tr>-->
-<!--					<td width="66" height="16" style="border:solid 1px black">A<sub>01</sub></td>-->
-<!--					<td width="80" height="12" style="border:solid 1px black">中-001</td>-->
-<!--					<td width="51" height="12" style="border:solid 1px black">C1<sup>x</sup></td>-->
-<!--				</tr>-->
-<!--				<tr>-->
-<!--					<td width="66" height="16" style="border:solid 1px black">A<sub>02</sub>Φ</td>-->
-<!--					<td width="80" height="16" style="border:solid 1px black">日-スの</td>-->
-<!--					<td width="51" height="16" style="border:solid 1px black"><font face='Vernada'>7&#13221</font></td>-->
-<!--				</tr>-->
-<!--				<tr><td width="66" height="16" style="border:solid 1px black;overflow:hidden">A<sub>03</sub><nobr>over隐藏后面的：1234567890</nobr>-->
-<!--				</td><td width="80" height="16" style="border:solid 1px black;overflow:hidden">韩-안녕</td><td width="51" height="16">C3<sup>x</sup>-->
-<!--				</td></tr> </table>-->
-<!--		</form>-->
-<!--	</div>-->
-<!--</template>-->
-
-<!--<script>-->
-
-<!--    import {getLodop} from '@/utils/LodopFuncs'-->
-
-<!--    export default {-->
-<!--        name: "demo",-->
-<!--        data() {-->
-<!--            return {}-->
-<!--        },-->
-<!--        methods: {-->
-<!--            // 查询数据-->
-<!--            printPdf() {-->
-<!--                let LODOP = getLodop();-->
-<!--                LODOP.PRINT_INIT("订货单");-->
-<!--                LODOP.SET_PRINT_STYLE("FontSize", 18);-->
-<!--                LODOP.SET_PRINT_STYLE("Bold", 1);-->
-<!--                LODOP.ADD_PRINT_TEXT(50, 231, 260, 39, "打印页面部分内容");-->
-<!--                LODOP.ADD_PRINT_HTM(88, 200, 350, 600,-->
-<!--                    document.getElementById("form1").innerHTML);-->
-<!--//    LODOP.PRINT();-->
-<!--                LODOP.PREVIEW();-->
-<!--            },-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
-

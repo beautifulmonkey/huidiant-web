@@ -50,4 +50,14 @@ export default {
         const url = `${config.server.url}/setting/pay/${id}`;
         return await request('delete', url)
     },
+    // 获取开单设置
+    async getOrderConfig(){
+        const url = `${config.server.url}/setting/order_config`;
+        return await request('get', url)
+    },
+    // 修改开单设置
+    async updateOrderConfig(key, status){
+        const url = `${config.server.url}/setting/order_config/${key}/${status}`;
+        return await request('patch', url)
+    }
 }

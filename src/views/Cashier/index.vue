@@ -197,6 +197,7 @@
                                 label="操作">
                             <template slot-scope="scope">
                                 <el-popover
+                                    v-show="orderConfig.gaijia"
                                     v-if="scope.row.shoppingType === 'consume'"
                                     placement="top">
                                     <div>
@@ -491,6 +492,7 @@
     import cardApi from '@/service/card.js'
     import cashierApi from '@/service/cashier.js'
     import storeSettingEmApi from '@/service/storeSettingEm.js'
+    import storeSettingApi from '@/service/storeSetting.js'
     import ThemePicker from "@/components/ThemePicker"
 
     export default {
@@ -506,6 +508,7 @@
         },
         data() {
             return {
+                orderConfig: {},  // 开单配置
                 checkboxEMList: [],
                 menuActive: 'consume',
                 customerKeyWord: '',
@@ -763,7 +766,15 @@
                 }else if(this.menuActive==='recharge' && this.shoppingCardRecharge){
                     amount = parseFloat(this.shoppingCardRecharge.price || 0)
                 }
-                this.payAmount = amount.toFixed(2);
+
+
+                // 抹零判断
+                if (this.orderConfig.moling){
+                    this.payAmount = parseInt(amount)
+                }else {
+                    this.payAmount = amount.toFixed(2);
+                }
+
                 return this.payAmount
             },
 
@@ -1029,7 +1040,24 @@
                     this.updateCustomerDesc(value)
                 }).catch(() => {
                 });
-            }
+            },
+
+            // 获取开单配置
+            async getOrderConfig(){
+                try {
+                    const res = await storeSettingApi.getOrderConfig();
+                    if (res.status >= 200 && res.status < 300) {
+                        this.orderConfig = res.data
+                    } else {
+                        this.$message({
+                            type: 'error',
+                            message: '获取失败!'
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
+            },
 
         },
         mounted() {
@@ -1042,6 +1070,8 @@
             if (uid){
                 this.initCustomer(uid)
             }
+            // 获取开单配置
+            this.getOrderConfig()
 
         }
     }
