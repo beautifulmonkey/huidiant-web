@@ -114,7 +114,10 @@ function addDynamicMenuAndRoutes(userName, to, from) {
   // 处理IFrame嵌套页面
   handleIFrameUrl(to.path)
   if(store.state.app.menuRouteLoaded) {
-    store.commit('switchNavTree', menuIndex);
+    // todo: 设置定时器是为了概况页面和其他页面切换造成闪屏, 非长久之计!
+    setTimeout(() => {
+      store.commit('switchNavTree', menuIndex);
+    }, 15);
     return
   }
   let dynamicRoutes = addDynamicRoutes(menu_list);
