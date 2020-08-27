@@ -133,6 +133,7 @@
 
         <div class="m-wrap-16">
             <el-table
+                    v-loading="customerTableLoading"
                     size="medium"
                     :data="tableData"
                     tooltip-effect="dark"
@@ -206,6 +207,7 @@
         },
         data() {
             return {
+                customerTableLoading: false,
                 defaultImg: require('@/assets/img/user_smile.png'),
                 condition_details: false,
                 identityList: [
@@ -247,11 +249,20 @@
         methods: {
             // 获取客户列表
             async getCustomerList(){
+                this.customerTableLoading = true;
+                let start_ts = (new Date()).getTime();
+
                 try {
                     const res = await customerApi.getCustomerList(this.filter);
                     if (res.status >= 200 && res.status < 300) {
-                        this.tableData = res.data.data;
-                        this.filter.pageTotal = res.data.page.total
+                        let tc = (new Date()).getTime() - start_ts;
+                        setTimeout(() => {
+                            console.log((new Date()).getTime() - start_ts);
+                            this.customerTableLoading = false;
+                            this.tableData = res.data.data;
+                            this.filter.pageTotal = res.data.page.total
+                        }, 400 - tc)
+
                     } else {
                         this.$message({
                             type: 'error',

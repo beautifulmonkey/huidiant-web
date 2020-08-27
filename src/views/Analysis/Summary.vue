@@ -24,7 +24,7 @@
 
 
 		<div>
-			<el-card class="card-items" shadow="always">
+			<el-card class="card-items" v-loading="dataLoading" shadow="always">
 				<div class="g-start">
 					<span style="font-size: 100%; font-weight: 500;">整体看板</span>
 				</div>
@@ -176,6 +176,7 @@
         },
 	    data() {
             return {
+                dataLoading: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() > Date.now();
@@ -425,6 +426,9 @@
 
             // 获取汇总数据
             async getAnalysisHistory(){
+                this.dataLoading = true;
+                let start_ts = (new Date()).getTime();
+
                 let params = {
                     start: parseInt(this.dateRange[0] / 1000),
 	                end: parseInt(this.dateRange[1] / 1000 + 86399)
@@ -433,9 +437,16 @@
                 try {
                     const res = await analysisApi.getAnalysisHistory(params);
                     if (res.status >= 200 && res.status < 300) {
-                        this.summaryData = res.data;
-                        this.drawHistoryData();
-                        this.drawPieData();
+                        let tc = (new Date()).getTime() - start_ts;
+
+                        setTimeout(() => {
+                            console.log((new Date()).getTime() - start_ts);
+                            this.dataLoading = false;
+                            this.summaryData = res.data;
+                            this.drawHistoryData();
+                            this.drawPieData();
+                        }, 500 - tc)
+
                     } else {
                         this.$message({
                             type: 'error',

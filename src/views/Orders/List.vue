@@ -105,7 +105,7 @@
 
         </div>
 
-        <div :class="{'m-wrap-16' : !customer_id}">
+        <div :class="{'m-wrap-16' : !customer_id}" v-loading="orderTableLoading">
 
             <header class="table-header">
                 <table>
@@ -247,6 +247,7 @@
         },
         data() {
             return {
+                orderTableLoading: false,
                 condition_details: false,
                 filter: {
                     customer_query: '',
@@ -395,6 +396,9 @@
 
             // 获取订单列表
             async getOrderList(){
+                this.orderTableLoading = true;
+                let start_ts = (new Date()).getTime();
+
                 if (this.customer_id){
                     this.filter.customer_id = this.customer_id
                 }
@@ -409,8 +413,15 @@
                 try {
                     const res = await orderApi.getOrderList(this.filter);
                     if (res.status >= 200 && res.status < 300) {
-                        this.orderData = res.data.data;
-                        this.filter.pageTotal = res.data.page.total
+                        let tc = (new Date()).getTime() - start_ts;
+
+                        setTimeout(() => {
+                            console.log((new Date()).getTime() - start_ts);
+                            this.orderTableLoading = false;
+                            this.orderData = res.data.data;
+                            this.filter.pageTotal = res.data.page.total
+                        }, 400 - tc)
+
                     } else {
                         this.$message({
                             type: 'error',
