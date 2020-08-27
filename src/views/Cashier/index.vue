@@ -205,7 +205,7 @@
                                         <div class="change-price-item">
                                             <el-input placeholder="改价格" v-model="scope.row.discount_price" size="mini"
                                                       oninput="value=value.replace(/[^\d.]/g,'')"
-                                                      @input="discountChangeVal=scope.row.discount_price / scope.row.price * 10">
+                                                      @input="discountChangeVal=toF2(scope.row.discount_price / scope.row.price * 10)">
                                                 <template slot="prepend">￥</template>
                                             </el-input>
 
@@ -213,7 +213,7 @@
 
                                             <el-input placeholder="改折扣" v-model="discountChangeVal" size="mini"
                                                       oninput="value=value.replace(/[^\d.]/g,'')"
-                                                      @input="scope.row.discount_price=scope.row.price * discountChangeVal/10">
+                                                      @input="scope.row.discount_price=toF2(scope.row.price * discountChangeVal/10)">
                                                 <template slot="append">折</template>
                                             </el-input>
                                         </div>
@@ -224,7 +224,7 @@
 <!--                                        <el-button type="primary" size="mini" @click="cancelInput(scope.$index)">确定</el-button>-->
 <!--                                    </div>-->
                                     <el-button slot="reference" size="mini" type="text"
-                                               @click="discountChangeVal=scope.row.discount_price / scope.row.price * 10">改价</el-button>
+                                               @click="discountChangeVal=toF2(scope.row.discount_price / scope.row.price * 10)">改价</el-button>
                                 </el-popover>
 
                                 <el-button size="mini" type="text"
@@ -326,7 +326,7 @@
                                         <div class="change-price-item">
                                             <el-input placeholder="改价格" v-model="scope.row.discount_price" size="mini"
                                                       oninput="value=value.replace(/[^\d.]/g,'')"
-                                                      @input="cardDiscountChangeVal=scope.row.discount_price / scope.row.price * 10">
+                                                      @input="cardDiscountChangeVal=toF2(scope.row.discount_price / scope.row.price * 10)">
                                                 <template slot="prepend">￥</template>
                                             </el-input>
 
@@ -334,7 +334,7 @@
 
                                             <el-input placeholder="改折扣" v-model="cardDiscountChangeVal" size="mini"
                                                       oninput="value=value.replace(/[^\d.]/g,'')"
-                                                      @input="scope.row.discount_price=scope.row.price * cardDiscountChangeVal/10">
+                                                      @input="scope.row.discount_price=toF2(scope.row.price * cardDiscountChangeVal/10)">
                                                 <template slot="append">折</template>
                                             </el-input>
                                         </div>
@@ -345,7 +345,7 @@
                                     <!--                                        <el-button type="primary" size="mini" @click="cancelInput(scope.$index)">确定</el-button>-->
                                     <!--                                    </div>-->
                                     <el-button slot="reference" size="mini" type="text"
-                                               @click="cardDiscountChangeVal=scope.row.discount_price / scope.row.price * 10">改价</el-button>
+                                               @click="cardDiscountChangeVal=toF2(scope.row.discount_price / scope.row.price * 10)">改价</el-button>
                                 </el-popover>
 
 
@@ -556,6 +556,14 @@
             })
         },
         methods: {
+            // 保留两位小数
+            toF2(floatNumber){
+                if (!floatNumber){
+                    return floatNumber
+                }
+                return parseFloat(floatNumber.toFixed(2))
+            },
+
             calcHeight(){
                const container = window.document.getElementById('main-shopping');
                if(container){
@@ -896,7 +904,7 @@
                     } else if(item.origin_discount_price !== item.discount_price){
                         reduce_text = '手动改价(改前单价:' + item.origin_discount_price.toString() + '元 改后:' + item.discount_price.toString() + '元)';
                     } else if (item.discount_price < item.price){
-                        reduce_text = '充值卡优惠' + ((item.price - item.discount_price)*item.count).toString()  + '元'
+                        reduce_text = '充值卡优惠' + ((item.price - item.discount_price)*item.count).toFixed(2)  + '元'
                     }
 
                     console.log(reduce_text);

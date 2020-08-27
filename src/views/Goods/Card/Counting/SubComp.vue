@@ -48,7 +48,8 @@
 						<el-table-column
 							label="次数">
 							<template slot-scope="scope">
-								<el-input style="width: 20vh" size="mini" v-if="ruleForm.counting_card_type==='1'" v-model="scope.row.count"></el-input>
+<!--								<el-input type="number" style="width: 20vh" size="mini" v-if="ruleForm.counting_card_type==='1'" v-model="scope.row.count"></el-input>-->
+								<el-input-number style="width: 15vh" size="mini" v-if="ruleForm.counting_card_type==='1'" v-model="scope.row.count" :min="1" :max="9999" :step="1" step-strictly></el-input-number>
 								<el-input style="width: 20vh" size="mini" v-if="ruleForm.counting_card_type==='2'" disabled value="无限次"></el-input>
 								<span v-if="ruleForm.counting_card_type==='3'">-</span>
 							</template>
