@@ -355,16 +355,11 @@
             },
 
             // 支付成功页面显示
-            setPaySuccess(order_number) {
+            setPaySuccess(loadingObj, order_number) {
                 this.getOrderDetails(order_number);
-                const loading = this.$loading({
-                    lock: true,
-                    text: '正在保存订单信息...',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.7)'
-                });
+
                 setTimeout(() => {
-                    loading.close();
+                    loadingObj.close();
                     this.showPaySuccess = true
                 }, 1500);
             },

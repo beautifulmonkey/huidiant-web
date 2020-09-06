@@ -709,10 +709,17 @@
 
             // 收款结账
             async cashierDeal(params){
+                const loading = this.$loading({
+                    lock: true,
+                    text: '正在保存订单信息...',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+
                 try {
                     const res = await cashierApi.cashierDeal(params);
                     if (res.status >= 200 && res.status < 300) {
-                        this.$refs.payComponent.setPaySuccess(res.data)
+                        this.$refs.payComponent.setPaySuccess(loading, res.data)
                     } else {
                         this.$message({
                             type: 'error',
