@@ -133,12 +133,12 @@
                 <div class="right-card" style="padding: 16px;">
                     <span style="font-size: 14px;font-weight: 700">产品动态</span>
                     <div class="product-version">
+                        <p>09/10 优化了一些交互效果</p>
+                        <p>09/10 修复了已知的bug</p>
                         <p>08/22 收银台支持 查看/修改 客户备注</p>
                         <p>08/22 订单列表、客户列表 UI优化</p>
                         <p>08/22 店铺信息支持上传店铺Logo</p>
                         <p>08/19 界面UI细节优化</p>
-                        <p>08/15 短信发送功能上线</p>
-                        <p>08/15 微信公众号客户中心上线</p>
                     </div>
                 </div>
 

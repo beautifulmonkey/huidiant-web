@@ -39,7 +39,7 @@
         </div>
 
         <div  style="text-align: center">
-            <span style="font-size: 80%;color: #969799">版本: v2.2</span>
+            <span style="font-size: 80%;color: #969799">版本: v2.3</span>
         </div>
 
     </div>

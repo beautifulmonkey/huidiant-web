@@ -13,9 +13,9 @@
 				<div class="card-bg" :style="cardBgStyle">
 					<div class="head-wrap">
 						<div class="avatar-wrap">
-							<img :src="require('@/assets/img/user_smile.png')" class="avatar">
-							<i v-if="meData.sex===1" class="el-icon-female sex-icon" style="color: #e6419c;font-size: 20px;"></i>
-							<i v-if="meData.sex===2" class="el-icon-male sex-icon" style="color: #409df3;font-size: 20px;"></i>
+							<img :src="meData.img || require('@/assets/img/user_smile.png')" class="avatar">
+<!--							<i v-if="meData.sex===1" class="el-icon-female sex-icon" style="color: #e6419c;font-size: 20px;"></i>-->
+<!--							<i v-if="meData.sex===2" class="el-icon-male sex-icon" style="color: #409df3;font-size: 20px;"></i>-->
 						</div>
 
 						<div class="info-wrap flex-item">
@@ -43,7 +43,12 @@
 				<div class="card-info">
 					<el-card v-for="item in vip_card" @click.native="redirect(item.menu)">
 						<div class="vip-card-box">
-							<svg-icon :icon-class="item.icon" style="font-size: 35px;color: #fbae11" />
+							<div class="FodderList_preview_wrap-4qxvzk" style="width: 50px !important;height: 50px !important;background-color: #f9f0e3">
+								<div class="FodderList_preview_wrap-4qxvzk">
+									<img :src="item.icon" class="FodderList_img-3Z91qH">
+								</div>
+							</div>
+
 							<div style="margin-left: 10px;">
 								<span style="font-size: 12px;color: #555555">{{item.name}}</span><br>
 								<span style="font-weight: 500;">{{meData[item.key]}}</span>
@@ -52,6 +57,28 @@
 					</el-card>
 				</div>
 
+				<div class="card-func">
+					<el-card>
+						<div style="display: flex;justify-content: space-between;padding: 15px 10px; ">
+							<div class="itemCon" @click="redirect('order')"><div class="itemName">
+									<svg-icon icon-class="public_order" class="moduleMenuSVG icon_form"/>
+									<div class="memberCenterText">消费记录</div>
+							</div></div>
+
+							<div class="itemCon" @click="redirect('prepaid')"><div class="itemName">
+									<svg-icon icon-class="public_rights2" class="moduleMenuSVG icon_form"/>
+									<div class="memberCenterText">我的权益</div>
+							</div></div>
+
+
+							<div class="itemCon" @click="redirect('order')"><div class="itemName">
+									<svg-icon icon-class="public_evaluation" class="moduleMenuSVG icon_form"/>
+									<div class="memberCenterText">订单评价</div>
+							</div></div>
+
+						</div>
+					</el-card>
+				</div>
 			</div>
 
 		</div>
@@ -71,8 +98,8 @@
                     "background": "url(" + require('@/assets/img/public_me.jpg') +  ") center center / cover no-repeat"
                 },
 	            vip_card: [
-                    {icon: "dashboard_wallet", name: "余额", menu: "prepaid", key: "card_balance"},
-                    {icon: "dashboard_card", name: "套餐", menu: "counting", key: "counting_card_length"}
+                    {key: "card_balance", name: "余额", menu: "prepaid", icon: require('@/assets/img/public_yue.png')},
+                    {key: "counting_card_length", name: "套餐", menu: "counting", icon: require('@/assets/img/public_taocan.png')}
 	            ],
 	            meData: {}
             }
@@ -187,6 +214,8 @@
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
+		border:2px solid white;
+
 		background: #fff;
 		display: inline-block;
 	}
@@ -287,12 +316,79 @@
 		text-align: center;
 	}
 	/deep/ .el-card__body {
-		padding: 15px 20px;
+		padding: 10px 17px;
 	}
 
 	.vip-card-box {
 		display: -webkit-box;
 		width: 100%;
 		align-items: center
+	}
+
+	.FodderList_preview_wrap-4qxvzk {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 35px !important;
+		height: 35px !important;
+		background-color: #f9f0e3;
+		border-radius: 50%;
+	}
+	.FodderList_img-3Z91qH {
+		width: auto;
+		height: auto;
+		max-width: 100%;
+		max-height: 100%;
+
+	}
+	.card-func .itemCon {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+	}
+	.card-func  .itemName {
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		-webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		max-width: 100%;
+	}
+	.card-func  .moduleMenuSVG {
+		width: 25px;
+		height: 25px;
+		fill: #454545;
+	}
+	.card-func .memberCenterText {
+		display: block;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		width: 100%;
+		font-size: 13px;
+		text-align: center;
+		margin-top: 10px;
 	}
 </style>
