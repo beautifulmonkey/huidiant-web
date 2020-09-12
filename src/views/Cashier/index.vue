@@ -467,6 +467,11 @@
                             </el-checkbox-group>
                         </div>
                     </div>
+
+
+                    <div v-if="!emList.length">
+                        您还没有添加员工,请先前往 后台-员工管理 添加
+                    </div>
                 </div>
 
                 <span slot="footer" class="dialog-footer">
