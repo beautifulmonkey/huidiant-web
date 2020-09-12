@@ -65,11 +65,17 @@
 				<tr>
 					<td style="white-space: nowrap;padding-right:10px">支付方式：</td>
 					<td style="padding-right:20px">(
-						<span v-if="orderData.cash_pay_amount">现金:{{orderData.cash_pay_amount}}&nbsp;</span>
-						<span v-if="orderData.balance_pay_amount">余额:{{orderData.balance_pay_amount}}&nbsp;</span>
+						<span v-if="orderData.cash_pay_amount">现金支付:{{orderData.cash_pay_amount}}&nbsp;</span>
+						<span v-if="orderData.balance_pay_amount">余额支付:{{orderData.balance_pay_amount}}&nbsp;</span>
 						<span v-if="orderData.custom_pay_amount">{{orderData.custom_pay_name}}:{{orderData.custom_pay_amount}}&nbsp;</span>
 						)</td>
 				</tr>
+
+				<tr v-if="orderData.customer_has_prepaid_card">
+					<td style="white-space: nowrap">储值余额: </td>
+					<td>{{orderData.total_balance_after}}</td>
+				</tr>
+
 				<tr v-if="orderData.description">
 					<td style="white-space: nowrap">备注: </td>
 					<td>{{orderData.description}}</td>
