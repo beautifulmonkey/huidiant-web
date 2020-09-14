@@ -123,7 +123,13 @@
                                 <el-button class="customer-name-btn" size="medium" type="text" style="color: #5a5e66"
                                            @click="customerDetailsOpen(chooseCustomerData.id)">{{chooseCustomerData.name}}</el-button>
                                 <span style="color: #777;font-size: 13px;">{{chooseCustomerData.tel}}</span>
-                                <el-tag style="margin-left: 10px;" type="warning"  effect="dark" size="mini">{{chooseCustomerData.identity}}</el-tag>
+                                <el-tag style="margin-left: 10px;" type="warning"  effect="dark" size="mini">
+                                    <span v-if="chooseCustomerData.is_prepaid_expiry">
+                                        <s style="color: #555555"><span style="color: white">{{chooseCustomerData.identity}}</span></s>
+                                        <span style="color: red">(已失效)</span>
+                                    </span>
+                                    <span v-else>{{chooseCustomerData.identity}}</span>
+                                </el-tag>
 
                             </div><br>
                             <div style="text-align: left">
@@ -686,7 +692,9 @@
                         identity: item.identity,
                         prepaid_card: item.prepaid_card,
                         card_balance: item.card_balance,
-                        prepaid_card_price: item.prepaid_card_price
+                        prepaid_card_price: item.prepaid_card_price,
+                        is_prepaid_expiry: item.is_prepaid_expiry,
+                        prepaid_expiry_date: item.prepaid_expiry_date,
                     })
                 });
                 if (!cb_data.length){

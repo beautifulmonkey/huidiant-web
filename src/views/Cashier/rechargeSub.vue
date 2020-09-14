@@ -5,7 +5,8 @@
                 <div style="padding: 30px;text-align: left">
                     <div class="justify-between" style="font-size: 0.9rem;">
                         <span>{{customerData.identity}}</span>
-                        <span>永久有效</span>
+                        <span v-if="customerData.prepaid_expiry_date">{{customerData.prepaid_expiry_date}} 失效</span>
+                        <span v-else>永久有效</span>
                     </div>
                     <div style="margin-top: 20px;">
                         <span style="font-size: 0.8rem;">余额:&nbsp;</span>
